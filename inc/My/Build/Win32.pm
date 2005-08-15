@@ -49,7 +49,6 @@ sub awx_grep_dlls {
 
 sub awx_configure {
     my $self = shift;
-
     my %config = $self->SUPER::awx_configure;
 
     $config{config}{toolkit} = 'msw';
