@@ -1,9 +1,13 @@
 Build.PL
+Changes
 MANIFEST			This list of files
 MANIFEST.SKIP
 META.yml
 inc/My/Build.pm
+inc/My/Build/Any_wx_config.pm
+inc/My/Build/Any_wx_config_Bakefile.pm
 inc/My/Build/Base.pm
+inc/My/Build/MacOSX_wx_config.pm
 inc/My/Build/Utility.pm
 inc/My/Build/Win32.pm
 inc/My/Build/Win32_MSVC.pm
@@ -11,3 +15,5 @@ inc/My/Build/Win32_MSVC_Bakefile.pm
 inc/My/Build/Win32_MinGW.pm
 inc/My/Build/Win32_MinGW_Bakefile.pm
 lib/Alien/wxWidgets.pm
+t/01_load.t
+t/zz_pod.t
