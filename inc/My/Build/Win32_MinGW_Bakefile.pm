@@ -20,7 +20,7 @@ sub awx_wx_config_data {
     my $final = $self->awx_debug ? 'BUILD=debug'
                                  : 'BUILD=release';
     my $unicode = $self->awx_unicode ? 'UNICODE=1' : 'UNICODE=0';
-    $unicode .= ' MSLU=1' if $self->awx_mslu;
+    $unicode .= ' MSLU=1' if $self->awx_unicode && $self->awx_mslu;
 
     my $dir = Cwd::cwd;
     chdir $min_dir;
