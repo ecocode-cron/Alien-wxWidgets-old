@@ -6,6 +6,7 @@ use My::Build::Utility qw(awx_arch_file);
 use File::Path ();
 use File::Basename ();
 use Fatal qw(open close);
+use Data::Dumper;
 
 sub ACTION_build {
     my $self = shift;
@@ -55,7 +56,7 @@ our %VALUES;
     %VALUES = %{
 EOT
 
-    print $fh Data::Dumper->Dump( [ \%config ] );
+    print {$fh} Data::Dumper->Dump( [ \%config ] );
 
     print $fh <<'EOT';
     };
@@ -81,6 +82,7 @@ sub awx_configure {
     $config{config}{unicode} = $self->awx_unicode;
     $config{config}{mslu} = $self->awx_mslu;
     $config{link_flags} = '';
+    $config{c_flags} = '';
 
     return %config;
 }
@@ -100,5 +102,7 @@ sub wx_config {
 sub awx_debug { $_[0]->args( 'debug' ) }
 sub awx_unicode { $_[0]->args( 'unicode' ) }
 sub awx_mslu { $_[0]->args( 'mslu' ) }
+sub awx_static { $_[0]->args( 'static' ) }
+sub awx_get_package { local $_ = $_[0]; s/^My::Build:://; return $_ }
 
 1;
