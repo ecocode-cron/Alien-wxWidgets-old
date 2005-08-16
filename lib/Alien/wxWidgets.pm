@@ -49,7 +49,7 @@ sub AUTOLOAD {
 
 my $lib_filter = $VALUES{version} >= 2.005001 ? qr/(?!a)a/ : # match nothing
                  $^O =~ /MSWin32/ ? qr/^(?:adv|base|html|net|xml|media|gl)$/ :
-                                    qr/^(?:adv|base|html|xml|media)$/;
+                                    qr/^(?:adv|base|html|net|xml|media)$/;
 
 sub _grep_libraries {
     my( $type, @libs ) = @_;
