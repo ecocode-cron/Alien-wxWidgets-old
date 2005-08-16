@@ -99,10 +99,17 @@ sub wx_config {
     return @{$data}{@_};
 }
 
-sub awx_debug { $_[0]->args( 'debug' ) }
-sub awx_unicode { $_[0]->args( 'unicode' ) }
-sub awx_mslu { $_[0]->args( 'mslu' ) }
-sub awx_static { $_[0]->args( 'static' ) }
+sub awx_debug { $_[0]->args( 'debug' ) ? 1 : 0 }
+sub awx_unicode { $_[0]->args( 'unicode' ) ? 1 : 0 }
+sub awx_static { $_[0]->args( 'static' ) ? 1 : 0 }
 sub awx_get_package { local $_ = $_[0]; s/^My::Build:://; return $_ }
+
+# MSLU is default when using Unicode *and* it has not
+# been explicitly disabled
+sub awx_mslu {
+    return 0 unless $^O =~ /MSWin32/;
+    return $_[0]->args( 'mslu' ) if defined $_[0]->args( 'mslu' );
+    return $_[0]->args( 'unicode' );
+}
 
 1;
