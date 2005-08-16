@@ -51,7 +51,9 @@ sub awx_configure {
         $config{_libraries}{$key} =
           { map { $_ => File::Basename::basename( $value->{$_} ) }
                 keys %$value };
-        if( $value->{lib} ) {
+        if( $value->{link} ) {
+            $config{_libraries}{$key}{link} = $value->{link};
+        } elsif( $value->{lib} ) {
             my $lib = $config{_libraries}{$key}{lib};
             $lib =~ s/^lib(.*?)(?:\.dll)?\.a$/$1/;
             $config{_libraries}{$key}{link} = '-l' . $lib;

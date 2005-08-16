@@ -11,9 +11,9 @@ My::Build->new
     requires        => { 'File::Spec'    => '0.80',
                          'Module::Build' => '0.26',
                         },
-    get_options     => { debug      => { default => 0 },
-                         unicode    => { default => 0 },
-                         mslu       => { default => 1 },
-                         static     => { default => 0 },
+    get_options     => { debug      => { type => '!' },
+                         unicode    => { type => '!' },
+                         mslu       => { type => '!' },
+                         static     => { type => '!' },
                         },
   )->create_build_script;

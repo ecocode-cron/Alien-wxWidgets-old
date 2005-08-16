@@ -2,7 +2,7 @@ package My::Build::Win32;
 
 use strict;
 use base qw(My::Build::Base);
-use My::Build::Utility qw(awx_arch_file);
+use My::Build::Utility qw(awx_arch_file awx_install_arch_file);
 use Config;
 
 # check for WXDIR and WXWIN environment variables
@@ -44,6 +44,9 @@ sub awx_grep_dlls {
         $ret->{$name}{$type} = $full;
     }
 
+    die "Configuration error: could not find libraries for this configuration"
+      unless exists $ret->{core}{dll} and exists $ret->{core}{lib};
+
     return $ret;
 }
 
@@ -52,6 +55,7 @@ sub awx_configure {
     my %config = $self->SUPER::awx_configure;
 
     $config{config}{toolkit} = 'msw';
+    $config{shared_library_path} = awx_install_arch_file( "lib" );
 
     die "Unable to find setup.h directory"
       unless $self->wx_config( 'cxxflags' )
@@ -75,6 +79,7 @@ sub files_to_install {
 
     $files{$setup_h} = awx_arch_file( "lib/wx/setup.h" );
     foreach my $dll ( map { $_->{dll} } values %$dlls ) {
+        next unless defined $dll;
         my $base = File::Basename::basename( $dll );
         $files{$dll} = awx_arch_file( "lib/$base" );
     }

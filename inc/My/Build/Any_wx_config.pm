@@ -4,9 +4,9 @@ use strict;
 
 our @ISA;
 
-my $libs_sep;
-my @LIBRARIES = qw(base net xml adv animate core deprecated fl gizmos
-                   html media mmedia ogl plot qa stc svg xrc);
+our $WX_CONFIG_LIBSEP;
+our @LIBRARIES = qw(base net xml adv animate core deprecated fl gizmos
+                    html media mmedia ogl plot qa stc svg xrc);
 
 BEGIN {
     my $wx_config = $ENV{WX_CONFIG} || 'wx-config';
@@ -14,8 +14,8 @@ BEGIN {
     $ver =~ m/^(\d)\.(\d)/;
     $ver = $1 + $2 / 1000;
 
-    if( $ver >= 2.005 ) {
-        $libs_sep = `$wx_config --libs base > /dev/null 2>&1 || echo 'X'` eq "X\n" ?
+    if( $ver >= 2.005001 ) {
+        $WX_CONFIG_LIBSEP = `$wx_config --libs base > /dev/null 2>&1 || echo 'X'` eq "X\n" ?
           '=' : ' ';
         require My::Build::Any_wx_config_Bakefile;
         @ISA = qw(My::Build::Any_wx_config_Bakefile);
@@ -63,18 +63,7 @@ sub awx_configure {
         $config{link_libraries} .= " $_";
     }
 
-    $config{_libraries} = {};
-    my $arg = 'libs' . $libs_sep . join ',', grep { !m/base/ } @LIBRARIES;
-    my $libraries = $self->_call_wx_config( $arg );
-
-    foreach my $lib ( grep { m/\-lwx/ } split ' ', $libraries ) {
-        $lib =~ m/-l(.*_(\w+)-.*)/ or die $lib;
-        my( $key, $name ) = ( $2, $1 );
-        $key = 'base' if $key =~ m/^base[ud]{0,2}/;
-        $key = 'base' if $key =~ m/^carbon/; # here for Mac
-        $config{_libraries}{$key} = { dll  => "lib${name}.$Config{dlext}",
-                                      link => $lib };
-    }
+    $config{_libraries} = $self->wx_config( 'dlls' );
 
     return %config;
 }

@@ -36,7 +36,7 @@ sub awx_configure {
 
     foreach ( split /\s+/, $libs ) {
         m(wx|unicows)i || next;
-        next if m{(?:(?:zlib|regexu?|expat|png|jpeg|tiff)[ud]{0,2}\.lib)$};
+        next if m{(?:(?:zlib|regexu?|expat|png|jpeg|tiff)[uhd]{0,2}\.lib)$};
         $config{link_libraries} .= "$_ ";
     }
 
@@ -47,8 +47,11 @@ sub awx_configure {
         $config{_libraries}{$key} =
           { map { $_ => File::Basename::basename( $value->{$_} ) }
                 keys %$value };
-        $config{_libraries}{$key}{link} = $config{_libraries}{$key}{lib}
-          if $value->{lib};
+        if( $value->{link} ) {
+            $config{_libraries}{$key}{link} = $value->{link};
+        } elsif( $value->{lib} ) {
+            $config{_libraries}{$key}{link} = $config{_libraries}{$key}{lib};
+        }
     }
 
     return %config;
