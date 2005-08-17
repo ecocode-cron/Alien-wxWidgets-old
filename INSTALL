@@ -1,0 +1,40 @@
+=head1 NAME
+
+Install - build and installation instructions
+
+=head1 Installing wxWidgets
+
+TODO
+
+=head1 Installing Alien::wxWidgets
+
+Please note that the steps below can be repeated multiple times in order
+install multiple configurations (differing for the wxWidgets version,
+compiler, compiler version, debug/unicode settings).
+
+=head2 Unices and Mac OS X
+
+Important: either wx-config must be in the PATH or the WX_CONFIG
+environment variable must be set to the full path to wx-config. The
+environment WX_CONFIG variable can also be used to specify a different
+wx-config.
+
+    perl Build.PL
+    perl Build
+    perl Build test
+    perl Build install
+
+=head2 Windows
+
+    <add your compiler to the path>
+    <build wxWidgets>
+    set WXDIR=C:\Path\to\wxWidgets
+    perl Build.PL [--debug] [--unicode] [--mslu]
+    perl Build
+    perl Build test
+    perl Build install
+
+Important: the command line options to Build.PL must match the build
+settings used to build wxWidgets.
+
+=cut

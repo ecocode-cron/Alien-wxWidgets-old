@@ -1,5 +1,9 @@
 Revision history for Perl extension Alien::wxWidgets.
 
+0.03  Wed Aug 17 20:57:49 CEST 2005
+	- Allow multiple configurations to be installed at the
+	  same time.
+
 0.02  Wed Aug 17 00:53:40 CEST 2005
 	- Added support for wxWidgets 2.4.x.
 	- Fixed option handling.

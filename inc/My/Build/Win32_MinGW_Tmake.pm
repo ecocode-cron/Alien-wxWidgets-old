@@ -27,7 +27,8 @@ sub awx_wx_config_data {
     my $self = shift;
     return $self->{awx_data} if $self->{awx_data};
 
-    my %data = ( 'cxx'     => 'g++',
+    my %data = ( %{$self->SUPER::awx_wx_config_data},
+                 'cxx'     => 'g++',
                  'ld'      => 'g++',
                  'wxdir'   => $ENV{WXDIR},
                );
@@ -46,10 +47,10 @@ sub awx_wx_config_data {
     };
 
     my $lib_link = sub {
-        awx_install_arch_file( 'lib/' . 'lib' . $_[0] . $Config{_a} );
+        awx_install_arch_file( 'rEpLaCe/lib/' . 'lib' . $_[0] . $Config{_a} );
     };
     my $link_implib = awx_install_arch_file
-      ( 'lib/'. File::Basename::basename( $implib ) );
+      ( 'rEpLaCe/lib/'. File::Basename::basename( $implib ) );
 
     $data{dlls} = { core => { dll  => $dll,
                               lib  => $implib,

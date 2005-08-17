@@ -24,7 +24,7 @@ sub awx_configure {
             next if m{(?:regex|zlib|jpeg|png|tiff)$};
             if( $_ =~ /-I\Q$self->{awx_setup_dir}\E/ ) {
                 $config{include_path} .=
-                  '-I' . awx_install_arch_file( 'lib' ) . ' ';
+                  '-I' . awx_install_arch_file( 'rEpLaCe/lib' ) . ' ';
             } else {
                 $config{include_path} .= "$_ ";
             }
@@ -56,5 +56,7 @@ sub awx_configure {
 
     return %config;
 }
+
+sub awx_compiler_kind { 'cl' }
 
 1;

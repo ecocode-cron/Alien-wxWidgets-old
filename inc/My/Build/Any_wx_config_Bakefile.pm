@@ -2,6 +2,7 @@ package My::Build::Any_wx_config_Bakefile;
 
 use strict;
 our @ISA = qw(My::Build::Any_wx_config::Base);
+use Config;
 
 sub awx_wx_config_data {
     my $self = shift;
@@ -9,7 +10,7 @@ sub awx_wx_config_data {
 
     my %data;
 
-    foreach my $item ( qw(cxx ld cxxflags version libs) ) {
+    foreach my $item ( qw(cxx ld cxxflags version libs basename) ) {
         $data{$item} = $self->_call_wx_config( $item );
     }
     $data{ld} =~ s/\-o\s*$/ /; # wxWidgets puts 'ld -o' into LD

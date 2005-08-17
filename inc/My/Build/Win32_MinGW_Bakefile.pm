@@ -12,7 +12,8 @@ sub awx_wx_config_data {
     my $self = shift;
     return $self->{awx_data} if $self->{awx_data};
 
-    my %data = ( 'cxx'     => 'g++',
+    my %data = ( %{$self->SUPER::awx_wx_config_data},
+                 'cxx'     => 'g++',
                  'ld'      => 'g++',
                  'wxdir'   => $ENV{WXDIR},
                );
@@ -38,7 +39,7 @@ sub awx_wx_config_data {
             s{-L(\S+)}
              {$orig_libdir = File::Spec->canonpath
                                  ( File::Spec->rel2abs( $1 ) );
-              '-L' . ( $libdir = awx_install_arch_file( 'lib' ) )}eg;
+              '-L' . ( $libdir = awx_install_arch_file( 'rEpLaCe/lib' ) )}eg;
             $data{libs} = $_;
         } elsif( s/^\s*g\+\+\s+// ) {
             s/\s+\S+\.(cpp|o)/ /g;

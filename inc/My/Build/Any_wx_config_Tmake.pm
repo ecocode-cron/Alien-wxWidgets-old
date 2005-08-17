@@ -8,9 +8,8 @@ sub awx_wx_config_data {
     return $self->{awx_data} if $self->{awx_data};
 
     my %data;
-    my $basename = $self->_call_wx_config( 'basename' );
 
-    foreach my $item ( qw(cxx ld cxxflags version libs) ) {
+    foreach my $item ( qw(cxx ld cxxflags version libs basename) ) {
         $data{$item} = $self->_call_wx_config( $item );
     }
     $data{ld} =~ s/\-o\s*$/ /; # wxWidgets puts 'ld -o' into LD
@@ -19,8 +18,8 @@ sub awx_wx_config_data {
 
     my $lib_link = sub {
         $_[0] eq 'core' ?
-          '-l' . $basename . '-' . $ver :
-          '-l' . $basename  . '_' . $_[0] . '-' . $ver;
+          '-l' . $data{basename} . '-' . $ver :
+          '-l' . $data{basename}  . '_' . $_[0] . '-' . $ver;
     };
 
     $data{dlls} = { core => { link => $lib_link->( 'core' ) },

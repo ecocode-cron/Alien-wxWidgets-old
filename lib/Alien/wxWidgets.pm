@@ -6,7 +6,7 @@ Alien::wxWidgets - building, finding and using wxWidgets binaries
 
 =head1 SYNOPSIS
 
-    use Alien::wxWidgets;
+    use Alien::wxWidgets <options>;
 
     my $version = Alien::wxWidgets->version;
     my $config = Alien::wxWidgets->config;
@@ -21,6 +21,7 @@ Alien::wxWidgets - building, finding and using wxWidgets binaries
     my @implib = Alien::wxWidgets->import_libraries( qw(gl adv core base) );
     my @shrlib = Alien::wxWidgets->shared_libraries( qw(gl adv core base) );
     my $library_path = Alien::wxWidgets->shared_library_path;
+    my $key = Alien::wxWidgets->key;
 
 =head1 DESCRIPTION
 
@@ -33,10 +34,15 @@ configuration settings from an installed wxWidgets.
 
 use strict;
 use Carp;
-use Alien::wxWidgets::Config qw(%VALUES);
+use Alien::wxWidgets::Utility qw(awx_sort_config awx_grep_config
+                                 awx_smart_config);
+use Module::Pluggable sub_name      => '_list',
+                      search_path   => 'Alien::wxWidgets::Config',
+                      instantiate   => 'config';
 
 our $AUTOLOAD;
-our $VERSION = '0.02';
+our $VERSION = '0.03';
+our %VALUES;
 
 sub AUTOLOAD {
     my $name = $AUTOLOAD;
@@ -47,11 +53,52 @@ sub AUTOLOAD {
     return $VALUES{$name};
 }
 
-my $lib_filter = $VALUES{version} >= 2.005001 ? qr/(?!a)a/ : # match nothing
-                 $^O =~ /MSWin32/ ? qr/^(?:adv|base|html|net|xml|media|gl)$/ :
-                                    qr/^(?:adv|base|html|net|xml|media)$/;
+sub import {
+    my $class = shift;
+    if( @_ == 1 ) {
+        $class->show_configurations if $_[0] eq ':dump';
+        return;
+    }
+
+    $class->load( @_ );
+}
+
+sub load {
+    my $class = shift;
+    my %crit = awx_smart_config @_;
+
+    my @configs = awx_sort_config awx_grep_config [ $class->_list ], %crit ;
+
+    unless( @configs ) {
+        require Data::Dumper;
+        die "No matching config:\n",
+          Data::Dumper->Dump( [ { %crit } ] );
+    }
+
+    %VALUES = $configs[0]->{package}->values;
+}
+
+sub show_configurations {
+    my $class = shift;
+    my @configs = awx_sort_config awx_grep_config [ $class->_list ], @_;
+
+    require Data::Dumper;
+    print Data::Dumper->Dump( \@configs );
+}
+
+sub get_configurations {
+    my $class = shift;
+
+    return awx_sort_config awx_grep_config [ shift->_list ], @_;
+ }
+
+my $lib_nok = 'adv|base|html|net|xml|media';
 
 sub _grep_libraries {
+    my $lib_filter = $VALUES{version} >= 2.005001 ? qr/(?!a)a/ : # no match
+                     $^O =~ /MSWin32/             ? qr/^(?:$lib_nok|gl)$/ :
+                                                    qr/^(?:$lib_nok)$/;
+
     my( $type, @libs ) = @_;
     my $dlls = $VALUES{_libraries};
 
@@ -78,6 +125,40 @@ sub libraries {
 __END__
 
 =head1 METHODS
+
+=head1 load/import
+
+    use Alien::wxWidgets version          => 2.004 | [ 2.004, 2.005 ],
+                         compiler_kind    => 'gcc' | 'cl', # Windows only
+                         compiler_version => '3.3', # only GCC for now
+                         toolkit          => 'gtk2',
+                         debug            => 0 | 1,
+                         unicode          => 0 | 1,
+                         mslu             => 0 | 1,
+                         key              => $key,
+                         ;
+
+    Alien::wxWidgets->load( <same as the above> );
+
+Using C<Alien::wxWidgets> without parameters will load a default
+configuration (for most people this will be the only installed
+confiuration). Additional parameters allow to be more selective.
+
+If there is no matching configuration the method will C<die()>.
+
+In case no arguments are passed in the C<use>, C<Alien::wxWidgets>
+will try to find a reasonable default configuration.
+
+Please note that when the version is pecified as C<version => 2.004>
+it means "any version >= 2.004" while when specified as
+C<version => [ 2.004, 2.005 ]> it means "any version => 2.004 and < 2.005".
+
+=head1 key
+
+    my $key = Alien::wxWidgets key;
+
+Returns an unique key that can be used to reload the
+currently-loaded configuration.
 
 =head1 version
 

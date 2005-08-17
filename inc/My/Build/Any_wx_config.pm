@@ -11,8 +11,14 @@ our @LIBRARIES = qw(base net xml adv animate core deprecated fl gizmos
 BEGIN {
     my $wx_config = $ENV{WX_CONFIG} || 'wx-config';
     my $ver = `$wx_config --version`;
+    my( $wx_debug, $wx_unicode );
+
     $ver =~ m/^(\d)\.(\d)/;
     $ver = $1 + $2 / 1000;
+
+    my $base = `$wx_config --basename`;
+    $wx_debug = $base =~ m/d$/ ? 1 : 0;
+    $wx_unicode = $base =~ m/ud?$/ ? 1 : 0;
 
     if( $ver >= 2.005001 ) {
         $WX_CONFIG_LIBSEP = `$wx_config --libs base > /dev/null 2>&1 || echo 'X'` eq "X\n" ?
@@ -23,6 +29,9 @@ BEGIN {
         require My::Build::Any_wx_config_Tmake;
         @ISA = qw(My::Build::Any_wx_config_Tmake);
     }
+
+    sub awx_is_debug { $wx_debug }
+    sub awx_is_unicode { $wx_unicode }
 }
 
 package My::Build::Any_wx_config::Base;
@@ -38,8 +47,14 @@ sub awx_configure {
 
     $cf =~ m/__WX(x11|msw|motif|gtk|mac)__/i or
       die "Unable to determine toolkit!";
-
     $config{config}{toolkit} = lc $1;
+
+    if( $config{config}{toolkit} eq 'gtk' ) {
+        $self->wx_config( 'basename' ) =~ m/(gtk2?)/i or
+          die 'PANIC: ', $self->wx_config( 'basename' );
+        $config{config}{toolkit} = lc $1;
+    }
+
     $config{compiler} = $ENV{CXX} || $self->wx_config( 'cxx' );
     if( $self->awx_debug ) {
         $config{c_flags} .= ' -g ';
@@ -80,6 +95,10 @@ sub _call_wx_config {
     chomp $t;
 
     return $t;
+}
+
+sub awx_compiler_kind {
+    return Alien::wxWidgets::Utility::awx_compiler_kind( $_[1] )
 }
 
 1;

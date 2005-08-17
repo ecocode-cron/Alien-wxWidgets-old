@@ -3,6 +3,7 @@ Changes
 MANIFEST			This list of files
 MANIFEST.SKIP
 META.yml
+INSTALL
 inc/My/Build.pm
 inc/My/Build/Any_wx_config.pm
 inc/My/Build/Any_wx_config_Bakefile.pm
@@ -20,5 +21,6 @@ inc/My/Build/Win32_MinGW_Tmake.pm
 inc/My/Build/gmake.mak
 inc/My/Build/nmake.mak
 lib/Alien/wxWidgets.pm
+lib/Alien/wxWidgets/Utility.pm
 t/01_load.t
 t/zz_pod.t
