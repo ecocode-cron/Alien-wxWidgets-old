@@ -167,4 +167,15 @@ sub awx_compiler_version {
     return Alien::wxWidgets::Utility::awx_cc_version( $_[1] );
 }
 
+sub awx_path_search {
+    my( $self, $file ) = @_;
+
+    foreach my $d ( File::Spec->path ) {
+        my $full = File::Spec->catfile( $d, $file );
+        return $full if -f $full;
+    }
+
+    return;
+}
+
 1;

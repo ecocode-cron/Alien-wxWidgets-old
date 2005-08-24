@@ -65,4 +65,14 @@ sub awx_configure {
 
 sub awx_compiler_kind { 'gcc' }
 
+sub files_to_install {
+    my $self = shift;
+    my $dll = 'mingwm10.dll';
+    my $dll_from = $self->awx_path_search( $dll );
+
+    return ( $self->SUPER::files_to_install(),
+             ( $dll_from =>
+                   Wx::build::Utils::awx_arch_file( "rEpLaCe/lib/$dll" ) ) );
+}
+
 1;
