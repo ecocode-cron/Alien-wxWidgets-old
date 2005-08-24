@@ -3,12 +3,24 @@ package My::Build::Win32_MSVC_Bakefile;
 use strict;
 use base qw(My::Build::Win32_MSVC);
 use My::Build::Utility qw(awx_install_arch_file awx_install_arch_auto_file);
+use Alien::wxWidgets::Utility qw(awx_capture);
 use Config;
 use Fatal qw(chdir);
 
 my $min_dir = File::Spec->catdir( $ENV{WXDIR}, 'samples', 'minimal' );
 
+sub _check_nmake {
+    my $out = awx_capture( 'nmake /?' );
+    unless( $out =~ m{/U\s}i ) {
+        die "Please use an NMAKE version supporting '-u', not the" .
+            " freely-available one\n";
+    }
+}
+
 sub awx_wx_config_data {
+    My::Build::Win32::_init();
+    _check_nmake();
+
     my $self = shift;
     return $self->{awx_data} if $self->{awx_data};
 

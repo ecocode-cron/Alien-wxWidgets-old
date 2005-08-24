@@ -2,16 +2,21 @@ package My::Build::Any_wx_config;
 
 use strict;
 
-our @ISA;
+our @ISA = qw(My::Build::Any_wx_config::Base);
 
 our $WX_CONFIG_LIBSEP;
 our @LIBRARIES = qw(base net xml adv animate core deprecated fl gizmos
                     html media mmedia ogl plot qa stc svg xrc);
 
-BEGIN {
+my $initialized;
+my( $wx_debug, $wx_unicode );
+
+sub _init {
+    return if $initialized;
+    $initialized = 1;
+
     my $wx_config = $ENV{WX_CONFIG} || 'wx-config';
-    my $ver = `$wx_config --version`;
-    my( $wx_debug, $wx_unicode );
+    my $ver = `$wx_config --version` or die "Can't execute wx-config: $!";
 
     $ver =~ m/^(\d)\.(\d)/;
     $ver = $1 + $2 / 1000;
@@ -41,6 +46,8 @@ use base qw(My::Build::Base);
 use Config;
 
 sub awx_configure {
+    My::Build::Any_wx_config::_init;
+
     my $self = shift;
     my %config = $self->SUPER::awx_configure;
     my $cf = $self->wx_config( 'cxxflags' );
@@ -69,6 +76,9 @@ sub awx_configure {
         $config{c_flags} .= "$_ ";
     }
 
+    my @paths = ( ( map { s/^-L//; $_ } grep { /^-L/ } split ' ', $libs ),
+                  qw(/usr/local/lib /usr/lib) );
+
     foreach ( split /\s+/, $libs ) {
         m{^-[lL]|/} && do { $config{link_libraries} .= " $_"; next; };
         if( $_ eq '-pthread' && $^O =~ m/linux/i ) {
@@ -78,12 +88,27 @@ sub awx_configure {
         $config{link_libraries} .= " $_";
     }
 
-    $config{_libraries} = $self->wx_config( 'dlls' );
+    my %dlls = %{$self->wx_config( 'dlls' )};
+    $config{_libraries} = {};
+
+    while( my( $k, $v ) = each %dlls ) {
+        if( @paths ) {
+            my $found = 0;
+            foreach my $path ( @paths ) {
+                $found = 1 if -f File::Spec->catfile( $path, $v->{dll} );
+            }
+            warn "'$k' library not found" and next unless $found;
+        }
+
+        $config{_libraries}{$k} = $v;
+    }
 
     return %config;
 }
 
 sub _call_wx_config {
+    My::Build::Any_wx_config::_init;
+
     my $self = shift;
     my $options = join ' ', map { "--$_" } @_;
     my $wx_config = $ENV{WX_CONFIG} || 'wx-config';
@@ -98,6 +123,8 @@ sub _call_wx_config {
 }
 
 sub awx_compiler_kind {
+    My::Build::Any_wx_config::_init;
+
     return Alien::wxWidgets::Utility::awx_compiler_kind( $_[1] )
 }
 

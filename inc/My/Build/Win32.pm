@@ -6,9 +6,15 @@ use My::Build::Utility qw(awx_arch_file awx_install_arch_file);
 use Config;
 use Fatal qw(open close);
 
-# check for WXDIR and WXWIN environment variables
-unless( exists $ENV{WXDIR} or exists $ENV{WXWIN} ) {
-  warn <<EOT;
+my $initialized;
+
+sub _init {
+    return if $initialized;
+    $initialized = 1;
+
+    # check for WXDIR and WXWIN environment variables
+    unless( exists $ENV{WXDIR} or exists $ENV{WXWIN} ) {
+        warn <<EOT;
 
 **********************************************************************
 WARNING!
@@ -18,11 +24,12 @@ docs/install.txt for a detailed explanation
 **********************************************************************
 
 EOT
-  exit 1;
-}
+        exit 1;
+    }
 
-$ENV{WXDIR} = $ENV{WXWIN} unless exists $ENV{WXDIR};
-$ENV{WXWIN} = $ENV{WXDIR} unless exists $ENV{WXWIN};
+    $ENV{WXDIR} = $ENV{WXWIN} unless exists $ENV{WXDIR};
+    $ENV{WXWIN} = $ENV{WXDIR} unless exists $ENV{WXWIN};
+}
 
 sub awx_grep_dlls {
     my( $self, $libdir, $digits ) = @_;
@@ -130,6 +137,8 @@ sub build_wxwidgets {
 }
 
 sub awx_get_package {
+    My::Build::Win32::_init();
+
     my $package;
 
     SWITCH: {

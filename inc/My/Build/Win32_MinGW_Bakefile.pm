@@ -9,6 +9,8 @@ use Fatal qw(chdir);
 my $min_dir = File::Spec->catdir( $ENV{WXDIR}, 'samples', 'minimal' );
 
 sub awx_wx_config_data {
+    My::Build::Win32::_init();
+
     my $self = shift;
     return $self->{awx_data} if $self->{awx_data};
 
