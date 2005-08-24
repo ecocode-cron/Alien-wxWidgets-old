@@ -1,5 +1,12 @@
 Revision history for Perl extension Alien::wxWidgets.
 
+0.04
+	- Allow some actions (like 'dist') to be executed without
+	  an installed wxWidgets.
+	- Detect when some wxWidgets contrib libraries are not built
+	  on wx-config platforms.
+	- Check for a recent 'nmake' for Win32+MSVC+Bakefile.
+
 0.03  Wed Aug 17 20:57:49 CEST 2005
 	- Allow multiple configurations to be installed at the
 	  same time.

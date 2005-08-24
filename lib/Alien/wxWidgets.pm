@@ -41,7 +41,7 @@ use Module::Pluggable sub_name      => '_list',
                       instantiate   => 'config';
 
 our $AUTOLOAD;
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 our %VALUES;
 
 sub AUTOLOAD {
