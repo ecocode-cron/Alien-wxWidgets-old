@@ -26,7 +26,9 @@ sub awx_wx_config_data {
         my( $key, $name ) = ( $2, $1 );
         $key = 'base' if $key =~ m/^base[ud]{0,2}/;
         $key = 'base' if $key =~ m/^carbon/; # here for Mac
-        $data{dlls}{$key} = { dll  => "lib${name}.$Config{dlext}",
+        my $dll = "lib${name}.$Config{dlext}";
+
+        $data{dlls}{$key} = { dll  => $dll,
                               link => $lib };
     }
 
