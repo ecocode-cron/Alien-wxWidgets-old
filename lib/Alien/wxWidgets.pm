@@ -44,13 +44,15 @@ our $AUTOLOAD;
 our $VERSION = '0.04';
 our %VALUES;
 
+*_remap = \&Alien::wxWidgets::Utility::_awx_remap;
+
 sub AUTOLOAD {
     my $name = $AUTOLOAD;
 
     $name =~ s/.*:://;
     croak "Can not use '", $name, "'" unless exists $VALUES{$name};
 
-    return $VALUES{$name};
+    return _remap( $VALUES{$name} );
 }
 
 sub import {
@@ -100,11 +102,17 @@ sub _grep_libraries {
                                                     qr/^(?:$lib_nok)$/;
 
     my( $type, @libs ) = @_;
+
+    if( $VALUES{config}{build} eq 'mono' ) {
+        @libs = qw(mono);
+    }
+
     my $dlls = $VALUES{_libraries};
 
     @libs = keys %$dlls unless @libs;
-    push @libs, 'core', 'base'  unless grep /^core$/, @libs;
-    return map  { defined( $dlls->{$_}{$type} ) ? $dlls->{$_}{$type} :
+    push @libs, 'core', 'base'  unless grep /^core|mono$/, @libs;
+    return map  { _remap( $_ ) }
+           map  { defined( $dlls->{$_}{$type} ) ? $dlls->{$_}{$type} :
                       croak "No such '$type' library: '$_'" }
            grep !/$lib_filter/, @libs;
 }
@@ -116,8 +124,9 @@ sub import_libraries { shift; return _grep_libraries( 'lib', @_ ) }
 sub libraries {
     my $class = shift;
 
-    return $VALUES{link_libraries} . ' ' .
-           join ' ', $class->link_libraries( @_ );
+    return _remap( $VALUES{link_libraries} ) . ' ' .
+           join ' ', map { _remap( $_ ) }
+                         $class->link_libraries( @_ );
 }
 
 1;
@@ -285,3 +294,5 @@ Copyright (c) 2005 Mattia Barbon <mbarbon@cpan.org>
 
 This program is free software; you can redistribute it and/or
 modify it under the same terms as Perl itself
+
+=cut

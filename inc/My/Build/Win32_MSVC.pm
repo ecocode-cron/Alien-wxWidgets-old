@@ -2,7 +2,7 @@ package My::Build::Win32_MSVC;
 
 use strict;
 use base qw(My::Build::Win32);
-use My::Build::Utility qw(awx_install_arch_file);
+use My::Build::Utility qw(awx_install_arch_file awx_install_arch_dir);
 use Config;
 
 sub awx_configure {
@@ -17,12 +17,19 @@ sub awx_configure {
 
     my $cccflags = $self->wx_config( 'cxxflags' );
     my $libs = $self->wx_config( 'libs' );
+    my $incdir = $self->awx_wx_config_data->{wxinc};
+    my $cincdir = $self->awx_wx_config_data->{wxcontrinc};
+    my $iincdir = awx_install_arch_dir( 'rEpLaCe/include' );
 
     foreach ( split /\s+/, $cccflags ) {
         m(^-DSTRICT) && next;
         m(^-I) && do {
-            next if m{(?:regex|zlib|jpeg|png|tiff)$};
-            if( $_ =~ /-I\Q$self->{awx_setup_dir}\E/ ) {
+            next if m{(?:regex|zlib|jpeg|png|tiff|expat[\\/]lib)$};
+            if( $self->notes( 'build_wx' ) ) {
+                $_ =~ s{\Q$cincdir\E}{$iincdir};
+                $_ =~ s{\Q$incdir\E}{$iincdir};
+            }
+            if( $_ =~ /-I\Q$self->{awx_setup_dir}\E/ && !$self->is_wince ) {
                 $config{include_path} .=
                   '-I' . awx_install_arch_file( 'rEpLaCe/lib' ) . ' ';
             } else {
@@ -53,6 +60,9 @@ sub awx_configure {
             $config{_libraries}{$key}{link} = $config{_libraries}{$key}{lib};
         }
     }
+
+    $config{config}{build} =
+        $self->awx_wx_config_data->{build_kind} || 'multi';
 
     return %config;
 }

@@ -1,0 +1,69 @@
+--- include/wx/msw/setup.h	2004-09-28 13:17:54.000000000 +0200
++++ include/wx/msw/setup.h	2005-01-04 13:13:53.584228800 +0100
+@@ -43,5 +43,5 @@
+ //
+ // Recommended setting: 0 (please update your code)
+-#define WXWIN_COMPATIBILITY_2_4 1
++#define WXWIN_COMPATIBILITY_2_4 0
+ 
+ // Define as 1 for font size to be backward compatible to 1.63 and earlier.
+@@ -150,5 +150,5 @@
+ // Recommended setting: 0 (unless you only plan to use Windows NT/2000/XP)
+ #ifndef wxUSE_UNICODE
+-    #define wxUSE_UNICODE 0
++    #define wxUSE_UNICODE 1
+ #endif
+ 
+@@ -293,5 +293,5 @@
+ //
+ // Recommended setting: 1 (but may be safely disabled if you don't use it)
+-#define wxUSE_FSVOLUME      1
++#define wxUSE_FSVOLUME      0
+ 
+ // use wxTextBuffer class: required by wxTextFile
+@@ -391,5 +391,5 @@
+ 
+ // Set to 1 to enable virtual Internet filesystem (requires wxUSE_FILESYSTEM)
+-#define wxUSE_FS_INET       1
++#define wxUSE_FS_INET       0
+ 
+ // Set to 1 to compile wxZipInput/OutputStream classes.
+@@ -428,6 +428,6 @@
+ // The settings for the individual URL schemes
+ #define wxUSE_PROTOCOL_FILE 1
+-#define wxUSE_PROTOCOL_FTP 1
+-#define wxUSE_PROTOCOL_HTTP 1
++#define wxUSE_PROTOCOL_FTP 1 // BROKEN!
++#define wxUSE_PROTOCOL_HTTP 1 // BROKEN!
+ 
+ // Define this to use wxURL class.
+@@ -833,5 +833,5 @@
+ //
+ // Recommended setting: 1 if you intend to use OpenGL, 0 otherwise
+-#define wxUSE_GLCANVAS       0
++#define wxUSE_GLCANVAS       1
+ 
+ // ----------------------------------------------------------------------------
+@@ -886,5 +886,5 @@
+ #define wxUSE_DRAGIMAGE 1
+ 
+-#define wxUSE_IPC         1
++#define wxUSE_IPC         0
+                                 // 0 for no interprocess comms
+ #define wxUSE_HELP        1
+@@ -1000,5 +1000,5 @@
+ 
+ // Set to 1 for IFF format support (Amiga format)
+-#define wxUSE_IFF           0
++#define wxUSE_IFF           1
+ 
+ // Set to 1 for XPM format support
+@@ -1046,7 +1046,7 @@
+ //
+ // Recommended setting: 0 (1 if you want to deploy Unicode apps on 9x systems)
+ #ifndef wxUSE_UNICODE_MSLU
+-    #define wxUSE_UNICODE_MSLU 0
++    #define wxUSE_UNICODE_MSLU 1
+ #endif
+ 
+ // Setting wxUSE_WCHAR_T to 1 gives you some degree of Unicode support without

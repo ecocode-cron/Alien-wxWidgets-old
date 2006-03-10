@@ -1,0 +1,30 @@
+my $VERSION = '2.6.2';
+my $URL     = 'http://humptydumpty.rbnet.it/wxperl/data';
+my $TYPE    = 'tar.bz2';
+my $BASE    = 'wxWidgets';
+
+{ msw     => { unicode => [ qw(
+wxMSW-2.6.2-setup_u.patch
+wxMSW-2.5.3-config.patch
+wxMSW-2.6.1-magic.patch
+wxMSW-2.6.2-makefiles.patch
+wxWidgets-2.6.2.patch
+                               ) ],
+               ansi    => [ qw(
+wxMSW-2.6.2-setup.patch
+wxMSW-2.5.3-config.patch
+wxMSW-2.6.1-magic.patch
+wxMSW-2.6.2-makefiles.patch
+wxWidgets-2.6.2.patch
+                               ) ],
+               },
+  mac     => {
+               },
+  unix    => {
+               },
+  data    => { url  => ( sprintf '%s/%s-%s.%s', $URL, $BASE, $VERSION, $TYPE ),
+               directory => ( sprintf '%s-%s', $BASE, $VERSION ),
+               archive   => ( sprintf '%s-%s.%s', $BASE, $VERSION, $TYPE ),
+               version   => $VERSION,
+               },
+  };

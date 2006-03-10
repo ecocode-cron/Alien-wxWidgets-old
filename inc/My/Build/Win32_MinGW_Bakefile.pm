@@ -1,12 +1,10 @@
 package My::Build::Win32_MinGW_Bakefile;
 
 use strict;
-use base qw(My::Build::Win32_MinGW);
+use base qw(My::Build::Win32_MinGW My::Build::Win32_Bakefile);
 use My::Build::Utility qw(awx_install_arch_file awx_install_arch_auto_file);
 use Config;
 use Fatal qw(chdir);
-
-my $min_dir = File::Spec->catdir( $ENV{WXDIR}, 'samples', 'minimal' );
 
 sub awx_wx_config_data {
     My::Build::Win32::_init();
@@ -17,7 +15,6 @@ sub awx_wx_config_data {
     my %data = ( %{$self->SUPER::awx_wx_config_data},
                  'cxx'     => 'g++',
                  'ld'      => 'g++',
-                 'wxdir'   => $ENV{WXDIR},
                );
 
     my $final = $self->awx_debug ? 'BUILD=debug'
@@ -26,7 +23,7 @@ sub awx_wx_config_data {
     $unicode .= ' MSLU=1' if $self->awx_mslu;
 
     my $dir = Cwd::cwd;
-    chdir $min_dir;
+    chdir File::Spec->catdir( $ENV{WXDIR}, 'samples', 'minimal' );
     my @t = qx(make -n -f makefile.gcc $final $unicode SHARED=1);
 
     my( $orig_libdir, $libdir, $digits );
@@ -44,7 +41,8 @@ sub awx_wx_config_data {
               '-L' . ( $libdir = awx_install_arch_file( 'rEpLaCe/lib' ) )}eg;
             $data{libs} = $_;
         } elsif( s/^\s*g\+\+\s+// ) {
-            s/\s+\S+\.(cpp|o)/ /g;
+            s/\s+\S+\.(cpp|o|d)/ /g;
+            s/\s+-MD\s+/ /g;
             s/(?:\s|^)-[co]//g;
             s{[-/]I(\S+)}{'-I' . File::Spec->canonpath
                                      ( File::Spec->rel2abs( $1 ) )}egi;
@@ -61,6 +59,14 @@ sub awx_wx_config_data {
     $data{version} = $digits;
 
     $self->{awx_data} = \%data;
+}
+
+sub _make_command { "make -f makefile.gcc all " }
+
+sub build_wxwidgets {
+    my( $self ) = shift;
+
+    $self->My::Build::Win32_Bakefile::build_wxwidgets( @_ );
 }
 
 1;

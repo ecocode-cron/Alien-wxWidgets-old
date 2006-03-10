@@ -2,7 +2,8 @@ package My::Build::Win32_MinGW;
 
 use strict;
 use base qw(My::Build::Win32);
-use My::Build::Utility qw(awx_install_arch_file);
+use My::Build::Utility qw(awx_arch_file awx_install_arch_file
+                          awx_install_arch_dir);
 use Config;
 
 sub awx_configure {
@@ -19,6 +20,9 @@ sub awx_configure {
 
     my $cccflags = $self->wx_config( 'cxxflags' );
     my $libs = $self->wx_config( 'libs' );
+    my $incdir = $self->awx_wx_config_data->{wxinc};
+    my $cincdir = $self->awx_wx_config_data->{wxcontrinc};
+    my $iincdir = awx_install_arch_dir( 'rEpLaCe/include' );
 
     foreach ( split /\s+/, $cccflags ) {
         m(^-DSTRICT) && next;
@@ -26,6 +30,10 @@ sub awx_configure {
         m(^-W.*) && next; # under Win32 -Wall gives you TONS of warnings
         m(^-I) && do {
             next if m{(?:regex|zlib|jpeg|png|tiff)$};
+            if( $self->notes( 'build_wx' ) ) {
+                $_ =~ s{\Q$cincdir\E}{$iincdir};
+                $_ =~ s{\Q$incdir\E}{$iincdir};
+            }
             if( $_ =~ /-I\Q$self->{awx_setup_dir}\E/ ) {
                 $config{include_path} .=
                   '-I' . awx_install_arch_file( 'rEpLaCe/lib' ) . ' ';
@@ -71,8 +79,7 @@ sub files_to_install {
     my $dll_from = $self->awx_path_search( $dll );
 
     return ( $self->SUPER::files_to_install(),
-             ( $dll_from =>
-                   Wx::build::Utils::awx_arch_file( "rEpLaCe/lib/$dll" ) ) );
+             ( $dll_from => awx_arch_file( "rEpLaCe/lib/$dll" ) ) );
 }
 
 1;

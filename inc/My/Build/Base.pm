@@ -2,7 +2,7 @@ package My::Build::Base;
 
 use strict;
 use base qw(Module::Build);
-use My::Build::Utility qw(awx_arch_file);
+use My::Build::Utility qw(awx_arch_file awx_patch);
 use Alien::wxWidgets::Utility qw(awx_sort_config awx_grep_config);
 use File::Path ();
 use File::Basename ();
@@ -13,8 +13,68 @@ sub ACTION_build {
     my $self = shift;
 
     $self->SUPER::ACTION_build;
+    if( $self->notes( 'build_wx' ) ) {
+        $self->fetch_wxwidgets;
+        $self->extract_wxwidgets;
+        $self->massage_environment;
+        $self->build_wxwidgets;
+    }
     $self->create_config_file( awx_arch_file( 'Config/Config.pm' ) );
-    $self->build_wxwidgets;
+    $self->install_wxwidgets;
+}
+
+sub ACTION_build_wx {
+    my $self = shift;
+
+    if( $self->notes( 'build_wx' ) ) {
+        $self->fetch_wxwidgets;
+        $self->extract_wxwidgets;
+        $self->massage_environment;
+        $self->build_wxwidgets;
+    }
+}
+
+sub ACTION_build_perl {
+    my $self = shift;
+
+    $self->SUPER::ACTION_build;
+    $self->massage_environment;
+    $self->create_config_file( awx_arch_file( 'Config/Config.pm' ) );
+}
+
+sub ACTION_install_wx {
+    my $self = shift;
+
+    $self->depends_on( 'build_perl' );
+    $self->install_wxwidgets;
+}
+
+sub ACTION_install {
+    my $self = shift;
+
+    $self->SUPER::ACTION_install;
+    $self->install_system_wxwidgets;
+}
+
+sub ACTION_distcheck {
+    my $self = shift;
+    my $data = $self->notes( 'build_data' );
+
+    foreach my $p ( qw(msw mac unix) ) {
+        next unless exists $data->{$p};
+
+        foreach my $c ( qw(unicode ansi) ) {
+            next unless exists $data->{$p}{$c};
+
+            foreach my $f ( @{$data->{$p}{$c}} ) {
+                my $file = File::Spec->catfile( 'patches', $f );
+
+                warn 'Missing patch file: ', $file, "\n" unless -f $file;
+            }
+        }
+    }
+
+    $self->SUPER::ACTION_distcheck;
 }
 
 sub create_config_file {
@@ -102,9 +162,78 @@ EOT
     close $fh;
 }
 
-sub build_wxwidgets {
-    # by default do nothing
+sub fetch_wxwidgets {
+    my $self = shift;
+
+    return if -f $self->notes( 'build_data' )->{data}{archive};
+    require File::Fetch;
+
+    print "Fetching wxWidgets...\n";
+
+    my $path = File::Fetch->new
+      ( uri => $self->notes( 'build_data' )->{data}{url} )->fetch;
+    die 'Unable to fetch archive' unless $path;
 }
+
+sub extract_wxwidgets {
+    my $self = shift;
+
+    return if -d $self->notes( 'build_data' )->{data}{directory};
+    my $archive = $self->notes( 'build_data' )->{data}{archive};
+
+    print "Extracting wxWidgets...\n";
+
+    my $ae;
+    if( $archive =~ /\.tar\.bz2$/ ) {
+        $ae = Archive::Extract::Bz2->new( archive => $archive );
+
+        package Archive::Extract::Bz2;
+
+        sub new { my $class = shift; bless { @_ }, $class };
+        sub extract {
+            my $archive = $_[0]->{archive};
+            system "bzip2 -cd $archive | tar -x -f -" and die 'Error: ', $?;
+            1;
+        }
+        sub error { 'Something went wrong...' }
+    } else {
+        require Archive::Extract;
+        Archive::Extract->new( archive => $archive );
+    }
+
+    die 'Error: ', $ae->error unless $ae->extract;
+
+    $self->patch_wxwidgets;
+}
+
+sub patch_wxwidgets {
+    my $self = shift;
+    my $old_dir = Cwd::cwd();
+    my @patches = $self->awx_wx_patches;
+
+    print "Patching wxWidgets...\n";
+
+    chdir File::Spec->rel2abs
+              ( $self->notes( 'build_data' )->{data}{directory} );
+
+    foreach my $i ( @patches ) {
+        print "Applying patch: ", $i, "\n";
+        system "patch --binary -b -p0 < $i" and die 'Error: ', $?;
+    }
+
+    chdir $old_dir;
+}
+
+sub build_wxwidgets {
+    die "Don't know how to build wxWidgets";
+}
+
+sub install_wxwidgets {
+    return unless $_[0]->notes( 'build_wx' );
+    die "Don't know how to build wxWidgets";
+}
+
+sub install_system_wxwidgets { }
 
 sub awx_configure {
     my $self = shift;
@@ -115,6 +244,7 @@ sub awx_configure {
     $config{config}{debug} = $self->awx_is_debug;
     $config{config}{unicode} = $self->awx_is_unicode;
     $config{config}{mslu} = $self->awx_is_mslu;
+    $config{config}{build} = 'multi';
     $config{link_flags} = '';
     $config{c_flags} = '';
 
@@ -143,11 +273,25 @@ sub awx_static { $_[0]->args( 'static' ) ? 1 : 0 }
 sub awx_is_static { $_[0]->awx_static }
 sub awx_get_package { local $_ = $_[0]; s/^My::Build:://; return $_ }
 
+sub awx_wx_patches {
+    my $self = shift;
+    my $data = $self->notes( 'build_data' );
+    my $toolkit = $^O eq 'MSWin32' ? 'msw' :
+                  $^O eq 'darwin'  ? 'mac' :
+                                     'unix';
+    my $unicode = $self->awx_unicode ? 'unicode' : 'ansi';
+
+    return unless exists $data->{$toolkit} and $data->{$toolkit}{$unicode};
+
+    return map { File::Spec->rel2abs( File::Spec->catfile( 'patches', $_ ) ) }
+               @{$data->{$toolkit}{$unicode}};
+}
+
 sub awx_get_name {
     my( $self, %args ) = @_;
     my $e = sub { defined $_[0] ? ( $_[0] ) : () };
     my $pv = sub { join '.', map { 0 + ( $_ || 0 ) }
-                                 ( $_[0] =~ /(\d+)\.(\d{3,3})(\d{0,3})/ ) } ;
+                                 ( $_[0] =~ /(\d+)\.(\d{1,3})(\d{0,3})/ ) } ;
     my $base = join '-', $args{toolkit}, $pv->( $args{version} ),
                    $e->( $args{debug} ? 'dbg' : undef ),
                    $e->( $args{unicode} ? 'uni' : undef ),
@@ -177,5 +321,7 @@ sub awx_path_search {
 
     return;
 }
+
+sub awx_uses_bakefile { 1 }
 
 1;

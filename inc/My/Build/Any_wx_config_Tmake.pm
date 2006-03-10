@@ -31,5 +31,6 @@ sub awx_wx_config_data {
     $self->{data} = \%data;
 }
 
-1;
+sub awx_uses_bakefile { 0 }
 
+1;

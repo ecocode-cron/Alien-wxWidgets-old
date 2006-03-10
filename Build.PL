@@ -1,11 +1,14 @@
 #!/usr/bin/perl -w
 
+BEGIN { our $NO_INIT = 1 }
+
 use strict;
-use lib 'inc';
-use lib 'lib'; # for Alien::wxWidgets::Utility
+use FindBin;
+use lib "$FindBin::RealBin/inc";
+use lib "$FindBin::RealBin/lib"; # for Alien::wxWidgets::Utility
 use My::Build;
 
-My::Build->new
+my $build = My::Build->new
   ( module_name     => 'Alien::wxWidgets',
     license         => 'perl',
     author          => 'Mattia Barbon <mbarbon@cpan.org>',
@@ -17,5 +20,14 @@ My::Build->new
                          unicode    => { type => '!' },
                          mslu       => { type => '!' },
                          static     => { type => '!' },
+                         build_wx   => { type => '!' },
                         },
-  )->create_build_script;
+  );
+
+my $build_wx = defined $build->args( 'build_wx' )
+                   ? $build->args( 'build_wx' )
+                   : $build->y_n( 'Do you want to build wxWidgets?', 'no' );
+$build->notes( 'build_wx' => $build_wx );
+$build->notes( 'build_data' => do 'patches/data' );
+
+$build->create_build_script;

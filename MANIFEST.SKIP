@@ -1,3 +1,6 @@
+# Avoid wxWidgets temp directory and archive
+^wxWidgets
+
 # Avoid version control files.
 \bRCS\b
 \bCVS\b

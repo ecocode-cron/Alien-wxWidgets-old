@@ -46,7 +46,10 @@ sub awx_compiler_kind {
     return 'nc'; # as in 'No Clue'
 }
 
+# sort a list of configurations by version, debug/release, unicode/ansi, mslu
 sub awx_sort_config {
+    # comparison functions treating undef as 0 or ''
+    # numerico comparison
     my $make_cmpn = sub {
         my $k = shift;
         sub { exists $a->{$k} && exists $b->{$k} ? $a->{$k} <=> $b->{$k} :
@@ -54,6 +57,7 @@ sub awx_sort_config {
               exists $b->{$k}                    ? -1                    :
                                                    0 }
     };
+    # string comparison
     my $make_cmps = sub {
         my $k = shift;
         sub { exists $a->{$k} && exists $b->{$k} ? $a->{$k} cmp $b->{$k} :
@@ -61,7 +65,9 @@ sub awx_sort_config {
               exists $b->{$k}                    ? -1                    :
                                                    0 }
     };
+    # reverse comparison
     my $rev = sub { my $cmp = shift; sub { -1 * &$cmp } };
+    # compare by different criteria, using the first nonzero as tie-breaker
     my $crit_sort = sub {
         my @crit = @_;
         sub {
@@ -85,6 +91,9 @@ sub awx_sort_config {
 sub awx_grep_config {
     my( $cfgs ) = shift;
     my( %a ) = @_;
+    # compare to a numeric range or value
+    # low extreme included, high extreme excluded
+    # if $a{key} = [ lo, hi ] then range else low extreme
     my $make_cmpr = sub {
         my $k = shift;
         sub {
@@ -93,15 +102,18 @@ sub awx_grep_config {
                          $a{$k}    <= $_->{$k};
         }
     };
+    # compare for numeric equality
     my $make_cmpn = sub {
         my $k = shift;
         sub { exists $a{$k} ? $a{$k} == $_->{$k} : 1 }
     };
+    # compare for string equality
     my $make_cmps = sub {
         my $k = shift;
         sub { exists $a{$k} ? $a{$k} eq $_->{$k} : 1 }
     };
 
+    # note tha if the criteria was not supplied, the comparison is a noop
     my $wver = $make_cmpr->( 'version' );
     my $ckind = $make_cmps->( 'compiler_kind' );
     my $cver = $make_cmpn->( 'compiler_version' );
@@ -117,8 +129,12 @@ sub awx_grep_config {
          @{$cfgs}
 }
 
+# automatically add compiler data unless the key was supplied
 sub awx_smart_config {
     my( %args ) = @_;
+    # the key already identifies the configuration
+    return %args if $args{key};
+
     my $cc = $Config{cc};
     my $kind = awx_compiler_kind( $cc );
     my $version = awx_cc_version( $cc );
@@ -127,6 +143,39 @@ sub awx_smart_config {
     $args{compiler_version} ||= $version;
 
     return %args;
+}
+
+# allow to remap srings in the configuration; useful when building
+# archives
+my @prefixes;
+
+BEGIN {
+    if( $ENV{ALIEN_WX_PREFIXES} ) {
+        my @kv = split /,\s*/, $ENV{ALIEN_WX_PREFIXES};
+
+        while( @kv ) {
+            my( $match, $repl ) = ( shift( @kv ) || '', shift( @kv ) || '' );
+
+            push @prefixes, [ $match, $^O eq 'MSWin32' ?
+                                          qr/\Q$match\E/i :
+                                          qr/\Q$match\E/, $repl ];
+        }
+    }
+}
+
+sub _awx_remap {
+    my( $string ) = @_;
+    return $string if ref $string;
+
+    foreach my $prefix ( @prefixes ) {
+        my( $str, $rx, $repl ) = @$prefix;
+
+        if( $string =~ s{$rx(.*)}{$repl$1}g ) {
+            last;
+        }
+    }
+
+    return $string;
 }
 
 1;

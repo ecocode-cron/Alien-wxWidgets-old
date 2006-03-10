@@ -1,0 +1,9 @@
+--- build/msw/config.gcc	2004-09-27 12:01:54.000000000 +0200
++++ build/msw/config.gcc	2005-01-05 06:20:03.345608000 +0100
+@@ -66,5 +66,5 @@
+ 
+ # Build OpenGL canvas library (USE_GUI must be 1)? [0,1]
+-USE_OPENGL = 0
++USE_OPENGL = 1
+ 
+ # Build ODBC database classes (USE_GUI must be 1)? [0,1]

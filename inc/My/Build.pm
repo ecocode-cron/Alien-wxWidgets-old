@@ -6,6 +6,7 @@ use Config;
 use File::Spec;
 
 our @ISA;
+$main::NO_INIT = $main::NO_INIT; # no warnings...
 
 sub awx_get_package {
     local $_ = $Config{osname};
@@ -22,7 +23,7 @@ BEGIN {
     my $package = 'My::Build';
 
     # iterate until fixed point
-    for(;;) {
+    for( ;!$main::NO_INIT ; ) {
         my $full_package = 'My::Build::' . $package->awx_get_package;
         last if $package eq $full_package;
 

@@ -32,7 +32,6 @@ sub awx_wx_config_data {
     my %data = ( %{$self->SUPER::awx_wx_config_data},
                  'cxx'     => 'g++',
                  'ld'      => 'g++',
-                 'wxdir'   => $ENV{WXDIR},
                );
 
     foreach my $item ( qw(cxxflags version libs) ) {
@@ -65,5 +64,7 @@ sub awx_wx_config_data {
 
     $self->{awx_data} = \%data;
 }
+
+sub awx_uses_bakefile { 0 }
 
 1;

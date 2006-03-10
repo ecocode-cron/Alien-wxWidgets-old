@@ -1,13 +1,12 @@
 package My::Build::Win32_MSVC_Bakefile;
 
 use strict;
-use base qw(My::Build::Win32_MSVC);
+use base qw(My::Build::Win32_MSVC My::Build::Win32_Bakefile);
 use My::Build::Utility qw(awx_install_arch_file awx_install_arch_auto_file);
 use Alien::wxWidgets::Utility qw(awx_capture);
 use Config;
 use Fatal qw(chdir);
-
-my $min_dir = File::Spec->catdir( $ENV{WXDIR}, 'samples', 'minimal' );
+use Cwd ();
 
 sub _check_nmake {
     my $out = awx_capture( 'nmake /?' );
@@ -18,16 +17,16 @@ sub _check_nmake {
 }
 
 sub awx_wx_config_data {
-    My::Build::Win32::_init();
-    _check_nmake();
-
     my $self = shift;
+
+    My::Build::Win32::_init();
+    $self->_check_nmake();
+
     return $self->{awx_data} if $self->{awx_data};
 
     my %data = ( %{$self->SUPER::awx_wx_config_data},
                  'cxx'     => 'cl',
                  'ld'      => 'link',
-                 'wxdir'   => $ENV{WXDIR},
                );
 
     die "PANIC: you are not using nmake!" unless $Config{make} eq 'nmake';
@@ -39,7 +38,7 @@ sub awx_wx_config_data {
     $unicode .= ' MSLU=1' if $self->awx_mslu;
 
     my $dir = Cwd::cwd;
-    chdir $min_dir;
+    chdir File::Spec->catdir( $ENV{WXDIR}, 'samples', 'minimal' );
     my @t = qx(nmake /nologo /n /u /f makefile.vc $final $unicode SHARED=1);
 
     my( $accu, $libdir, $digits );
@@ -74,6 +73,14 @@ sub awx_wx_config_data {
     $data{version} = $digits;
 
     $self->{awx_data} = \%data;
+}
+
+sub _make_command { "nmake -f makefile.vc all " }
+
+sub build_wxwidgets {
+    my( $self ) = shift;
+
+    $self->My::Build::Win32_Bakefile::build_wxwidgets( @_ );
 }
 
 1;
