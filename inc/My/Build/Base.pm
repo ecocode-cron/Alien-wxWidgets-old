@@ -18,6 +18,7 @@ sub ACTION_build {
         $self->extract_wxwidgets;
         $self->massage_environment;
         $self->build_wxwidgets;
+        $self->massage_environment; # twice on purpose
     }
     $self->create_config_file( awx_arch_file( 'Config/Config.pm' ) );
     $self->install_wxwidgets;
@@ -31,6 +32,7 @@ sub ACTION_build_wx {
         $self->extract_wxwidgets;
         $self->massage_environment;
         $self->build_wxwidgets;
+        $self->massage_environment; # twice on purpose
     }
 }
 
@@ -77,6 +79,30 @@ sub ACTION_distcheck {
     $self->SUPER::ACTION_distcheck;
 }
 
+sub awx_key {
+    my( $self ) = @_;
+
+    die unless $self->{awx_key};
+
+    return $self->{awx_key};
+}
+
+sub _version_2_dec {
+    my( $self, $ver ) = @_;
+    my $dec;
+
+    $ver =~ m/^(\d)(\d)$/ and
+      $dec = $1 + $2 / 1000;
+    $ver =~ m/^(\d)(\d)(\d+)$/ and
+      $dec = $1 + $2 / 1000 + $3 / 1000000;
+    $ver =~ m/^(\d)(\d+)_(\d+)$/ and
+      $dec = $1 + $2 / 1000 + $3 / 1000000;
+    $ver =~ m/^(\d+)\.(\d+)\.(\d+)$/ and
+      $dec = $1 + $2 / 1000 + $3 / 1000000;
+
+    return $dec;
+}
+
 sub create_config_file {
     my( $self, $file ) = @_;
     my %config = $self->awx_configure;
@@ -85,14 +111,7 @@ sub create_config_file {
 
     $self->{awx_config} = \%config;
 
-    $ver =~ m/^(\d)(\d)$/ and
-      $config{version} = $1 + $2 / 1000;
-    $ver =~ m/^(\d)(\d)(\d+)$/ and
-      $config{version} = $1 + $2 / 1000 + $3 / 1000000;
-    $ver =~ m/^(\d)(\d+)_(\d+)$/ and
-      $config{version} = $1 + $2 / 1000 + $3 / 1000000;
-    $ver =~ m/^(\d+)\.(\d+)\.(\d+)$/ and
-      $config{version} = $1 + $2 / 1000 + $3 / 1000000;
+    $config{version} = $self->_version_2_dec( $ver );
 
     $config{compiler} = $self->awx_wx_config_data->{cxx};
     $config{linker} = $self->awx_wx_config_data->{ld};
@@ -110,6 +129,8 @@ sub create_config_file {
         compiler         => $config{config}{compiler_kind},
         compiler_version => $config{config}{compiler_version},
       );
+
+    $self->{awx_key} = $base;
 
     $config{wx_base_directory} = $self->awx_wx_config_data->{wxdir}
       if $self->awx_wx_config_data->{wxdir};
@@ -323,5 +344,20 @@ sub awx_path_search {
 }
 
 sub awx_uses_bakefile { 1 }
+
+sub ACTION_ppmdist {
+    my( $self ) = @_;
+
+    $self->awx_strip_dlls;
+    $self->_system( 'perl script/make_ppm.pl' );
+}
+
+sub _system {
+    shift;
+    my $ret;
+
+    $ret = @_ > 1 ? system @_ : system $_[0];
+    $ret and croak "system: @_: $?";
+}
 
 1;

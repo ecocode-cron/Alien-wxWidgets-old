@@ -82,4 +82,15 @@ sub files_to_install {
              ( $dll_from => awx_arch_file( "rEpLaCe/lib/$dll" ) ) );
 }
 
+sub awx_strip_dlls {
+    my( $self ) = @_;
+    my $key = $self->awx_key;
+    my $glob = awx_arch_dir( File::Spec->catfile
+                                 ( 'Config', $self->key, '*.dll' ) );
+
+    $self->_system( "attrib -r $glob" );
+    $self->_system( "strip $glob" );
+    $self->_system( "attrib +r $glob" );
+}
+
 1;

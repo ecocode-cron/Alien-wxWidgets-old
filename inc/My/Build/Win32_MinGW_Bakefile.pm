@@ -17,6 +17,7 @@ sub awx_wx_config_data {
                  'ld'      => 'g++',
                );
 
+    my $cflags = 'CXXFLAGS=" -Os -DNO_GCC_PRAGMA "';
     my $final = $self->awx_debug ? 'BUILD=debug'
                                  : 'BUILD=release';
     my $unicode = $self->awx_unicode ? 'UNICODE=1' : 'UNICODE=0';
@@ -24,7 +25,7 @@ sub awx_wx_config_data {
 
     my $dir = Cwd::cwd;
     chdir File::Spec->catdir( $ENV{WXDIR}, 'samples', 'minimal' );
-    my @t = qx(make -n -f makefile.gcc $final $unicode SHARED=1);
+    my @t = qx(make -n -f makefile.gcc $final $unicode $cflags SHARED=1);
 
     my( $orig_libdir, $libdir, $digits );
     foreach ( @t ) {

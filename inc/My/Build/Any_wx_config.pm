@@ -7,7 +7,7 @@ our @ISA = qw(My::Build::Any_wx_config::Base);
 
 our $WX_CONFIG_LIBSEP;
 our @LIBRARIES = qw(base net xml adv animate core deprecated fl gizmos
-                    html media mmedia ogl plot qa stc svg xrc);
+                    html media mmedia ogl plot qa stc svg xrc gl);
 
 my $initialized;
 my( $wx_debug, $wx_unicode );
@@ -139,7 +139,8 @@ sub _key {
     my $self = shift;
     my $key = $self->awx_get_name
       ( toolkit          => $self->awx_build_toolkit,
-        version          => $self->notes( 'build_data' )->{data}{version},
+        version          => $self->_version_2_dec
+                            ( $self->notes( 'build_data' )->{data}{version} ),
         debug            => $self->awx_is_debug,
         unicode          => $self->awx_is_unicode,
         mslu             => $self->awx_is_mslu,
@@ -153,13 +154,6 @@ sub _key {
     return $key;
 }
 
-sub _system {
-    my $ret;
-
-    $ret = @_ > 1 ? system @_ : system $_[0];
-    $ret and croak "system: @_: $?";
-}
-
 sub build_wxwidgets {
     my $self = shift;
     my $prefix = awx_install_arch_dir( 'Config/' . $self->_key );
@@ -168,7 +162,8 @@ sub build_wxwidgets {
     my $unicode = $self->awx_is_unicode ? 'enable' : 'disable';
     my $debug = $self->awx_is_debug ? 'enable' : 'disable';
     my $dir = $self->notes( 'build_data' )->{data}{directory};
-    my $cmd = "sh ../configure --prefix=$prefix $args --$unicode-unicode"
+    my $cmd = "echo exit | " . # for OS X 10.3...
+              "sh ../configure --prefix=$prefix $args --$unicode-unicode"
             . " --$debug-debug";
     my $old_dir = Cwd::cwd;
 
@@ -177,10 +172,10 @@ sub build_wxwidgets {
     # do not reconfigure unless necessary
     mkdir 'bld' unless -d 'bld';
     chdir 'bld';
-    _system( $cmd ) unless -f 'Makefile';
-    _system( 'make all' );
+    $self->_system( $cmd ) unless -f 'Makefile';
+    $self->_system( 'make all' );
     chdir 'contrib/src/stc';
-    _system( 'make all' );
+    $self->_system( 'make all' );
 
     chdir $old_dir;
 }
@@ -208,16 +203,20 @@ sub install_wxwidgets { }
 
 sub install_system_wxwidgets {
     my( $self ) = shift;
+
+    return unless $self->notes( 'build_wx' );
+
     my $prefix = awx_arch_dir( 'Config/' . $self->_key );
     my $dir = $self->notes( 'build_data' )->{data}{directory};
     my $old_dir = Cwd::cwd;
+    my $destdir = $self->destdir ? ' DESTDIR=' . $self->destdir : '';
 
     chdir $dir;
 
     chdir 'bld';
-    _system( 'make install' );
+    $self->_system( 'make install' . $destdir );
     chdir 'contrib/src/stc';
-    _system( 'make install' );
+    $self->_system( 'make install' . $destdir );
 
     chdir $old_dir;
 }

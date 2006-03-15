@@ -232,13 +232,6 @@ use strict;
 use Carp;
 # mixin: no use base
 
-sub _system {
-    my $ret;
-
-    $ret = @_ > 1 ? system @_ : system $_[0];
-    $ret and croak "system: @_: $?";
-}
-
 sub build_wxwidgets {
     my $self = shift;
     my $old_dir = Cwd::cwd();
@@ -249,9 +242,9 @@ sub build_wxwidgets {
     my $opt = join ' ', $uni, $mslu, $dbg, 'SHARED=1';
 
     chdir File::Spec->catdir( $ENV{WXDIR}, 'build', 'msw' );
-    _system( $self->_make_command . ' ' . $opt );
+    $self->_system( $self->_make_command . ' ' . $opt );
     chdir File::Spec->catdir( $ENV{WXDIR}, 'contrib', 'build', 'stc' );
-    _system( $self->_make_command . ' ' . $opt );
+    $self->_system( $self->_make_command . ' ' . $opt );
 
     chdir $old_dir;
 }

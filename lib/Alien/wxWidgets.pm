@@ -20,6 +20,7 @@ Alien::wxWidgets - building, finding and using wxWidgets binaries
     my @libraries = Alien::wxWidgets->link_libraries( qw(gl adv core base) );
     my @implib = Alien::wxWidgets->import_libraries( qw(gl adv core base) );
     my @shrlib = Alien::wxWidgets->shared_libraries( qw(gl adv core base) );
+    my @keys = Alien::wxWidgets->library_keys; # 'gl', 'adv', ...
     my $library_path = Alien::wxWidgets->shared_library_path;
     my $key = Alien::wxWidgets->key;
 
@@ -120,6 +121,7 @@ sub _grep_libraries {
 sub link_libraries { shift; return _grep_libraries( 'link', @_ ) }
 sub shared_libraries { shift; return _grep_libraries( 'dll', @_ ) }
 sub import_libraries { shift; return _grep_libraries( 'lib', @_ ) }
+sub library_keys { shift; return keys %{$VALUES{_libraries}} }
 
 sub libraries {
     my $class = shift;

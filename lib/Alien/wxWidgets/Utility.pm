@@ -170,9 +170,7 @@ sub _awx_remap {
     foreach my $prefix ( @prefixes ) {
         my( $str, $rx, $repl ) = @$prefix;
 
-        if( $string =~ s{$rx(.*)}{$repl$1}g ) {
-            last;
-        }
+        $string =~ s{$rx(\S*)}{$repl$1}g;
     }
 
     return $string;

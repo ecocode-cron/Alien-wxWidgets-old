@@ -3,24 +3,26 @@ my $URL     = 'http://humptydumpty.rbnet.it/wxperl/data';
 my $TYPE    = 'tar.bz2';
 my $BASE    = 'wxWidgets';
 
+my @common = qw(wxWidgets-2.6.2.patch);
+
 { msw     => { unicode => [ qw(
 wxMSW-2.6.2-setup_u.patch
 wxMSW-2.5.3-config.patch
 wxMSW-2.6.1-magic.patch
 wxMSW-2.6.2-makefiles.patch
-wxWidgets-2.6.2.patch
-                               ) ],
+                               ), @common ],
                ansi    => [ qw(
 wxMSW-2.6.2-setup.patch
 wxMSW-2.5.3-config.patch
 wxMSW-2.6.1-magic.patch
 wxMSW-2.6.2-makefiles.patch
-wxWidgets-2.6.2.patch
-                               ) ],
+                               ), @common ],
                },
-  mac     => {
+  mac     => { unicode => [ @common ],
+               ansi    => [ @common ],
                },
-  unix    => {
+  unix    => { unicode => [ @common ],
+               ansi    => [ @common ],
                },
   data    => { url  => ( sprintf '%s/%s-%s.%s', $URL, $BASE, $VERSION, $TYPE ),
                directory => ( sprintf '%s-%s', $BASE, $VERSION ),
