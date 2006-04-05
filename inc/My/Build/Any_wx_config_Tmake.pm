@@ -9,7 +9,7 @@ sub awx_wx_config_data {
 
     my %data;
 
-    foreach my $item ( qw(cxx ld cxxflags version libs basename) ) {
+    foreach my $item ( qw(cxx ld cxxflags version libs basename prefix) ) {
         $data{$item} = $self->_call_wx_config( $item );
     }
     $data{ld} =~ s/\-o\s*$/ /; # wxWidgets puts 'ld -o' into LD
@@ -32,5 +32,6 @@ sub awx_wx_config_data {
 }
 
 sub awx_uses_bakefile { 0 }
+sub awx_is_monolithic { 0 }
 
 1;

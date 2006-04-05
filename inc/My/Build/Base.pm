@@ -88,7 +88,7 @@ sub awx_key {
 }
 
 sub _version_2_dec {
-    my( $self, $ver ) = @_;
+    my( $class, $ver ) = @_;
     my $dec;
 
     $ver =~ m/^(\d)(\d)$/ and
@@ -103,10 +103,9 @@ sub _version_2_dec {
     return $dec;
 }
 
-sub create_config_file {
-    my( $self, $file ) = @_;
+sub _init_config {
+    my( $self ) = @_;
     my %config = $self->awx_configure;
-    my $directory = File::Basename::dirname( $file );
     my $ver = $self->awx_wx_config_data->{version};
 
     $self->{awx_config} = \%config;
@@ -136,6 +135,27 @@ sub create_config_file {
       if $self->awx_wx_config_data->{wxdir};
     $config{alien_base} = $self->{awx_base} = $base;
     $config{alien_package} = "Alien::wxWidgets::Config::${base}";
+
+    return %config;
+}
+
+sub create_config_file {
+    my( $self, $file ) = @_;
+
+    if( -f 'configured' ) {
+        warn "Remove 'configured' to reconfigure wxWidgets";
+        return;
+    }
+    $self->add_to_cleanup( 'configured' );
+    {
+        require ExtUtils::Command;
+        local @ARGV = 'configured';
+        ExtUtils::Command::touch();
+    }
+
+    my $directory = File::Basename::dirname( $file );
+    my %config = $self->_init_config;
+    my $base = $self->awx_key;
 
     my $body = Data::Dumper->Dump( [ \%config ] );
     $body =~ s/rEpLaCe/$base/g;
@@ -284,6 +304,8 @@ sub wx_config {
     return @{$data}{@_};
 }
 
+sub awx_monolithic { $_[0]->args( 'monolithic' ) ? 1 : 0 }
+sub awx_is_monolithic { $_[0]->awx_monolithic }
 sub awx_debug { $_[0]->args( 'debug' ) ? 1 : 0 }
 sub awx_is_debug { $_[0]->awx_debug }
 sub awx_unicode { $_[0]->args( 'unicode' ) ? 1 : 0 }

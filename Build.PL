@@ -21,6 +21,7 @@ my $build = My::Build->new
                          unicode    => { type => '!' },
                          mslu       => { type => '!' },
                          static     => { type => '!' },
+                         monolithic => { type => '!' },
                          build_wx   => { type => '!' },
                         },
   );
@@ -32,3 +33,5 @@ $build->notes( 'build_wx' => $build_wx );
 $build->notes( 'build_data' => do 'patches/data' );
 
 $build->create_build_script;
+
+unlink 'configured' if -f 'configured';

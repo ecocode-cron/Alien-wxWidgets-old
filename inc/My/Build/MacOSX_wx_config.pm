@@ -18,5 +18,6 @@ sub awx_wx_config_data {
 }
 
 sub awx_build_toolkit { 'mac' }
+sub awx_dlext { 'dylib' }
 
 1;

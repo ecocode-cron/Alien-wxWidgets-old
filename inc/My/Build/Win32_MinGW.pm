@@ -3,7 +3,7 @@ package My::Build::Win32_MinGW;
 use strict;
 use base qw(My::Build::Win32);
 use My::Build::Utility qw(awx_arch_file awx_install_arch_file
-                          awx_install_arch_dir);
+                          awx_install_arch_dir awx_arch_dir);
 use Config;
 
 sub awx_configure {
@@ -84,13 +84,11 @@ sub files_to_install {
 
 sub awx_strip_dlls {
     my( $self ) = @_;
-    my $key = $self->awx_key;
-    my $glob = awx_arch_dir( File::Spec->catfile
-                                 ( 'Config', $self->key, '*.dll' ) );
+    my( $dir ) = grep !/Config/, glob( awx_arch_dir( '*' ) );
 
-    $self->_system( "attrib -r $glob" );
-    $self->_system( "strip $glob" );
-    $self->_system( "attrib +r $glob" );
+    $self->_system( "attrib -r $dir\\lib\\*.dll" );
+    $self->_system( "strip $dir\\lib\\*.dll" );
+    $self->_system( "attrib +r $dir\\lib\\*.dll" );
 }
 
 1;

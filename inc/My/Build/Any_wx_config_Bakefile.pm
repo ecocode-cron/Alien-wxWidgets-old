@@ -10,7 +10,7 @@ sub awx_wx_config_data {
 
     my %data;
 
-    foreach my $item ( qw(cxx ld cxxflags version libs basename) ) {
+    foreach my $item ( qw(cxx ld cxxflags version libs basename prefix) ) {
         $data{$item} = $self->_call_wx_config( $item );
     }
     $data{ld} =~ s/\-o\s*$/ /; # wxWidgets puts 'ld -o' into LD
@@ -26,10 +26,14 @@ sub awx_wx_config_data {
         my( $key, $name ) = ( $2, $1 );
         $key = 'base' if $key =~ m/^base[ud]{0,2}/;
         $key = 'base' if $key =~ m/^carbon/; # here for Mac
-        my $dll = "lib${name}.$Config{dlext}";
+        $key = 'core' if $key =~ m/^mac[ud]{0,2}/;
+        my $dll = "lib${name}." . $self->awx_dlext;
 
         $data{dlls}{$key} = { dll  => $dll,
                               link => $lib };
+    }
+    if( $self->awx_is_monolithic ) {
+        $data{dlls}{mono} = delete $data{dlls}{core};
     }
 
     $self->{data} = \%data;

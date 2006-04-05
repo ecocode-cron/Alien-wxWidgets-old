@@ -10,7 +10,7 @@ our @LIBRARIES = qw(base net xml adv animate core deprecated fl gizmos
                     html media mmedia ogl plot qa stc svg xrc gl);
 
 my $initialized;
-my( $wx_debug, $wx_unicode );
+my( $wx_debug, $wx_unicode, $wx_monolithic );
 
 sub _init {
     return if $initialized;
@@ -19,8 +19,7 @@ sub _init {
     my $wx_config = $ENV{WX_CONFIG} || 'wx-config';
     my $ver = `$wx_config --version` or die "Can't execute wx-config: $!";
 
-    $ver =~ m/^(\d)\.(\d)/;
-    $ver = $1 + $2 / 1000;
+    $ver = __PACKAGE__->_version_2_dec( $ver );
 
     my $base = `$wx_config --basename`;
     $wx_debug = $base =~ m/d$/ ? 1 : 0;
@@ -29,6 +28,8 @@ sub _init {
     if( $ver >= 2.005001 ) {
         $WX_CONFIG_LIBSEP = `$wx_config --libs base > /dev/null 2>&1 || echo 'X'` eq "X\n" ?
           '=' : ' ';
+        $wx_monolithic = `$wx_config --libs${WX_CONFIG_LIBSEP}adv` eq
+                         `$wx_config --libs${WX_CONFIG_LIBSEP}core`;
         require My::Build::Any_wx_config_Bakefile;
         @ISA = qw(My::Build::Any_wx_config_Bakefile);
     } else {
@@ -36,8 +37,21 @@ sub _init {
         @ISA = qw(My::Build::Any_wx_config_Tmake);
     }
 
-    sub awx_is_debug { $wx_debug }
-    sub awx_is_unicode { $wx_unicode }
+    sub awx_is_debug {
+        $_[0]->notes( 'build_wx' )
+          ? $_[0]->SUPER::awx_is_debug
+          : $wx_debug;
+    }
+    sub awx_is_unicode {
+        $_[0]->notes( 'build_wx' )
+          ? $_[0]->SUPER::awx_is_unicode
+          : $wx_unicode;
+    }
+    sub awx_is_monolithic {
+        $_[0]->notes( 'build_wx' )
+          ? $_[0]->SUPER::awx_is_monolithic
+          : $wx_monolithic;
+    }
 }
 
 package My::Build::Any_wx_config::Base;
@@ -56,9 +70,11 @@ sub awx_configure {
     my %config = $self->SUPER::awx_configure;
     my $cf = $self->wx_config( 'cxxflags' );
 
+    $config{prefix} = $self->wx_config( 'prefix' );
     $cf =~ m/__WX(x11|msw|motif|gtk|mac)__/i or
       die "Unable to determine toolkit!";
     $config{config}{toolkit} = lc $1;
+    $config{config}{build} = $self->awx_is_monolithic ? 'mono' : 'multi';
 
     if( $config{config}{toolkit} eq 'gtk' ) {
         $self->wx_config( 'basename' ) =~ m/(gtk2?)/i or
@@ -135,6 +151,8 @@ sub awx_compiler_kind {
     return Alien::wxWidgets::Utility::awx_compiler_kind( $_[1] )
 }
 
+sub awx_dlext { $Config{dlext} }
+
 sub _key {
     my $self = shift;
     my $key = $self->awx_get_name
@@ -156,7 +174,7 @@ sub _key {
 
 sub build_wxwidgets {
     my $self = shift;
-    my $prefix = awx_install_arch_dir( 'Config/' . $self->_key );
+    my $prefix = awx_install_arch_dir( $self->_key );
     my $args = sprintf '--with-%s --with-opengl --disable-compat24',
                        $self->awx_build_toolkit;
     my $unicode = $self->awx_is_unicode ? 'enable' : 'disable';
@@ -206,7 +224,6 @@ sub install_system_wxwidgets {
 
     return unless $self->notes( 'build_wx' );
 
-    my $prefix = awx_arch_dir( 'Config/' . $self->_key );
     my $dir = $self->notes( 'build_data' )->{data}{directory};
     my $old_dir = Cwd::cwd;
     my $destdir = $self->destdir ? ' DESTDIR=' . $self->destdir : '';

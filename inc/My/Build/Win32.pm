@@ -85,6 +85,7 @@ sub awx_configure {
     my $self = shift;
     my %config = $self->SUPER::awx_configure;
 
+    $config{prefix} = $self->wx_config( 'wxdir' );
     $config{config}{toolkit} = $self->is_wince ? 'wce' : 'msw';
     $config{shared_library_path} = awx_install_arch_file( "rEpLaCe/lib" );
 

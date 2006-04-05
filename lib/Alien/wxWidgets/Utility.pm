@@ -135,7 +135,7 @@ sub awx_smart_config {
     # the key already identifies the configuration
     return %args if $args{key};
 
-    my $cc = $Config{cc};
+    my $cc = $ENV{CC} || $Config{cc};
     my $kind = awx_compiler_kind( $cc );
     my $version = awx_cc_version( $cc );
 
@@ -166,6 +166,7 @@ BEGIN {
 sub _awx_remap {
     my( $string ) = @_;
     return $string if ref $string;
+    return $string if $Alien::wxWidgets::dont_remap;
 
     foreach my $prefix ( @prefixes ) {
         my( $str, $rx, $repl ) = @$prefix;
