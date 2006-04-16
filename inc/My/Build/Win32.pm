@@ -174,7 +174,7 @@ sub copy_wxwidgets {
     my %files = $self->files_to_install;
 
     while( my( $from, $to ) = each %files ) {
-        $to =~ s/rEpLaCe/$self->{awx_base}/g;
+        $to =~ s/rEpLaCe/$self->{awx_key}/g;
         $self->copy_if_modified( from => $from, to => $to, verbose => 1 );
     }
 }

@@ -142,16 +142,16 @@ sub _init_config {
 sub create_config_file {
     my( $self, $file ) = @_;
 
+=pod
+
     if( -f 'configured' ) {
         warn "Remove 'configured' to reconfigure wxWidgets";
+        my $config = do 'configured';
+        $self->{awx_base} = $self->{awx_key} = $config->{alien_base};
         return;
     }
-    $self->add_to_cleanup( 'configured' );
-    {
-        require ExtUtils::Command;
-        local @ARGV = 'configured';
-        ExtUtils::Command::touch();
-    }
+
+=cut
 
     my $directory = File::Basename::dirname( $file );
     my %config = $self->_init_config;
@@ -201,6 +201,17 @@ sub config {
 EOT
 
     close $fh;
+
+=pod
+
+    $self->add_to_cleanup( 'configured' );
+    {
+        open my $fh, '>', 'configured';
+        print $fh $body;
+    }
+
+=cut
+
 }
 
 sub fetch_wxwidgets {
