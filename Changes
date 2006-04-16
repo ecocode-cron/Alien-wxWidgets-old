@@ -1,6 +1,6 @@
 Revision history for Perl extension Alien::wxWidgets.
 
-0.04
+0.04  Sun Apr 16 17:01:07 CEST 2006
 	- Optionally build wxWidgets from sources.
 	- Allow some actions (like 'dist') to be executed without
 	  an installed wxWidgets.
