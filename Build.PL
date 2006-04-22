@@ -4,11 +4,20 @@ BEGIN { our $NO_INIT = 1 }
 
 use strict;
 use FindBin;
-use lib "$FindBin::RealBin/inc";
-use lib "$FindBin::RealBin/lib"; # for Alien::wxWidgets::Utility
+use lib "$FindBin::RealBin/lib", "$FindBin::RealBin/inc";
 use My::Build;
 
-my $build = My::Build->new
+# new_from_context is broken: it does not restore
+# @INC set in Build.PL before trying to load a base class not
+# defined using ->subclass...
+my $class = Module::Build->subclass
+  ( class            => 'My::Build::new_from_context_is_broken',
+    code             => <<'EOC' );
+use lib qw(lib inc);
+use My::Build;
+@ISA = qw(My::Build);
+EOC
+my $build = $class->new
   ( module_name     => 'Alien::wxWidgets',
     license         => 'perl',
     author          => 'Mattia Barbon <mbarbon@cpan.org>',
