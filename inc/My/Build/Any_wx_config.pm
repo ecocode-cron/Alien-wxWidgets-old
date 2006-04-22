@@ -17,7 +17,7 @@ sub _init {
     $initialized = 1;
 
     my $wx_config = $ENV{WX_CONFIG} || 'wx-config';
-    my $ver = `$wx_config --version` or die "Can't execute wx-config: $!";
+    my $ver = `$wx_config --version` or die "Can't execute '$wx_config': $!";
 
     $ver = __PACKAGE__->_version_2_dec( $ver );
 
