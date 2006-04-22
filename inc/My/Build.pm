@@ -23,7 +23,7 @@ BEGIN {
     my $package = 'My::Build';
 
     # iterate until fixed point
-    for( ;!$main::NO_INIT ; ) {
+    for( ; !$main::NO_INIT; ) {
         my $full_package = 'My::Build::' . $package->awx_get_package;
         last if $package eq $full_package;
 
