@@ -1,5 +1,9 @@
 Revision history for Perl extension Alien::wxWidgets.
 
+0.06  Sun Apr 23 14:35:47 CEST 2006
+	- Cache the absolute path of the wx-config used, and always
+	  use it during the build even if PATH changes.
+
 0.05  Fri Apr 21 22:40:38 CEST 2006
 	- Work around a Module::Build handling of @INC when
 	  building from CPAN.

@@ -12,13 +12,30 @@ our @LIBRARIES = qw(base net xml adv animate core deprecated fl gizmos
 my $initialized;
 my( $wx_debug, $wx_unicode, $wx_monolithic );
 
+sub _find {
+    my( $name ) = @_;
+
+    return $name if File::Spec->file_name_is_absolute( $name );
+    foreach my $dir ( File::Spec->path ) {
+        my $abs = File::Spec->catfile( $dir, $name );
+        return $abs if -x $abs;
+    }
+
+    return $name;
+}
+
 sub _init {
+    my $build = shift;
+
     return if $initialized;
     $initialized = 1;
 
-    my $wx_config = $ENV{WX_CONFIG} || 'wx-config';
+    my $wx_config =    ( $build && $build->notes( 'wx_config' ) )
+                    || $ENV{WX_CONFIG} || 'wx-config';
     my $ver = `$wx_config --version` or die "Can't execute '$wx_config': $!";
 
+    $build->notes( 'wx_config' => _find( $wx_config ) )
+        if $build && !$build->notes( 'wx_config' );
     $ver = __PACKAGE__->_version_2_dec( $ver );
 
     my $base = `$wx_config --basename`;
@@ -64,7 +81,7 @@ use Config;
 use My::Build::Utility qw(awx_arch_dir awx_install_arch_dir);
 
 sub awx_configure {
-    My::Build::Any_wx_config::_init;
+    My::Build::Any_wx_config::_init( $_[0] );
 
     my $self = shift;
     my %config = $self->SUPER::awx_configure;
@@ -130,11 +147,12 @@ sub awx_configure {
 }
 
 sub _call_wx_config {
-    My::Build::Any_wx_config::_init;
+    My::Build::Any_wx_config::_init( $_[0] );
 
     my $self = shift;
     my $options = join ' ', map { "--$_" } @_;
-    my $wx_config = $ENV{WX_CONFIG} || 'wx-config';
+    my $wx_config =    $self->notes( 'wx_config' )
+                    || $ENV{WX_CONFIG} || 'wx-config';
 
     # not completely correct, but close
     $options = "--static $options" if $self->awx_static;
@@ -146,7 +164,7 @@ sub _call_wx_config {
 }
 
 sub awx_compiler_kind {
-    My::Build::Any_wx_config::_init;
+    My::Build::Any_wx_config::_init( $_[0] );
 
     return Alien::wxWidgets::Utility::awx_compiler_kind( $_[1] )
 }
