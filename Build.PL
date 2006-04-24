@@ -14,8 +14,8 @@ my $class = Module::Build->subclass
   ( class            => 'My::Build::new_from_context_is_broken',
     code             => <<'EOC' );
 use lib qw(lib inc);
-use My::Build;
-@ISA = qw(My::Build);
+@ISA = qw(My::Build Module::Build);
+require My::Build;
 EOC
 my $build = $class->new
   ( module_name     => 'Alien::wxWidgets',

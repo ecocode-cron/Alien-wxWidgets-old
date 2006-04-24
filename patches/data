@@ -1,5 +1,5 @@
 my $VERSION = '2.6.2';
-my $URL     = 'http://humptydumpty.rbnet.it/wxperl/data';
+my $URL     = 'ftp://biolpc22.york.ac.uk/pub/2.6.2';
 my $TYPE    = 'tar.bz2';
 my $BASE    = 'wxWidgets';
 
