@@ -15,8 +15,9 @@ sub _call_make {
     my $self = shift;
     my $final = $self->awx_debug ? 'FINAL=0' : 'FINAL=1';
     my $unicode = $self->awx_unicode ? 'UNICODE=1' : 'UNICODE=0';
+    my $make = $self->_find_make;
     $unicode .= ' EXTRALIBS=-lunicows' if $self->awx_mslu;
-    my $t = qx(make -s -f $makefile @_ $final $unicode CXXFLAGS=-Os);
+    my $t = qx($make -s -f $makefile @_ $final $unicode CXXFLAGS=-Os);
     chomp $t;
     $t =~ s{[/-]([ID])}{-$1}g;
 

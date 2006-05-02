@@ -24,8 +24,9 @@ sub awx_wx_config_data {
     $unicode .= ' MSLU=1' if $self->awx_mslu;
 
     my $dir = Cwd::cwd;
+    my $make = $self->_find_make;
     chdir File::Spec->catdir( $ENV{WXDIR}, 'samples', 'minimal' );
-    my @t = qx(make -n -f makefile.gcc $final $unicode $cflags SHARED=1);
+    my @t = qx($make -n -f makefile.gcc $final $unicode $cflags SHARED=1);
 
     my( $orig_libdir, $libdir, $digits );
     foreach ( @t ) {
@@ -62,7 +63,10 @@ sub awx_wx_config_data {
     $self->{awx_data} = \%data;
 }
 
-sub _make_command { "make -f makefile.gcc all " }
+sub _make_command {
+    my $make = $_[0]->_find_make;
+    "$make -f makefile.gcc all "
+}
 
 sub build_wxwidgets {
     my( $self ) = shift;

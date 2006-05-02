@@ -6,6 +6,19 @@ use My::Build::Utility qw(awx_arch_file awx_install_arch_file
                           awx_install_arch_dir awx_arch_dir);
 use Config;
 
+sub _find_make {
+    my( @try ) = qw(mingw32-make make);
+
+    foreach my $name ( @try ) {
+        foreach my $dir ( File::Spec->path ) {
+            my $abs = File::Spec->catfile( $dir, "$name.exe" );
+            return $name if -x $abs;
+        }
+    }
+
+    return 'make';
+}
+
 sub awx_configure {
     my $self = shift;
     my %config = $self->SUPER::awx_configure;

@@ -1,5 +1,9 @@
 Revision history for Perl extension Alien::wxWidgets.
 
+0.09  Tue May  2 21:27:03 CEST 2006
+	- Use mingw32-make as an alternative to make
+	  under Win32/MinGW.
+
 0.08  Sun Apr 30 12:33:01 CEST 2006
 	- Fix the build process with CPANPLUS.
 
