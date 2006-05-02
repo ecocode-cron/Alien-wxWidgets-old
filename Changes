@@ -1,5 +1,8 @@
 Revision history for Perl extension Alien::wxWidgets.
 
+0.08  Sun Apr 30 12:33:01 CEST 2006
+	- Fix the build process with CPANPLUS.
+
 0.07  Mon Apr 24 23:16:30 CEST 2006
 	- Fix the download URL for wxWidgets 2.6.2.
 	- Fix the build process under Windows.

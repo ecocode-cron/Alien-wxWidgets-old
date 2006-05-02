@@ -30,6 +30,8 @@ sub _init {
     return if $initialized;
     $initialized = 1;
 
+    lib->import( qw(lib inc) );
+
     my $wx_config =    ( $build && $build->notes( 'wx_config' ) )
                     || $ENV{WX_CONFIG} || 'wx-config';
     my $ver = `$wx_config --version` or die "Can't execute '$wx_config': $!";

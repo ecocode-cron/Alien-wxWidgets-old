@@ -3,8 +3,7 @@
 BEGIN { our $NO_INIT = 1 }
 
 use strict;
-use FindBin;
-use lib "$FindBin::RealBin/lib", "$FindBin::RealBin/inc";
+use lib "lib", "inc";
 use My::Build;
 
 # new_from_context is broken: it does not restore
@@ -43,4 +42,4 @@ $build->notes( 'build_data' => do 'patches/data' );
 
 $build->create_build_script;
 
-unlink 'configured' if -f 'configured';
+# unlink 'configured' if -f 'configured';
