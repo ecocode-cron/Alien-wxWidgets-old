@@ -1,0 +1,733 @@
+diff -r -u wxWidgets-2.6.3.orig/src/common/dobjcmn.cpp wxWidgets-2.6.3/src/common/dobjcmn.cpp
+--- src/common/dobjcmn.cpp	2006-03-21 21:35:57.000000000 +0100
++++ src/common/dobjcmn.cpp	2006-03-31 11:56:54.000000000 +0200
+@@ -253,11 +253,15 @@
+ 
+ bool wxTextDataObject::GetDataHere(const wxDataFormat& format, void *buf) const
+ {
++    if ( !buf )
++        return false;
++        
+     wxCharBuffer buffer = GetConv(format).cWX2MB( GetText().c_str() );
+     if ( !buffer )
+         return false;
+ 
+-    strcpy( (char*) buf, buffer );
++    memcpy( (char*) buf, buffer, GetDataSize(format) );
++    // strcpy( (char*) buf, buffer );
+ 
+     return true;
+ }
+diff -r -u wxWidgets-2.6.3.orig/src/common/socket.cpp wxWidgets-2.6.3/src/common/socket.cpp
+--- src/common/socket.cpp	2006-02-16 10:55:19.000000000 +0100
++++ src/common/socket.cpp	2006-03-31 11:56:56.000000000 +0200
+@@ -698,7 +698,7 @@
+   else
+     timeout = m_timeout * 1000;
+ 
+-  bool has_event_loop = wxTheApp ? (wxTheApp->GetTraits() ? true : false) : false;
++  bool has_event_loop = wxTheApp->GetTraits() ? (wxTheApp->GetTraits()->GetSocketGUIFunctionsTable() ? true : false) : false;
+ 
+   // Wait in an active polling loop.
+   //
+diff -r -u wxWidgets-2.6.3.orig/src/generic/listctrl.cpp wxWidgets-2.6.3/src/generic/listctrl.cpp
+--- src/generic/listctrl.cpp	2006-03-16 13:08:45.000000000 +0100
++++ src/generic/listctrl.cpp	2006-03-31 11:57:02.000000000 +0200
+@@ -2914,6 +2914,7 @@
+ 
+ void wxListMainWindow::OnMouse( wxMouseEvent &event )
+ {
++
+ #ifdef __WXMAC__
+     // On wxMac we can't depend on the EVT_KILL_FOCUS event to properly
+     // shutdown the edit control when the mouse is clicked elsewhere on the
+@@ -2937,7 +2938,15 @@
+     }
+ 
+     if ( !HasCurrent() || IsEmpty() )
++    {
++        if (event.RightDown())
++        {
++            SendNotify( (size_t)-1, wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK, event.GetPosition() );
++            // Allow generation of context menu event
++            event.Skip();
++		}
+         return;
++	}
+ 
+     if (m_dirty)
+         return;
+@@ -3005,11 +3014,17 @@
+         m_dragCount = 0;
+     }
+ 
+-    if ( !hitResult )
++	if ( !hitResult )
+     {
+-        // outside of any item
+-        return;
+-    }
++        if (event.RightDown())
++        {
++            SendNotify( (size_t) -1, wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK, event.GetPosition() );
++            // Allow generation of context menu event
++            event.Skip();
++        }
++
++		return;
++	}
+ 
+     bool forceClick = false;
+     if (event.ButtonDClick())
+@@ -3319,6 +3334,10 @@
+ 
+         case WXK_PRIOR:
+             {
++                // avoid floating point exception
++                if (m_linesPerPage == 0)
++                    m_linesPerPage = 1;
++                    
+                 int steps = InReportView() ? m_linesPerPage - 1 : m_current % m_linesPerPage;
+ 
+                 int index = m_current - steps;
+@@ -3331,6 +3350,10 @@
+ 
+         case WXK_NEXT:
+             {
++                // avoid floating point exception
++                if (m_linesPerPage == 0)
++                    m_linesPerPage = 1;
++                    
+                 int steps = InReportView()
+                                ? m_linesPerPage - 1
+                                : m_linesPerPage - (m_current % m_linesPerPage) - 1;
+@@ -4667,7 +4690,13 @@
+ 
+ void wxListMainWindow::OnScroll(wxScrollWinEvent& event)
+ {
+-    // update our idea of which lines are shown when we redraw the window the
++    int cw, ch, vw, vh;
++    GetVirtualSize(&vw, &vh);  
++    GetClientSize(&cw, &ch);
++    if (event.GetOrientation() == wxVERTICAL && ch >= vh)
++        return;
++        
++	// update our idea of which lines are shown when we redraw the window the
+     // next time
+     ResetVisibleLinesRange();
+ 
+diff -r -u wxWidgets-2.6.3.orig/src/gtk/clipbrd.cpp wxWidgets-2.6.3/src/gtk/clipbrd.cpp
+--- src/gtk/clipbrd.cpp	2006-03-21 21:36:02.000000000 +0100
++++ src/gtk/clipbrd.cpp	2006-03-31 11:57:02.000000000 +0200
+@@ -493,17 +493,22 @@
+     }
+ 
+     delete[] array;
+-
++    
++#ifdef __WXGTK20__
+     gtk_signal_connect( GTK_OBJECT(m_clipboardWidget),
+                         "selection_get",
+                         GTK_SIGNAL_FUNC(selection_handler),
+                         GUINT_TO_POINTER(
+-#ifdef __WXGTK20__
+                                 gtk_get_current_event_time()
++                            ) );
+ #else
++    gtk_signal_connect( GTK_OBJECT(m_clipboardWidget),
++                        "selection_get",
++                        GTK_SIGNAL_FUNC(selection_handler),
++                        GUINT_TO_POINTER(
+                                 gdk_event_get_time(gtk_get_current_event())
++                            ) );
+ #endif
+-                                        ) );
+ 
+ #if wxUSE_THREADS
+     /* disable GUI threads */
+diff -r -u wxWidgets-2.6.3.orig/src/gtk/window.cpp wxWidgets-2.6.3/src/gtk/window.cpp
+--- src/gtk/window.cpp	2006-03-19 10:08:42.000000000 +0100
++++ src/gtk/window.cpp	2006-03-31 11:57:04.000000000 +0200
+@@ -1014,9 +1014,6 @@
+     event.m_scanCode = gdk_event->keyval;
+     event.m_rawCode = (wxUint32) gdk_event->keyval;
+     event.m_rawFlags = 0;
+-#if wxUSE_UNICODE
+-    event.m_uniChar = gdk_keyval_to_unicode(gdk_event->keyval);
+-#endif
+     wxGetMousePosition( &x, &y );
+     win->ScreenToClient( &x, &y );
+     event.m_x = x;
+@@ -1327,11 +1324,11 @@
+             if (event.ControlDown() && key_code >= 'a' && key_code <= 'z' )
+             {
+                 event.m_keyCode = key_code - 'a' + 1;
+-#if wxUSE_UNICODE
+-                event.m_uniChar = event.m_keyCode;
+-#endif
+             }               
+ 
++#if wxUSE_UNICODE
++            event.m_uniChar = event.m_keyCode;
++#endif
+             // Implement OnCharHook by checking ancesteror top level windows
+             wxWindow *parent = win;
+             while (parent && !parent->IsTopLevel())
+diff -r -u wxWidgets-2.6.3.orig/src/msw/bmpbuttn.cpp wxWidgets-2.6.3/src/msw/bmpbuttn.cpp
+--- src/msw/bmpbuttn.cpp	2005-06-07 21:16:15.000000000 +0200
++++ src/msw/bmpbuttn.cpp	2006-04-01 20:14:26.000000000 +0200
+@@ -31,6 +31,27 @@
+ #include "wx/msw/private.h"
+ #include "wx/image.h"
+ 
++#if wxUSE_UXTHEME
++    #include "wx/msw/uxtheme.h"
++
++    // no need to include tmschema.h
++    #ifndef BP_PUSHBUTTON
++        #define BP_PUSHBUTTON 1
++
++        #define PBS_NORMAL    1
++        #define PBS_HOT       2
++        #define PBS_PRESSED   3
++        #define PBS_DISABLED  4
++        #define PBS_DEFAULTED 5
++
++        #define TMT_CONTENTMARGINS 3602
++    #endif
++#endif // wxUSE_UXTHEME
++
++#ifndef ODS_NOFOCUSRECT
++    #define ODS_NOFOCUSRECT     0x0200
++#endif
++
+ // ----------------------------------------------------------------------------
+ // macros
+ // ----------------------------------------------------------------------------
+@@ -119,8 +140,6 @@
+ 
+     parent->AddChild(this);
+ 
+-    m_backgroundColour = parent->GetBackgroundColour();
+-    m_foregroundColour = parent->GetForegroundColour();
+     m_windowStyle = style;
+ 
+     if ( style & wxBU_AUTODRAW )
+@@ -198,6 +217,79 @@
+     event.Skip();
+ }
+ 
++#if wxUSE_UXTHEME
++static
++void MSWDrawXPBackground(wxButton *button, WXDRAWITEMSTRUCT *wxdis)
++{
++    LPDRAWITEMSTRUCT lpDIS = (LPDRAWITEMSTRUCT)wxdis;
++    HDC hdc = lpDIS->hDC;
++    UINT state = lpDIS->itemState;
++    RECT rectBtn;
++    CopyRect(&rectBtn, &lpDIS->rcItem);
++
++    wxUxThemeHandle theme(button, L"BUTTON");
++    int iState;
++
++    if ( state & ODS_SELECTED )
++    {
++        iState = PBS_PRESSED;
++    }
++    else if ( button->HasCapture() || button->IsMouseInWindow() )
++    {
++        iState = PBS_HOT;
++    }
++    else if ( state & ODS_FOCUS )
++    {
++        iState = PBS_DEFAULTED;
++    }
++    else if ( state & ODS_DISABLED )
++    {
++        iState = PBS_DISABLED;
++    }
++    else
++    {
++        iState = PBS_NORMAL;
++    }
++
++    // draw parent background if needed
++    if ( wxUxThemeEngine::Get()->IsThemeBackgroundPartiallyTransparent(theme,
++                                                                       BP_PUSHBUTTON,
++                                                                       iState) )
++    {
++        wxUxThemeEngine::Get()->DrawThemeParentBackground(GetHwndOf(button), hdc, &rectBtn);
++    }
++
++    // draw background
++    wxUxThemeEngine::Get()->DrawThemeBackground(theme, hdc, BP_PUSHBUTTON, iState,
++                                                &rectBtn, NULL);
++
++    // calculate content area margins
++    MARGINS margins;
++    wxUxThemeEngine::Get()->GetThemeMargins(theme, hdc, BP_PUSHBUTTON, iState,
++                                            TMT_CONTENTMARGINS, &rectBtn, &margins);
++    RECT rectClient;
++    ::CopyRect(&rectClient, &rectBtn);
++    ::InflateRect(&rectClient, -margins.cxLeftWidth, -margins.cyTopHeight);
++
++    // if focused and !nofocus rect
++    if ( (state & ODS_FOCUS) && !(state & ODS_NOFOCUSRECT) )
++    {
++        DrawFocusRect(hdc, &rectClient);
++    }
++
++    if ( button->UseBgCol() )
++    {
++        COLORREF colBg = wxColourToRGB(button->GetBackgroundColour());
++        HBRUSH hbrushBackground = ::CreateSolidBrush(colBg);
++
++        // don't overwrite the focus rect
++        ::InflateRect(&rectClient, -1, -1);
++        FillRect(hdc, &rectClient, hbrushBackground);
++        ::DeleteObject(hbrushBackground);
++    }
++}
++#endif // wxUSE_UXTHEME
++
+ // VZ: should be at the very least less than wxDEFAULT_BUTTON_MARGIN
+ #define FOCUS_MARGIN 3
+ 
+@@ -243,6 +335,58 @@
+     int wBmp   = bitmap->GetWidth();
+     int hBmp   = bitmap->GetHeight();
+ 
++#if wxUSE_UXTHEME
++    if ( autoDraw && wxUxThemeEngine::GetIfActive() )
++    {
++        MSWDrawXPBackground(this, item);
++        wxUxThemeHandle theme(this, L"BUTTON");
++
++        // calculate content area margins
++        // assuming here that each state is the same size
++        MARGINS margins;
++        wxUxThemeEngine::Get()->GetThemeMargins(theme, NULL,
++                                                BP_PUSHBUTTON, PBS_NORMAL,
++                                                TMT_CONTENTMARGINS, NULL,
++                                                &margins);
++        int marginX = margins.cxLeftWidth + 1;
++        int marginY = margins.cyTopHeight + 1;
++        int x1,y1;
++
++        if ( m_windowStyle & wxBU_LEFT )
++        {
++            x1 = x + marginX;
++        }
++        else if ( m_windowStyle & wxBU_RIGHT )
++        {
++            x1 = x + (width - wBmp) - marginX;
++        }
++        else
++        {
++            x1 = x + (width - wBmp) / 2;
++        }
++
++        if ( m_windowStyle & wxBU_TOP )
++        {
++            y1 = y + marginY;
++        }
++        else if ( m_windowStyle & wxBU_BOTTOM )
++        {
++            y1 = y + (height - hBmp) - marginY;
++        }
++        else
++        {
++            y1 = y + (height - hBmp) / 2;
++        }
++
++        // draw the bitmap
++        wxDC dst;
++        dst.SetHDC((WXHDC) hDC, false);
++        dst.DrawBitmap(*bitmap, x1, y1, true);
++
++        return true;
++    }
++#endif // wxUSE_UXTHEME
++
+     int x1,y1;
+ 
+     if(m_windowStyle & wxBU_LEFT)
+@@ -319,10 +463,7 @@
+     penLight    = CreatePen(PS_SOLID, 0, GetSysColor(COLOR_3DLIGHT));
+     penShadow   = CreatePen(PS_SOLID, 0, GetSysColor(COLOR_3DSHADOW));
+     penDkShadow = CreatePen(PS_SOLID, 0, GetSysColor(COLOR_3DDKSHADOW));
+-    // brushFace   = CreateSolidBrush(GetSysColor(COLOR_BTNFACE));
+-    // Taking the background colour fits in better with
+-    // Windows XP themes.
+-    brushFace   = CreateSolidBrush(m_backgroundColour.m_pixel);
++    brushFace   = CreateSolidBrush(GetSysColor(COLOR_BTNFACE));
+ 
+     // draw the rectangle
+     RECT rect;
+@@ -492,6 +633,25 @@
+ {
+     if ( m_bmpNormal.Ok() )
+     {
++#if wxUSE_UXTHEME
++        if ( (GetWindowStyleFlag() & wxBU_AUTODRAW) && wxUxThemeEngine::GetIfActive() )
++        {
++            wxUxThemeHandle theme((wxBitmapButton *)this, L"BUTTON");
++
++            // calculate content area margins
++            // assuming here that each state is the same size
++            MARGINS margins;
++            wxUxThemeEngine::Get()->GetThemeMargins(theme, NULL,
++                                                    BP_PUSHBUTTON, PBS_NORMAL,
++                                                    TMT_CONTENTMARGINS, NULL,
++                                                    &margins);
++            wxSize best(m_bmpNormal.GetWidth() + 2 * (margins.cxLeftWidth + 1),
++                        m_bmpNormal.GetHeight() + 2* (margins.cyTopHeight + 1));
++            CacheBestSize(best);
++            return best;
++        }
++#endif // wxUSE_UXTHEME
++
+         wxSize best(m_bmpNormal.GetWidth() + 2*m_marginX,
+                       m_bmpNormal.GetHeight() + 2*m_marginY);
+         CacheBestSize(best);
+diff -r -u wxWidgets-2.6.3.orig/src/msw/button.cpp wxWidgets-2.6.3/src/msw/button.cpp
+--- src/msw/button.cpp	2006-01-18 04:16:51.000000000 +0100
++++ src/msw/button.cpp	2006-04-01 20:14:26.000000000 +0200
+@@ -44,6 +44,35 @@
+ #include "wx/tokenzr.h"
+ #include "wx/msw/private.h"
+ 
++#if wxUSE_UXTHEME
++    #include "wx/msw/uxtheme.h"
++
++    // no need to include tmschema.h
++    #ifndef BP_PUSHBUTTON
++        #define BP_PUSHBUTTON 1
++
++        #define PBS_NORMAL    1
++        #define PBS_HOT       2
++        #define PBS_PRESSED   3
++        #define PBS_DISABLED  4
++        #define PBS_DEFAULTED 5
++
++        #define TMT_CONTENTMARGINS 3602
++    #endif
++#endif // wxUSE_UXTHEME
++
++#ifndef WM_THEMECHANGED
++    #define WM_THEMECHANGED     0x031A
++#endif
++
++#ifndef ODS_NOACCEL
++    #define ODS_NOACCEL         0x0100
++#endif
++
++#ifndef ODS_NOFOCUSRECT
++    #define ODS_NOFOCUSRECT     0x0200
++#endif
++
+ // ----------------------------------------------------------------------------
+ // macros
+ // ----------------------------------------------------------------------------
+@@ -476,6 +505,31 @@
+ 
+         // and continue with processing the message normally as well
+     }
++#if wxUSE_UXTHEME
++    else if ( nMsg == WM_THEMECHANGED )
++    {
++        // need to recalculate the best size here
++        // as the theme size might have changed
++        InvalidateBestSize();
++    }
++    else if ( wxUxThemeEngine::GetIfActive() )
++    {
++        // we need to Refresh() if mouse has entered or left window
++        // so we can update the hot tracking state
++        // must use m_mouseInWindow here instead of IsMouseInWindow()
++        // since we need to know the first time the mouse enters the window
++        // and IsMouseInWindow() would return true in this case
++        if ( ( nMsg == WM_MOUSEMOVE && !m_mouseInWindow ) ||
++             nMsg == WM_MOUSELEAVE )
++        {
++            Refresh();
++        }
++        else if ( nMsg == WM_LBUTTONDOWN )
++        {
++            ::SetCapture(GetHwnd());
++        }
++    }
++#endif // wxUSE_UXTHEME
+ 
+     // let the base class do all real processing
+     return wxControl::MSWWindowProc(nMsg, wParam, lParam);
+@@ -669,63 +723,143 @@
+     DeleteObject(hpenBlack);
+ }
+ 
+-bool wxButton::MSWOnDraw(WXDRAWITEMSTRUCT *wxdis)
++#if wxUSE_UXTHEME
++static
++void MSWDrawXPBackground(wxButton *button, WXDRAWITEMSTRUCT *wxdis)
+ {
+     LPDRAWITEMSTRUCT lpDIS = (LPDRAWITEMSTRUCT)wxdis;
+-
++    HDC hdc = lpDIS->hDC;
++    UINT state = lpDIS->itemState;
+     RECT rectBtn;
+     CopyRect(&rectBtn, &lpDIS->rcItem);
+ 
+-    COLORREF colBg = wxColourToRGB(GetBackgroundColour()),
+-             colFg = wxColourToRGB(GetForegroundColour());
++    wxUxThemeHandle theme(button, L"BUTTON");
++    int iState;
+ 
++    if ( state & ODS_SELECTED )
++    {
++        iState = PBS_PRESSED;
++    }
++    else if ( button->HasCapture() || button->IsMouseInWindow() )
++    {
++        iState = PBS_HOT;
++    }
++    else if ( state & ODS_FOCUS )
++    {
++        iState = PBS_DEFAULTED;
++    }
++    else if ( state & ODS_DISABLED )
++    {
++        iState = PBS_DISABLED;
++    }
++    else
++    {
++        iState = PBS_NORMAL;
++    }
++
++    // draw parent background if needed
++    if ( wxUxThemeEngine::Get()->IsThemeBackgroundPartiallyTransparent(theme,
++                                                                       BP_PUSHBUTTON,
++                                                                       iState) )
++    {
++        wxUxThemeEngine::Get()->DrawThemeParentBackground(GetHwndOf(button), hdc, &rectBtn);
++    }
++
++    // draw background
++    wxUxThemeEngine::Get()->DrawThemeBackground(theme, hdc, BP_PUSHBUTTON, iState,
++                                                &rectBtn, NULL);
++
++    // calculate content area margins
++    MARGINS margins;
++    wxUxThemeEngine::Get()->GetThemeMargins(theme, hdc, BP_PUSHBUTTON, iState,
++                                            TMT_CONTENTMARGINS, &rectBtn, &margins);
++    RECT rectClient;
++    ::CopyRect(&rectClient, &rectBtn);
++    ::InflateRect(&rectClient, -margins.cxLeftWidth, -margins.cyTopHeight);
++
++    // if focused and !nofocus rect
++    if ( (state & ODS_FOCUS) && !(state & ODS_NOFOCUSRECT) )
++    {
++        DrawFocusRect(hdc, &rectClient);
++    }
++
++    if ( button->UseBgCol() )
++    {
++        COLORREF colBg = wxColourToRGB(button->GetBackgroundColour());
++        HBRUSH hbrushBackground = ::CreateSolidBrush(colBg);
++
++        // don't overwrite the focus rect
++        ::InflateRect(&rectClient, -1, -1);
++        FillRect(hdc, &rectClient, hbrushBackground);
++        ::DeleteObject(hbrushBackground);
++    }
++}
++#endif // wxUSE_UXTHEME
++
++bool wxButton::MSWOnDraw(WXDRAWITEMSTRUCT *wxdis)
++{
++    LPDRAWITEMSTRUCT lpDIS = (LPDRAWITEMSTRUCT)wxdis;
+     HDC hdc = lpDIS->hDC;
+     UINT state = lpDIS->itemState;
++    RECT rectBtn;
++    CopyRect(&rectBtn, &lpDIS->rcItem);
+ 
+-    // first, draw the background
+-    HBRUSH hbrushBackground = ::CreateSolidBrush(colBg);
++#if wxUSE_UXTHEME
++    if ( wxUxThemeEngine::GetIfActive() )
++    {
++        MSWDrawXPBackground(this, wxdis);
++    }
++    else
++#endif // wxUSE_UXTHEME
++    {
++        COLORREF colBg = wxColourToRGB(GetBackgroundColour());
+ 
+-    FillRect(hdc, &rectBtn, hbrushBackground);
++        // first, draw the background
++        HBRUSH hbrushBackground = ::CreateSolidBrush(colBg);
++        FillRect(hdc, &rectBtn, hbrushBackground);
++        ::DeleteObject(hbrushBackground);
+ 
+-    // draw the border for the current state
+-    bool selected = (state & ODS_SELECTED) != 0;
+-    if ( !selected )
+-    {
+-        wxPanel *panel = wxDynamicCast(GetParent(), wxPanel);
+-        if ( panel )
++        // draw the border for the current state
++        bool selected = (state & ODS_SELECTED) != 0;
++        if ( !selected )
+         {
+-            selected = panel->GetDefaultItem() == this;
++            wxPanel *panel = wxDynamicCast(GetParent(), wxPanel);
++            if ( panel )
++            {
++                selected = panel->GetDefaultItem() == this;
++            }
+         }
+-    }
+-    bool pushed = (SendMessage(GetHwnd(), BM_GETSTATE, 0, 0) & BST_PUSHED) != 0;
++        bool pushed = (SendMessage(GetHwnd(), BM_GETSTATE, 0, 0) & BST_PUSHED) != 0;
+ 
+-    DrawButtonFrame(hdc, rectBtn, selected, pushed);
++        DrawButtonFrame(hdc, rectBtn, selected, pushed);
+ 
+-    // draw the focus rect if needed
+-    if ( state & ODS_FOCUS )
+-    {
+-        RECT rectFocus;
+-        CopyRect(&rectFocus, &rectBtn);
++        // if focused and !nofocus rect
++        if ( (state & ODS_FOCUS) && !(state & ODS_NOFOCUSRECT) )
++        {
++            RECT rectFocus;
++            CopyRect(&rectFocus, &rectBtn);
+ 
+-        // I don't know where does this constant come from, but this is how
+-        // Windows draws them
+-        InflateRect(&rectFocus, -4, -4);
++            // I don't know where does this constant come from, but this is how
++            // Windows draws them
++            InflateRect(&rectFocus, -4, -4);
+ 
+-        DrawFocusRect(hdc, &rectFocus);
+-    }
++            DrawFocusRect(hdc, &rectFocus);
++        }
+ 
+-    if ( pushed )
+-    {
+-        // the label is shifted by 1 pixel to create "pushed" effect
+-        OffsetRect(&rectBtn, 1, 1);
++        if ( pushed )
++        {
++            // the label is shifted by 1 pixel to create "pushed" effect
++            OffsetRect(&rectBtn, 1, 1);
++        }
+     }
+ 
+-    DrawButtonText(hdc, &rectBtn, GetLabel(),
++    COLORREF colFg = wxColourToRGB(GetForegroundColour());
++    DrawButtonText(hdc, &rectBtn,
++                   state & ODS_NOACCEL ? wxStripMenuCodes(GetLabel())
++                                        : GetLabel(),
+                    state & ODS_DISABLED ? GetSysColor(COLOR_GRAYTEXT)
+                                         : colFg);
+ 
+-    ::DeleteObject(hbrushBackground);
+-
+     return true;
+ }
+ 
+diff -r -u wxWidgets-2.6.3.orig/src/msw/choice.cpp wxWidgets-2.6.3/src/msw/choice.cpp
+--- src/msw/choice.cpp	2006-03-21 21:36:10.000000000 +0100
++++ src/msw/choice.cpp	2006-03-30 11:19:04.000000000 +0200
+@@ -504,8 +504,46 @@
+                          int width, int height,
+                          int sizeFlags)
+ {
+-    int heightOrig = height;
++    // the height which we must pass to Windows should be the total height of
++    // the control including the drop down list while the height given to us
++    // is, of course, just the height of the permanently visible part of it
++    if ( height != wxDefaultCoord )
++    {
++        // don't make the drop down list too tall, arbitrarily limit it to 40
++        // items max and also don't leave it empty
++        size_t nItems = GetCount();
++        if ( !nItems )
++            nItems = 9;
++        else if ( nItems > 24 )
++            nItems = 24;
++
++        // add space for the drop down list
++        const int hItem = SendMessage(GetHwnd(), CB_GETITEMHEIGHT, 0, 0);
++        height += hItem*(nItems + 1);
++    }
++    else
++    {
++        // We cannot pass wxDefaultCoord as height to wxControl. wxControl uses
++        // wxGetWindowRect() to determine the current height of the combobox,
++        // and then again sets the combobox's height to that value. Unfortunately,
++        // wxGetWindowRect doesn't include the dropdown list's height (at least
++        // on Win2K), so this would result in a combobox with dropdown height of
++        // 1 pixel. We have to determine the default height ourselves and call
++        // wxControl with that value instead.
++        int w, h;
++        RECT r;
++        DoGetSize(&w, &h);
++        if (::SendMessage(GetHwnd(), CB_GETDROPPEDCONTROLRECT, 0, (LPARAM) &r) != 0)
++        {
++            height = h + r.bottom - r.top;
++        }
++    }
++
++    wxControl::DoSetSize(x, y, width, height, sizeFlags);
+ 
++    // This solution works on XP, but causes choice/combobox lists to be
++    // too short on W2K and earlier.
++#if 0
+     int widthCurrent, heightCurrent;
+     DoGetSize(&widthCurrent, &heightCurrent);
+ 
+@@ -568,26 +606,6 @@
+     }
+ 
+     wxControl::DoSetSize(x, y, width, height, sizeFlags);
+-
+-    // I'm commenting this out since the code appears to make choices
+-    // and comboxes too high when they have associated sizers. I'm sure this
+-    // is not the end of the story, which is why I'm leaving it #if'ed out for
+-    // now. JACS.
+-#if 0
+-    // if the height specified for the visible part of the control is
+-    // different from the current one, we need to change it separately
+-    // as it is not affected by normal WM_SETSIZE
+-    if ( height != wxDefaultCoord )
+-    {
+-        const int delta = heightOrig - GetSize().y;
+-        if ( delta )
+-        {
+-            int h = ::SendMessage(GetHwnd(), CB_GETITEMHEIGHT, (WPARAM)-1, 0);
+-            SendMessage(GetHwnd(), CB_SETITEMHEIGHT, (WPARAM)-1, h + delta);
+-        }
+-    }
+-#else
+-    wxUnusedVar(heightOrig);
+ #endif
+ }
+ 
+diff -r -u wxWidgets-2.6.3.orig/src/msw/tbar95.cpp wxWidgets-2.6.3/src/msw/tbar95.cpp
+--- src/msw/tbar95.cpp	2006-02-16 10:55:39.000000000 +0100
++++ src/msw/tbar95.cpp	2006-04-01 20:16:18.000000000 +0200
+@@ -1253,7 +1253,10 @@
+ 
+ void wxToolBar::UpdateSize()
+ {
++    wxPoint pos = GetPosition();
+     ::SendMessage(GetHwnd(), TB_AUTOSIZE, 0, 0);
++    if (pos != GetPosition())
++        Move(pos);
+ 
+     // In case Realize is called after the initial display (IOW the programmer
+     // may have rebuilt the toolbar) give the frame the option of resizing the

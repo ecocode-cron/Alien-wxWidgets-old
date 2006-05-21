@@ -1,5 +1,9 @@
 Revision history for Perl extension Alien::wxWidgets.
 
+0.10  Sun May 21 19:19:39 CEST 2006
+	- Prefer $CXX to $CC if both are set.
+	- Download and build wxWidgets 2.6.3.
+
 0.09  Tue May  2 21:27:03 CEST 2006
 	- Use mingw32-make as an alternative to make
 	  under Win32/MinGW.

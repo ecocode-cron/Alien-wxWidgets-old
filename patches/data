@@ -1,21 +1,21 @@
-my $VERSION = '2.6.2';
-my $URL     = 'ftp://biolpc22.york.ac.uk/pub/2.6.2';
+my $VERSION = '2.6.3';
+my $URL     = 'ftp://biolpc22.york.ac.uk/pub/2.6.3';
 my $TYPE    = 'tar.bz2';
 my $BASE    = 'wxWidgets';
 
-my @common = qw(wxWidgets-2.6.2.patch);
+my @common = qw(wxWidgets-2.6.3.patch);
 
 { msw     => { unicode => [ qw(
 wxMSW-2.6.2-setup_u.patch
 wxMSW-2.5.3-config.patch
 wxMSW-2.6.1-magic.patch
-wxMSW-2.6.2-makefiles.patch
+wxMSW-2.6.3-makefiles.patch
                                ), @common ],
                ansi    => [ qw(
 wxMSW-2.6.2-setup.patch
 wxMSW-2.5.3-config.patch
 wxMSW-2.6.1-magic.patch
-wxMSW-2.6.2-makefiles.patch
+wxMSW-2.6.3-makefiles.patch
                                ), @common ],
                },
   mac     => { unicode => [ @common ],
