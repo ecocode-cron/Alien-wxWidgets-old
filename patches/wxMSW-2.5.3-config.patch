@@ -1,3 +1,4 @@
+diff -u build/msw/config.gcc build/msw/config.gcc
 --- build/msw/config.gcc	2004-09-27 12:01:54.000000000 +0200
 +++ build/msw/config.gcc	2005-01-05 06:20:03.345608000 +0100
 @@ -66,5 +66,5 @@

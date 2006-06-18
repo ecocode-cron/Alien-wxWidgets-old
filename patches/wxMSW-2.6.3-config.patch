@@ -1,0 +1,12 @@
+diff -r -u build/msw/config.gcc build/msw/config.gcc
+--- build/msw/config.gcc	2006-02-05 22:37:26.000000000 +0100
++++ build/msw/config.gcc	2006-05-25 22:02:24.000000000 +0200
+@@ -68,7 +68,7 @@
+ USE_XRC = 1
+ 
+ # Build OpenGL canvas library (USE_GUI must be 1)? [0,1]
+-USE_OPENGL = 0
++USE_OPENGL = 1
+ 
+ # Build ODBC database classes (USE_GUI must be 1)? [0,1]
+ USE_ODBC = 0

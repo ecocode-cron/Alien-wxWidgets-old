@@ -1,5 +1,19 @@
 Revision history for Perl extension Alien::wxWidgets.
 
+0.13  Sun Jun 18 17:52:44 CEST 2006
+	- Removed (unused) Module::Install from inc.
+
+0.12  Mon Jun  5 21:59:58 CEST 2006
+	- Work with old versions of Test::Pod.
+	- Added a 'passthrough' Makefile.PL.
+	- Take GCC ABI compatibility into account when comparing
+	  compiler versions.
+	- Clearly signal that we need bzip2 to extract wxWidgets.
+
+0.11  Thu May 25 22:27:05 CEST 2006
+	- Bundle and use the patch implementation from PPT.
+	- Rediffed all the patches against wxWidgets 2.6.3.
+
 0.10  Sun May 21 19:19:39 CEST 2006
 	- Prefer $CXX to $CC if both are set.
 	- Download and build wxWidgets 2.6.3.

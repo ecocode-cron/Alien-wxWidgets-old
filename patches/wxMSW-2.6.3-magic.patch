@@ -1,0 +1,12 @@
+diff -r -u src/generic/grid.cpp src/generic/grid.cpp
+--- src/generic/grid.cpp	2006-03-06 13:13:00.000000000 +0100
++++ src/generic/grid.cpp	2006-05-25 22:02:38.000000000 +0200
+@@ -7527,7 +7527,7 @@
+                 break;
+             }
+ 
+-            if( textOrientation == wxHORIZONTAL )
++            if( textOrientation != wxVERTICAL )
+             {
+                 dc.DrawText( lines[l], (int)x, (int)y );
+                 y += lineHeight;

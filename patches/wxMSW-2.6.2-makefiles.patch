@@ -1,4 +1,4 @@
-diff -u -r1.19 -r1.20
+diff -u build/msw/makefile.gcc build/msw/makefile.gcc
 --- build/msw/makefile.gcc	Sun Sep 18 10:01:33 2005
 +++ build/msw/makefile.gcc	Tue Oct 25 21:49:22 2005
 @@ -171,5 +171,5 @@
@@ -211,7 +211,7 @@ diff -u -r1.19 -r1.20
 +	$(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) -I..\..\include -I$(SETUPHDIR) \
  	-Wall -I..\..\src\tiff -I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib \
  	-I..\..\src\regex -I..\..\src\expat\lib $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
-diff -u -2 -r1.19 -r1.20
+diff -u -2 contrib/build/stc/makefile.gcc contrib/build/stc/makefile.gcc
 --- contrib/build/stc/makefile.gcc	Sat Aug 13 02:23:35 2005
 +++ contrib/build/stc/makefile.gcc	Tue Oct 25 21:49:58 2005
 @@ -24,5 +24,5 @@

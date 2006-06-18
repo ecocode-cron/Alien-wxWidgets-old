@@ -43,7 +43,7 @@ use Module::Pluggable sub_name      => '_list',
                       instantiate   => 'config';
 
 our $AUTOLOAD;
-our $VERSION = '0.10';
+our $VERSION = '0.13';
 our %VALUES;
 our $dont_remap;
 
@@ -299,7 +299,7 @@ Mattia Barbon <mbarbon@cpan.org>
 
 =head1 LICENSE
 
-Copyright (c) 2005 Mattia Barbon <mbarbon@cpan.org>
+Copyright (c) 2005, 2006 Mattia Barbon <mbarbon@cpan.org>
 
 This program is free software; you can redistribute it and/or
 modify it under the same terms as Perl itself

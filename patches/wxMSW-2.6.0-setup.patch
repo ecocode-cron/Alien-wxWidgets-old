@@ -1,4 +1,3 @@
-diff -u include/wx/msw/setup.h include/wx/msw/setup.h
 --- include/wx/msw/setup.h	2004-09-28 13:17:54.000000000 +0200
 +++ include/wx/msw/setup.h	2005-01-04 13:13:53.584228800 +0100
 @@ -43,5 +43,5 @@
@@ -15,6 +14,13 @@ diff -u include/wx/msw/setup.h include/wx/msw/setup.h
 +    #define wxUSE_UNICODE 0
  #endif
  
+@@ -167,5 +167,5 @@
+ //
+ // Recommended setting: 0 (1 if you want to deploy Unicode apps on 9x systems)
+-#define wxUSE_UNICODE_MSLU 0
++#define wxUSE_UNICODE_MSLU 0
+ 
+ // Setting wxUSE_WCHAR_T to 1 gives you some degree of Unicode support without
 @@ -293,5 +293,5 @@
  //
  // Recommended setting: 1 (but may be safely disabled if you don't use it)
@@ -59,12 +65,3 @@ diff -u include/wx/msw/setup.h include/wx/msw/setup.h
 +#define wxUSE_IFF           1
  
  // Set to 1 for XPM format support
-@@ -1046,7 +1046,7 @@
- //
- // Recommended setting: 0 (1 if you want to deploy Unicode apps on 9x systems)
- #ifndef wxUSE_UNICODE_MSLU
--    #define wxUSE_UNICODE_MSLU 0
-+    #define wxUSE_UNICODE_MSLU 0
- #endif
- 
- // Setting wxUSE_WCHAR_T to 1 gives you some degree of Unicode support without

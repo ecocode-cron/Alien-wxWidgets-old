@@ -1,7 +1,7 @@
 Build.PL
 Changes
 INSTALL
-MANIFEST			This list of files
+MANIFEST
 MANIFEST.SKIP
 META.yml
 inc/File/Fetch.pm
@@ -9,10 +9,6 @@ inc/File/Fetch/Item.pm
 inc/File/Spec/Unix.pm
 inc/IPC/Cmd.pm
 inc/Locale/Maketext/Simple.pm
-inc/Module/Install.pm
-inc/Module/Install/Base.pm
-inc/Module/Install/Include.pm
-inc/Module/Install/Metadata.pm
 inc/Module/Load.pm
 inc/Module/Load/Conditional.pm
 inc/My/Build.pm
@@ -33,15 +29,17 @@ inc/My/Build/gmake.mak
 inc/My/Build/nmake.mak
 inc/Params/Check.pm
 inc/Text/Patch.pm
+inc/bin/patch
 lib/Alien/wxWidgets.pm
 lib/Alien/wxWidgets/Utility.pm
 patches/data
-patches/wxMSW-2.6.2-setup.patch
-patches/wxMSW-2.6.2-setup_u.patch
-patches/wxMSW-2.5.3-config.patch
-patches/wxMSW-2.6.1-magic.patch
+patches/wxMSW-2.6.3-setup.patch
+patches/wxMSW-2.6.3-setup_u.patch
+patches/wxMSW-2.6.3-config.patch
+patches/wxMSW-2.6.3-magic.patch
 patches/wxMSW-2.6.3-makefiles.patch
 patches/wxWidgets-2.6.3.patch
 script/make_ppm.pl
 t/01_load.t
 t/zz_pod.t
+Makefile.PL

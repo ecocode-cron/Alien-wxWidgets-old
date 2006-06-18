@@ -1,3 +1,4 @@
+diff -u include/wx/msw/setup.h include/wx/msw/setup.h
 --- include/wx/msw/setup.h	2004-09-28 13:17:54.000000000 +0200
 +++ include/wx/msw/setup.h	2005-01-04 13:13:53.584228800 +0100
 @@ -43,5 +43,5 @@

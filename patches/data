@@ -6,15 +6,15 @@ my $BASE    = 'wxWidgets';
 my @common = qw(wxWidgets-2.6.3.patch);
 
 { msw     => { unicode => [ qw(
-wxMSW-2.6.2-setup_u.patch
-wxMSW-2.5.3-config.patch
-wxMSW-2.6.1-magic.patch
+wxMSW-2.6.3-setup_u.patch
+wxMSW-2.6.3-config.patch
+wxMSW-2.6.3-magic.patch
 wxMSW-2.6.3-makefiles.patch
                                ), @common ],
                ansi    => [ qw(
-wxMSW-2.6.2-setup.patch
-wxMSW-2.5.3-config.patch
-wxMSW-2.6.1-magic.patch
+wxMSW-2.6.3-setup.patch
+wxMSW-2.6.3-config.patch
+wxMSW-2.6.3-magic.patch
 wxMSW-2.6.3-makefiles.patch
                                ), @common ],
                },

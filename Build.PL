@@ -32,6 +32,7 @@ my $build = $class->new
                          monolithic => { type => '!' },
                          build_wx   => { type => '!' },
                         },
+    create_makefile_pl => 'passthrough',
   );
 
 my $build_wx = defined $build->args( 'build_wx' )

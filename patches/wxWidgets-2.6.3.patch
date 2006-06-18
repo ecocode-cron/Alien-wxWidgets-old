@@ -1,4 +1,4 @@
-diff -r -u wxWidgets-2.6.3.orig/src/common/dobjcmn.cpp wxWidgets-2.6.3/src/common/dobjcmn.cpp
+diff -r -u src/common/dobjcmn.cpp src/common/dobjcmn.cpp
 --- src/common/dobjcmn.cpp	2006-03-21 21:35:57.000000000 +0100
 +++ src/common/dobjcmn.cpp	2006-03-31 11:56:54.000000000 +0200
 @@ -253,11 +253,15 @@
@@ -18,7 +18,7 @@ diff -r -u wxWidgets-2.6.3.orig/src/common/dobjcmn.cpp wxWidgets-2.6.3/src/commo
  
      return true;
  }
-diff -r -u wxWidgets-2.6.3.orig/src/common/socket.cpp wxWidgets-2.6.3/src/common/socket.cpp
+diff -r -u src/common/socket.cpp src/common/socket.cpp
 --- src/common/socket.cpp	2006-02-16 10:55:19.000000000 +0100
 +++ src/common/socket.cpp	2006-03-31 11:56:56.000000000 +0200
 @@ -698,7 +698,7 @@
@@ -30,7 +30,7 @@ diff -r -u wxWidgets-2.6.3.orig/src/common/socket.cpp wxWidgets-2.6.3/src/common
  
    // Wait in an active polling loop.
    //
-diff -r -u wxWidgets-2.6.3.orig/src/generic/listctrl.cpp wxWidgets-2.6.3/src/generic/listctrl.cpp
+diff -r -u src/generic/listctrl.cpp src/generic/listctrl.cpp
 --- src/generic/listctrl.cpp	2006-03-16 13:08:45.000000000 +0100
 +++ src/generic/listctrl.cpp	2006-03-31 11:57:02.000000000 +0200
 @@ -2914,6 +2914,7 @@
@@ -116,7 +116,7 @@ diff -r -u wxWidgets-2.6.3.orig/src/generic/listctrl.cpp wxWidgets-2.6.3/src/gen
      // next time
      ResetVisibleLinesRange();
  
-diff -r -u wxWidgets-2.6.3.orig/src/gtk/clipbrd.cpp wxWidgets-2.6.3/src/gtk/clipbrd.cpp
+diff -r -u src/gtk/clipbrd.cpp src/gtk/clipbrd.cpp
 --- src/gtk/clipbrd.cpp	2006-03-21 21:36:02.000000000 +0100
 +++ src/gtk/clipbrd.cpp	2006-03-31 11:57:02.000000000 +0200
 @@ -493,17 +493,22 @@
@@ -145,7 +145,7 @@ diff -r -u wxWidgets-2.6.3.orig/src/gtk/clipbrd.cpp wxWidgets-2.6.3/src/gtk/clip
  
  #if wxUSE_THREADS
      /* disable GUI threads */
-diff -r -u wxWidgets-2.6.3.orig/src/gtk/window.cpp wxWidgets-2.6.3/src/gtk/window.cpp
+diff -r -u src/gtk/window.cpp src/gtk/window.cpp
 --- src/gtk/window.cpp	2006-03-19 10:08:42.000000000 +0100
 +++ src/gtk/window.cpp	2006-03-31 11:57:04.000000000 +0200
 @@ -1014,9 +1014,6 @@
@@ -173,7 +173,7 @@ diff -r -u wxWidgets-2.6.3.orig/src/gtk/window.cpp wxWidgets-2.6.3/src/gtk/windo
              // Implement OnCharHook by checking ancesteror top level windows
              wxWindow *parent = win;
              while (parent && !parent->IsTopLevel())
-diff -r -u wxWidgets-2.6.3.orig/src/msw/bmpbuttn.cpp wxWidgets-2.6.3/src/msw/bmpbuttn.cpp
+diff -r -u src/msw/bmpbuttn.cpp src/msw/bmpbuttn.cpp
 --- src/msw/bmpbuttn.cpp	2005-06-07 21:16:15.000000000 +0200
 +++ src/msw/bmpbuttn.cpp	2006-04-01 20:14:26.000000000 +0200
 @@ -31,6 +31,27 @@
@@ -390,7 +390,7 @@ diff -r -u wxWidgets-2.6.3.orig/src/msw/bmpbuttn.cpp wxWidgets-2.6.3/src/msw/bmp
          wxSize best(m_bmpNormal.GetWidth() + 2*m_marginX,
                        m_bmpNormal.GetHeight() + 2*m_marginY);
          CacheBestSize(best);
-diff -r -u wxWidgets-2.6.3.orig/src/msw/button.cpp wxWidgets-2.6.3/src/msw/button.cpp
+diff -r -u src/msw/button.cpp src/msw/button.cpp
 --- src/msw/button.cpp	2006-01-18 04:16:51.000000000 +0100
 +++ src/msw/button.cpp	2006-04-01 20:14:26.000000000 +0200
 @@ -44,6 +44,35 @@
@@ -639,7 +639,7 @@ diff -r -u wxWidgets-2.6.3.orig/src/msw/button.cpp wxWidgets-2.6.3/src/msw/butto
      return true;
  }
  
-diff -r -u wxWidgets-2.6.3.orig/src/msw/choice.cpp wxWidgets-2.6.3/src/msw/choice.cpp
+diff -r -u src/msw/choice.cpp src/msw/choice.cpp
 --- src/msw/choice.cpp	2006-03-21 21:36:10.000000000 +0100
 +++ src/msw/choice.cpp	2006-03-30 11:19:04.000000000 +0200
 @@ -504,8 +504,46 @@
@@ -717,7 +717,7 @@ diff -r -u wxWidgets-2.6.3.orig/src/msw/choice.cpp wxWidgets-2.6.3/src/msw/choic
  #endif
  }
  
-diff -r -u wxWidgets-2.6.3.orig/src/msw/tbar95.cpp wxWidgets-2.6.3/src/msw/tbar95.cpp
+diff -r -u src/msw/tbar95.cpp src/msw/tbar95.cpp
 --- src/msw/tbar95.cpp	2006-02-16 10:55:39.000000000 +0100
 +++ src/msw/tbar95.cpp	2006-04-01 20:16:18.000000000 +0200
 @@ -1253,7 +1253,10 @@

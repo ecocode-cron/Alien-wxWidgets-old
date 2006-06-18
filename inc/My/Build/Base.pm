@@ -241,7 +241,13 @@ sub extract_wxwidgets {
 
         package Archive::Extract::Bz2;
 
-        sub new { my $class = shift; bless { @_ }, $class };
+        sub _has_bzip2 {
+            foreach my $dir ( File::Spec->path ) {
+                return if -x File::Spec->catfile( $dir, 'bzip2' );
+            }
+            die "\n\nYou need to install bzip2!\n\n\n";
+        }
+        sub new { _has_bzip2; my $class = shift; bless { @_ }, $class };
         sub extract {
             my $archive = $_[0]->{archive};
             system "bzip2 -cd $archive | tar -x -f -" and die 'Error: ', $?;
@@ -270,7 +276,12 @@ sub patch_wxwidgets {
 
     foreach my $i ( @patches ) {
         print "Applying patch: ", $i, "\n";
-        system "patch --binary -b -p0 < $i" and die 'Error: ', $?;
+        my $cmd = $^X . ' ' . File::Spec->catfile( $old_dir,
+                                                   qw(inc bin patch) )
+                  . " -N -p0 -u -s -b .bak < $i";
+        # system "patch --binary -b -p0 < $i" and die 'Error: ', $?;
+        print $cmd, "\n";
+        system $cmd and die 'Error: ', $?;
     }
 
     chdir $old_dir;
@@ -362,7 +373,7 @@ sub awx_get_name {
 sub awx_compiler_kind { 'nc' } # as in 'No Clue'
 
 sub awx_compiler_version {
-    return Alien::wxWidgets::Utility::awx_cc_version( $_[1] );
+    return Alien::wxWidgets::Utility::awx_cc_abi_version( $_[1] );
 }
 
 sub awx_path_search {

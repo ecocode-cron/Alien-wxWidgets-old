@@ -1,4 +1,4 @@
-diff -u -r1.19 -r1.20
+diff -u build/msw/makefile.gcc build/msw/makefile.gcc
 --- build/msw/makefile.gcc	2006-03-16 14:00:35.000000000 +0100
 +++ build/msw/makefile.gcc	2006-05-21 14:27:06.000000000 +0200
 @@ -170,7 +170,7 @@
@@ -270,7 +270,7 @@ diff -u -r1.19 -r1.20
  	-Wall -I..\..\src\tiff -I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib \
  	-I..\..\src\regex -I..\..\src\expat\lib $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
  	-Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
-diff -u -r1.19 -r1.20
+diff -u contrib/build/stc/makefile.gcc contrib/build/stc/makefile.gcc
 --- contrib/build/stc/makefile.gcc	2006-03-16 13:06:38.000000000 +0100
 +++ contrib/build/stc/makefile.gcc	2006-05-21 14:27:39.000000000 +0200
 @@ -23,7 +23,7 @@

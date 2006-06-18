@@ -10,7 +10,7 @@ use strict;
 use base qw(Exporter);
 use Config;
 
-our @EXPORT_OK = qw(awx_capture awx_cc_is_gcc awx_cc_version
+our @EXPORT_OK = qw(awx_capture awx_cc_is_gcc awx_cc_version awx_cc_abi_version
                     awx_sort_config awx_grep_config awx_smart_config);
 
 my $quotes = $^O =~ /MSWin32/ ? '"' : "'";
@@ -24,6 +24,15 @@ sub awx_cc_is_gcc {
 
     return    scalar( awx_capture( "$cc --version" ) =~ m/gcc/i ) # 3.x
            || scalar( awx_capture( "$cc" ) =~ m/gcc/i );          # 2.95
+}
+
+sub awx_cc_abi_version {
+    my( $cc ) = @_;
+    my $ver = awx_cc_version( $cc );
+    return 0 unless $ver > 0;
+    return '3.4' if $ver >= 3.4;
+    return '3.2' if $ver >= 3.2;
+    return $ver;
 }
 
 sub awx_cc_version {
@@ -137,7 +146,7 @@ sub awx_smart_config {
 
     my $cc = $ENV{CXX} || $ENV{CC} || $Config{cc};
     my $kind = awx_compiler_kind( $cc );
-    my $version = awx_cc_version( $cc );
+    my $version = awx_cc_abi_version( $cc );
 
     $args{compiler_kind} ||= $kind;
     $args{compiler_version} ||= $version;
