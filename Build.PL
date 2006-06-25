@@ -6,6 +6,8 @@ use strict;
 use lib "lib", "inc";
 use My::Build;
 
+our $TYPE;
+
 # new_from_context is broken: it does not restore
 # @INC set in Build.PL before trying to load a base class not
 # defined using ->subclass...
@@ -31,16 +33,35 @@ my $build = $class->new
                          static     => { type => '!' },
                          monolithic => { type => '!' },
                          build_wx   => { type => '!' },
-                        },
+                         source     => { type => '=s' },
+                         },
     create_makefile_pl => 'passthrough',
   );
 
-my $build_wx = defined $build->args( 'build_wx' )
-                   ? $build->args( 'build_wx' )
-                   : $build->y_n( 'Do you want to build wxWidgets?', 'no' );
+my $build_wx = _askyn( $build, 'build_wx',
+                       'Do you want to build wxWidgets?', 'no' );
 $build->notes( 'build_wx' => $build_wx );
-$build->notes( 'build_data' => do 'patches/data' );
+if( $build_wx ) {
+    $TYPE = _ask( $build, 'source', 'Which archive type?', 'tar.gz' );
+    $build->notes( 'build_data' => do 'patches/data' );
+}
 
 $build->create_build_script;
 
-# unlink 'configured' if -f 'configured';
+sub _askyn {
+    my( $build, $arg, $question, $default ) = @_;
+    my $res = defined $build->args( $arg )
+                  ? $build->args( $arg )
+                  : $build->y_n( $question, $default );
+
+    return $res
+}
+
+sub _ask {
+    my( $build, $arg, $question, $default ) = @_;
+    my $res = defined $build->args( $arg )
+                  ? $build->args( $arg )
+                  : $build->prompt( $question, $default );
+
+    return $res
+}

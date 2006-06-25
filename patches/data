@@ -1,7 +1,7 @@
 my $VERSION = '2.6.3';
-my $URL     = 'ftp://biolpc22.york.ac.uk/pub/2.6.3';
-my $TYPE    = 'tar.bz2';
+my $URL     = "ftp://biolpc22.york.ac.uk/pub/$VERSION";
 my $BASE    = 'wxWidgets';
+# $TYPE from Build.PL
 
 my @common = qw(wxWidgets-2.6.3.patch);
 
