@@ -9,7 +9,7 @@ sub awx_wx_config_data {
     my %data = %{$self->SUPER::awx_wx_config_data};
 
     # MakeMaker does not like the "-framework foo" options
-    $data{libs} =~ s{-framework\s+\w+|-L/usr/local/lib}{}g;
+    $data{libs} =~ s{-framework\s+\w+|-L/usr/local/lib\s}{}g;
 
     $data{ld} = $data{cxx};
     $data{cxxflags} .= ' -UWX_PRECOMP ';

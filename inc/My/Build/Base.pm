@@ -256,7 +256,7 @@ sub extract_wxwidgets {
         sub error { 'Something went wrong...' }
     } else {
         require Archive::Extract;
-        Archive::Extract->new( archive => $archive );
+        $ae = Archive::Extract->new( archive => $archive );
     }
 
     die 'Error: ', $ae->error unless $ae->extract;
