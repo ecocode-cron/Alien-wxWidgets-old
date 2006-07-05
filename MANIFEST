@@ -4,6 +4,7 @@ INSTALL
 MANIFEST
 MANIFEST.SKIP
 META.yml
+inc/Archive/Extract.pm
 inc/File/Fetch.pm
 inc/File/Fetch/Item.pm
 inc/File/Spec/Unix.pm

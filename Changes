@@ -1,5 +1,8 @@
 Revision history for Perl extension Alien::wxWidgets.
 
+0.15  Wed Jul  5 20:26:32 CEST 2006
+	- Bundled missing Archive::Extract.
+
 0.14  Sun Jun 25 13:00:37 CEST 2006
 	- Make the wxWidgets archive type configurable when building
 	  wxWidgets, defaulting to .tar.gz instead of .tar.bz2.
