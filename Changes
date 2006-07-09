@@ -1,5 +1,8 @@
 Revision history for Perl extension Alien::wxWidgets.
 
+0.17  Fri Jul  7 22:14:13 CEST 2006
+	- Do not test POD for bundled libraries.
+
 0.16  Wed Jul  5 21:58:33 CEST 2006
         - Fixed extraction error when using Archive::Extract.
 
