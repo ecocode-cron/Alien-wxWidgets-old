@@ -1,5 +1,9 @@
 Revision history for Perl extension Alien::wxWidgets.
 
+0.18  Sun Jul  9 12:31:44 CEST 2006
+	- Restored compatibility with wxWidgets 2.4 where it uses
+	  configure/wx-config.
+
 0.17  Fri Jul  7 22:14:13 CEST 2006
 	- Do not test POD for bundled libraries.
 

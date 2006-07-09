@@ -21,14 +21,22 @@ sub awx_wx_config_data {
           '-l' . $data{basename} . '-' . $ver :
           '-l' . $data{basename}  . '_' . $_[0] . '-' . $ver;
     };
+    my $lib_dll = sub {
+        'lib' . substr( $lib_link->( $_[0] ), 2 ) . '.' . $self->awx_dlext;
+    };
 
-    $data{dlls} = { core => { link => $lib_link->( 'core' ) },
-                    stc  => { link => $lib_link->( 'stc' ) },
-                    xrc  => { link => $lib_link->( 'xrc' ) },
-                    gl   => { link => $self->_call_wx_config( 'gl-libs' ) },
+    $data{dlls} = { core => { dll  => $lib_dll->( 'core' ),
+                              link => $lib_link->( 'core' ) },
+                    stc  => { dll  => $lib_dll->( 'stc' ),
+                              link => $lib_link->( 'stc' ) },
+                    xrc  => { dll  => $lib_dll->( 'xrc' ),
+                              link => $lib_link->( 'xrc' ) },
+                    gl   => { dll  => $lib_dll->( 'gl' ),
+                              link => $self->_call_wx_config( 'gl-libs' ) },
                    };
+    delete $data{dlls}{gl} unless $data{dlls}{gl}{link};
 
-    $self->{data} = \%data;
+    $self->{awx_data} = \%data;
 }
 
 sub awx_uses_bakefile { 0 }

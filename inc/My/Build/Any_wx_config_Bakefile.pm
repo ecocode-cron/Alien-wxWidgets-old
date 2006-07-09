@@ -36,7 +36,7 @@ sub awx_wx_config_data {
         $data{dlls}{mono} = delete $data{dlls}{core};
     }
 
-    $self->{data} = \%data;
+    $self->{awx_data} = \%data;
 }
 
 1;
