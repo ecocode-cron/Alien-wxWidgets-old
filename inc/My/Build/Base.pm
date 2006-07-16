@@ -114,10 +114,12 @@ sub _init_config {
 
     $config{compiler} = $self->awx_wx_config_data->{cxx};
     $config{linker} = $self->awx_wx_config_data->{ld};
-    $config{config}{compiler_kind} =
+    $config{config}{compiler_kind} = $self->notes( 'compiler_kind' ) ||
         $self->awx_compiler_kind( $config{compiler} );
-    $config{config}{compiler_version} =
+    $config{config}{compiler_version} = $self->notes( 'compiler_version' ) ||
       $self->awx_compiler_version( $config{compiler} );
+    $self->notes( 'compiler_kind' => $config{config}{compiler_kind} );
+    $self->notes( 'compiler_version' => $config{config}{compiler_version} );
 
     my $base = $self->awx_get_name
       ( toolkit          => $config{config}{toolkit},

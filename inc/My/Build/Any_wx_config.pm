@@ -175,6 +175,7 @@ sub awx_dlext { $Config{dlext} }
 
 sub _key {
     my $self = shift;
+    my $compiler = $ENV{CXX} || $Config{cc};
     my $key = $self->awx_get_name
       ( toolkit          => $self->awx_build_toolkit,
         version          => $self->_version_2_dec
@@ -184,8 +185,8 @@ sub _key {
         mslu             => $self->awx_is_mslu,
         # it is unlikely it will ever be required under *nix
         $self->notes( 'build_wx' ) ? () :
-        ( compiler         => $self->awx_compiler_kind( $Config{cc} ),
-          compiler_version => $self->awx_compiler_version( $Config{cc} )
+        ( compiler         => $self->awx_compiler_kind( $compiler ),
+          compiler_version => $self->awx_compiler_version( $compiler )
           ),
       );
 
