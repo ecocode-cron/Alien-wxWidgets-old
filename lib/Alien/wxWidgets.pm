@@ -43,7 +43,7 @@ use Module::Pluggable sub_name      => '_list',
                       instantiate   => 'config';
 
 our $AUTOLOAD;
-our $VERSION = '0.19';
+our $VERSION = '0.20';
 our %VALUES;
 our $dont_remap;
 
@@ -299,9 +299,60 @@ Mattia Barbon <mbarbon@cpan.org>
 
 =head1 LICENSE
 
+=over 4
+
+=item Alien::wxWidgets
+
 Copyright (c) 2005, 2006 Mattia Barbon <mbarbon@cpan.org>
 
 This program is free software; you can redistribute it and/or
 modify it under the same terms as Perl itself
+
+=item inc/bin/patch
+
+was taken from the Perl Power Tools distributions
+
+Copyright (c) 1999 Moogle Stuffy Software <tgy@chocobo.org>
+
+You may play with this software in accordance with the Perl Artistic License.
+
+You may use this documentation under the auspices of the GNU General Public
+License.
+
+=item inc/bin/patch.exe
+
+was downloaded from http://gnuwin32.sourceforge.net/packages/patch.htm
+ad is copyrighted by its authors.
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+=item bundled files from CPAN
+
+    inc/File/Fetch/Item.pm
+    inc/File/Fetch.pm
+    inc/File/Spec/Unix.pm
+    inc/IPC/Cmd.pm
+    inc/Locale/Maketext/Simple.pm
+    inc/Module/Load/Conditional.pm
+    inc/Module/Load.pm
+    inc/Params/Check.pm
+    inc/Archive/Extract.pm
+
+Are copyright their respective authors an can be used according
+to the license specified in their CPAN distributions.
+
+=back
 
 =cut

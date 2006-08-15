@@ -1,5 +1,9 @@
 Revision history for Perl extension Alien::wxWidgets.
 
+0.20  Tue Aug 15 17:45:12 CEST 2006
+	- Bundle and use the patch implementation from GNU under Windows;
+	  the PPT implementation is way too fragile.
+
 0.19  Sun Jul 16 15:46:11 CEST 2006
 	- Fixes for when the compiler user for building is not in
 	  the PATH when installing.

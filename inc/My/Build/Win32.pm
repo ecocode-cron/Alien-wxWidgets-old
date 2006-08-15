@@ -35,6 +35,16 @@ EOT
     $ENV{WXWIN} = $ENV{WXDIR} unless exists $ENV{WXWIN};
 }
 
+sub _patch_command {
+    my( $self, $base_dir, $patch_file ) = @_;
+    my $patch_exe = File::Spec->catfile( $base_dir, qw(inc bin patch.exe) );
+
+    my $cmd = qq{perl -pe "" -- $patch_file} .
+              qq{ | $patch_exe -N -p0 -u -b -z .bak};
+
+    return $cmd;
+}
+
 sub awx_grep_dlls {
     my( $self, $libdir, $digits, $mono ) = @_;
     my $ret = {};

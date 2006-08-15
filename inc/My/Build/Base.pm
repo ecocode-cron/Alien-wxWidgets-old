@@ -2,7 +2,7 @@ package My::Build::Base;
 
 use strict;
 use base qw(Module::Build);
-use My::Build::Utility qw(awx_arch_file awx_patch);
+use My::Build::Utility qw(awx_arch_file);
 use Alien::wxWidgets::Utility qw(awx_sort_config awx_grep_config);
 use File::Path ();
 use File::Basename ();
@@ -278,15 +278,22 @@ sub patch_wxwidgets {
 
     foreach my $i ( @patches ) {
         print "Applying patch: ", $i, "\n";
-        my $cmd = $^X . ' ' . File::Spec->catfile( $old_dir,
-                                                   qw(inc bin patch) )
-                  . " -N -p0 -u -s -b .bak < $i";
-        # system "patch --binary -b -p0 < $i" and die 'Error: ', $?;
+        my $cmd = $self->_patch_command( $old_dir, $i );
         print $cmd, "\n";
         system $cmd and die 'Error: ', $?;
     }
 
     chdir $old_dir;
+}
+
+sub _patch_command {
+    my( $self, $base_dir, $patch_file ) = @_;
+
+    my $cmd = $^X . ' ' . File::Spec->catfile( $base_dir,
+                                               qw(inc bin patch) )
+      . " -N -p0 -u -b .bak < $patch_file";
+
+    return $cmd;
 }
 
 sub build_wxwidgets {
