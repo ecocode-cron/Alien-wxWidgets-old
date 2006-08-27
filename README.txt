@@ -1,10 +1,19 @@
 =head1 NAME
 
-Install - build and installation instructions
+README.txt - build and installation instructions
+
+=head1 DESCRIPTION
+
+Alien::wxWidgets allows wxPerl to easily find information about
+your wxWidgets installation. It can store this information for multiple
+wxWidgets versions or configurations (debug, Unicode, etc.). It can also
+build and install a private copy of wxWidgets as part of the build process.
 
 =head1 Installing wxWidgets
 
-TODO
+If yo do not know how to do it, please answer 'yes' to the question 'Do you
+want to build wxWidgets?'; Alien::wxWidgets will build and install a
+copy of wxWidgets for you.
 
 =head1 Installing Alien::wxWidgets
 

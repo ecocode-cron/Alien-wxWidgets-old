@@ -10,6 +10,21 @@ use strict;
 use base qw(Exporter);
 use Config;
 
+BEGIN {
+    if( $^O eq 'MSWin32' && $Config{_a} ne $Config{lib_ext} ) {
+        print STDERR <<EOT;
+\$Config{_a} is '$Config{_a}' and \$Config{lib_ext} is '$Config{lib_ext}':
+they need to be equal for the build to succeed. If you are using ActivePerl
+with MinGW/GCC, please:
+
+- install ExtUtils::FakeConfig
+- set PERL5OPT=-MConfig_m
+- rerun Build.PL
+EOT
+        exit 1;
+    }
+}
+
 our @EXPORT_OK = qw(awx_capture awx_cc_is_gcc awx_cc_version awx_cc_abi_version
                     awx_sort_config awx_grep_config awx_smart_config);
 

@@ -1,9 +1,9 @@
 Build.PL
 Changes
-INSTALL
 MANIFEST
 MANIFEST.SKIP
 META.yml
+README.txt
 inc/Archive/Extract.pm
 inc/File/Fetch.pm
 inc/File/Fetch/Item.pm

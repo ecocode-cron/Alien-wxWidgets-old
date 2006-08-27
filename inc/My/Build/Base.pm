@@ -112,7 +112,7 @@ sub _init_config {
 
     $config{version} = $self->_version_2_dec( $ver );
 
-    $config{compiler} = $self->awx_wx_config_data->{cxx};
+    $config{compiler} = $ENV{CXX} || $self->awx_wx_config_data->{cxx};
     $config{linker} = $self->awx_wx_config_data->{ld};
     $config{config}{compiler_kind} = $self->notes( 'compiler_kind' ) ||
         $self->awx_compiler_kind( $config{compiler} );
@@ -237,29 +237,8 @@ sub extract_wxwidgets {
 
     print "Extracting wxWidgets...\n";
 
-    my $ae;
-    if( $archive =~ /\.tar\.bz2$/ ) {
-        $ae = Archive::Extract::Bz2->new( archive => $archive );
-
-        package Archive::Extract::Bz2;
-
-        sub _has_bzip2 {
-            foreach my $dir ( File::Spec->path ) {
-                return if -x File::Spec->catfile( $dir, 'bzip2' );
-            }
-            die "\n\nYou need to install bzip2!\n\n\n";
-        }
-        sub new { _has_bzip2; my $class = shift; bless { @_ }, $class };
-        sub extract {
-            my $archive = $_[0]->{archive};
-            system "bzip2 -cd $archive | tar -x -f -" and die 'Error: ', $?;
-            1;
-        }
-        sub error { 'Something went wrong...' }
-    } else {
-        require Archive::Extract;
-        $ae = Archive::Extract->new( archive => $archive );
-    }
+    require Archive::Extract;
+    my $ae = Archive::Extract->new( archive => $archive );
 
     die 'Error: ', $ae->error unless $ae->extract;
 
