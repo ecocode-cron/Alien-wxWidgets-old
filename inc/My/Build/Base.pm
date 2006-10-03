@@ -223,6 +223,7 @@ sub fetch_wxwidgets {
     require File::Fetch;
 
     print "Fetching wxWidgets...\n";
+    print "fetching from: ", $self->notes( 'build_data' )->{data}{url}, "\n";
 
     my $path = File::Fetch->new
       ( uri => $self->notes( 'build_data' )->{data}{url} )->fetch;
