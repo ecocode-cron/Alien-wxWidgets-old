@@ -43,7 +43,7 @@ use Module::Pluggable sub_name      => '_list',
                       instantiate   => 'config';
 
 our $AUTOLOAD;
-our $VERSION = '0.21';
+our $VERSION = '0.22';
 our %VALUES;
 our $dont_remap;
 
@@ -85,7 +85,7 @@ sub load {
 
 sub show_configurations {
     my $class = shift;
-    my @configs = awx_sort_config awx_grep_config [ $class->_list ], @_;
+    my @configs = $class->get_configurations( @_ );
 
     require Data::Dumper;
     print Data::Dumper->Dump( \@configs );
@@ -94,7 +94,7 @@ sub show_configurations {
 sub get_configurations {
     my $class = shift;
 
-    return awx_sort_config awx_grep_config [ shift->_list ], @_;
+    return awx_sort_config awx_grep_config [ $class->_list ], @_;
  }
 
 my $lib_nok  = 'adv|base|html|net|xml|media';
@@ -144,7 +144,7 @@ __END__
 
 =head1 METHODS
 
-=head1 load/import
+=head2 load/import
 
     use Alien::wxWidgets version          => 2.004 | [ 2.004, 2.005 ],
                          compiler_kind    => 'gcc' | 'cl', # Windows only
@@ -171,14 +171,14 @@ Please note that when the version is pecified as C<version => 2.004>
 it means "any version >= 2.004" while when specified as
 C<version => [ 2.004, 2.005 ]> it means "any version => 2.004 and < 2.005".
 
-=head1 key
+=head2 key
 
     my $key = Alien::wxWidgets key;
 
 Returns an unique key that can be used to reload the
 currently-loaded configuration.
 
-=head1 version
+=head2 version
 
     my $version = Alien::wxWidgets->version;
 
@@ -186,7 +186,7 @@ Returns the wxWidgets version for this C<Alien::wxWidgets>
 installation in the form MAJOR + MINOR / 1_000 + RELEASE / 1_000_000
 e.g. 2.006002 for wxWidgets 2.6.2 and 2.004 for wxWidgets 2.4.0.
 
-=head1 config
+=head2 config
 
     my $config = Alien::wxWidgets->config;
 
@@ -199,45 +199,45 @@ in the form
       mslu      => 1 | 0,
       }
 
-=head1 include_path
+=head2 include_path
 
     my $include_path = Alien::wxWidgets->include_path;
 
 Returns the include paths to be used in a format suitable for the
 compiler (usually something like "-I/usr/local/include -I/opt/wx/include").
 
-=head1 defines
+=head2 defines
 
     my $defines = Alien::wxWidgets->defines;
 
 Returns the compiler defines to be used in a format suitable for the
 compiler (usually something like "-D__WXDEBUG__ -DFOO=bar").
 
-=head1 c_flags
+=head2 c_flags
 
     my $cflags = Alien::wxWidgets->c_flags;
 
 Returns additional compiler flags to be used.
 
-=head1 compiler
+=head2 compiler
 
     my $compiler = Alien::wxWidgets->compiler;
 
 Returns the (C++) compiler used for compiling wxWidgets.
 
-=head1 linker
+=head2 linker
 
     my $linker = Alien::wxWidgets->linker;
 
 Returns a linker suitable for linking C++ binaries.
 
-=head1 link_flags
+=head2 link_flags
 
     my $linkflags = Alien::wxWidgets->link_flags;
 
 Returns additional link flags.
 
-=head1 libraries
+=head2 libraries
 
     my $libraries = Alien::wxWidgets->libraries( qw(gl adv core base) );
 
@@ -246,52 +246,59 @@ usually includes some search path specification in addition to the
 libraries themselves. The caller is responsible for the correct order
 of the libraries.
 
-=head1 link_libraries
+=head2 link_libraries
 
     my @libraries = Alien::wxWidgets->link_libraries( qw(gl adv core base) );
 
 Returns a list of linker flags that can be used to link the libraries
 passed as arguments.
 
-=head1 import_libraries
+=head2 import_libraries
 
     my @implib = Alien::wxWidgets->import_libraries( qw(gl adv core base) );
 
 Windows specific. Returns a list of import libraries corresponding to
 the libraries passed as arguments.
 
-=head1 shared_libraries
+=head2 shared_libraries
 
     my @shrlib = Alien::wxWidgets->shared_libraries( qw(gl adv core base) );
 
 Returns a list of shared libraries corresponding to the libraries
 passed as arguments.
 
-=head1 library_path
+=head2 library_keys
+
+    my @keys = Alien::wxWidgets->library_keys;
+
+Returns a list of keys that can be passed to C<shared_libraries>,
+C<import_libraries> and C<link_libraries>.
+
+=head2 library_path
 
     my $library_path = Alien::wxWidgets->shared_library_path;
 
 Windows specific. Returns the path at which the private copy
 of wxWidgets libraries has been installed.
 
-=head1 BUGS
+=head2 prefix
 
-=over 4
+    my $prefix = Alien::wxWidgets->prefix;
 
-=item *
+Returns the install prefix for wxWidgets.
 
-Does not support multiple wxWidgets configurations.
+=head2 show_configurations
 
-=item *
+    Alien::wxWidgets->show_configurations( %filters );
 
-Does not support automated wxWidgets download/installation.
+Prints a list of available configurations (mainly useful for
+interactive use/debugging).
 
-=item *
+=head2 get_configurations
 
-Error handling (wx-config not in path, compiler/make not found)
-is missing.
+   my $configs = Alien::wxWidgets->get_configurations( %filters );
 
-=back
+Returns a list of configurations matching the given filters.
 
 =head1 AUTHOR
 
