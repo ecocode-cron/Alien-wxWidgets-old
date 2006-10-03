@@ -1,5 +1,10 @@
 Revision history for Perl extension Alien::wxWidgets.
 
+0.22  Tue Oct  3 20:30:48 CEST 2006
+	- Fixed a bug in detecting an installed wxWidgets in /usr/lib64 in
+	  x86_64 systems. (patch by Jose Pedro Oliveira)
+	- When fetching wxWidgets, print the download URL.
+
 0.21  Sun Aug 27 17:17:56 CEST 2006
 	- Check that the build environment is sane under Win32.
 
