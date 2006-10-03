@@ -43,5 +43,6 @@ patches/wxMSW-2.6.3-makefiles.patch
 patches/wxWidgets-2.6.3.patch
 script/make_ppm.pl
 t/01_load.t
+t/zy_pod_coverage.t
 t/zz_pod.t
 Makefile.PL
