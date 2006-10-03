@@ -116,7 +116,7 @@ sub awx_configure {
     }
 
     my @paths = ( ( map { s/^-L//; $_ } grep { /^-L/ } split ' ', $libs ),
-                  qw(/usr/local/lib /usr/lib) );
+                  qw(/usr/local/lib /usr/lib /usr/lib/lib64) );
 
     foreach ( split /\s+/, $libs ) {
         m{^-[lL]|/} && do { $config{link_libraries} .= " $_"; next; };
