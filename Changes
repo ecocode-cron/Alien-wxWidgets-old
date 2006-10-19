@@ -1,5 +1,9 @@
 Revision history for Perl extension Alien::wxWidgets.
 
+0.23  Thu Oct 19 21:41:16 CEST 2006
+	- Use a smart default for the "Do you want to build
+          wxWidgets?" question.
+
 0.22  Tue Oct  3 20:30:48 CEST 2006
 	- Fixed a bug in detecting an installed wxWidgets in /usr/lib64 in
 	  x86_64 systems. (patch by Jose Pedro Oliveira)

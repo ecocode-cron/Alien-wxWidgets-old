@@ -38,8 +38,20 @@ my $build = $class->new
     create_makefile_pl => 'passthrough',
   );
 
+my $build_wx_dflt = 'yes';
+if( $^O eq 'MSWin32' && ( $ENV{WXWIN} || $ENV{WXDIR} ) ) {
+    $build_wx_dflt = 'no';
+} else {
+    require My::Build::Base;
+    my $wx_config = My::Build::Base->awx_path_search( 'wx-config' );
+    if( $wx_config ) {
+        my $ans = `wx-config --version`;
+        $build_wx_dflt = 'no' if $ans =~ /^2\./;
+    }
+}
+
 my $build_wx = _askyn( $build, 'build_wx',
-                       'Do you want to build wxWidgets?', 'no' );
+                       'Do you want to build wxWidgets?', $build_wx_dflt );
 $build->notes( 'build_wx' => $build_wx );
 if( $build_wx ) {
     $TYPE = _ask( $build, 'source', 'Which archive type?', 'tar.gz' );
