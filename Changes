@@ -1,5 +1,9 @@
 Revision history for Perl extension Alien::wxWidgets.
 
+0.24  Fri Oct 20 21:27:57 CEST 2006
+	- Add an option for disabling OpenGL support when building
+	  wxWidgets.
+
 0.23  Thu Oct 19 21:41:16 CEST 2006
 	- Use a smart default for the "Do you want to build
           wxWidgets?" question.

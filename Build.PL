@@ -33,12 +33,14 @@ my $build = $class->new
                          static     => { type => '!' },
                          monolithic => { type => '!' },
                          build_wx   => { type => '!' },
+                         build_wx_opengl => { type => '!' },
                          source     => { type => '=s' },
                          },
     create_makefile_pl => 'passthrough',
   );
 
 my $build_wx_dflt = 'yes';
+my $build_wx_opengl_dflt = 'yes';
 if( $^O eq 'MSWin32' && ( $ENV{WXWIN} || $ENV{WXDIR} ) ) {
     $build_wx_dflt = 'no';
 } else {
@@ -49,6 +51,9 @@ if( $^O eq 'MSWin32' && ( $ENV{WXWIN} || $ENV{WXDIR} ) ) {
         $build_wx_dflt = 'no' if $ans =~ /^2\./;
     }
 }
+if( $^O ne 'darwin' && $^O ne 'MSWin32' ) {
+    $build_wx_opengl_dflt = 'no';
+}
 
 my $build_wx = _askyn( $build, 'build_wx',
                        'Do you want to build wxWidgets?', $build_wx_dflt );
@@ -56,6 +61,12 @@ $build->notes( 'build_wx' => $build_wx );
 if( $build_wx ) {
     $TYPE = _ask( $build, 'source', 'Which archive type?', 'tar.gz' );
     $build->notes( 'build_data' => do 'patches/data' );
+}
+if( $build_wx ) {
+    my $build_wx_opengl = _askyn( $build, 'build_wx_opengl',
+                                  'Do you want to include OpenGL support',
+                                  $build_wx_opengl_dflt );
+    $build->notes( 'build_wx_opengl' => $build_wx_opengl );
 }
 
 $build->create_build_script;
