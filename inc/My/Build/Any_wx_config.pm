@@ -6,8 +6,8 @@ use My::Build::Utility qw(awx_arch_dir awx_install_arch_dir);
 our @ISA = qw(My::Build::Any_wx_config::Base);
 
 our $WX_CONFIG_LIBSEP;
-our @LIBRARIES = qw(base net xml adv animate core deprecated fl gizmos
-                    html media mmedia ogl plot qa stc svg xrc gl);
+our @LIBRARIES = qw(base net xml adv animate aui core deprecated fl gizmos
+                    gizmos_xrc gl html media ogl plot qa richtext stc svg xrc);
 
 my $initialized;
 my( $wx_debug, $wx_unicode, $wx_monolithic );
