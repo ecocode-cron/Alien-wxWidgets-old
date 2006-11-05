@@ -1,6 +1,6 @@
 Revision history for Perl extension Alien::wxWidgets.
 
-0.25
+0.25  Sun Nov  5 18:39:22 CET 2006
 	- Add aui and richtest to the wxWidgets libraries
 	  searched with wx-config.
 
