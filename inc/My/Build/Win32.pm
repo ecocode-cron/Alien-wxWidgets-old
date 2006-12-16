@@ -70,7 +70,8 @@ sub awx_grep_dlls {
         $ret->{mono} = delete $ret->{base};
     }
 
-    die "Configuration error: could not find libraries for this configuration"
+    die "Configuration error: could not find libraries for configuration: "
+        . join ' ', map "'$_'", $suff, $digits
       unless ( exists $ret->{core}{dll} and exists $ret->{core}{lib} )
           or ( exists $ret->{mono}{dll} and exists $ret->{mono}{lib} );
 

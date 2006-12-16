@@ -6,8 +6,10 @@ use My::Build::Utility qw(awx_arch_dir awx_install_arch_dir);
 our @ISA = qw(My::Build::Any_wx_config::Base);
 
 our $WX_CONFIG_LIBSEP;
-our @LIBRARIES = qw(base net xml adv animate aui core deprecated fl gizmos
+our @LIBRARIES = qw(base net xml adv animate aui core fl gizmos
                     gizmos_xrc gl html media ogl plot qa richtext stc svg xrc);
+our @CRITICAL  = qw(base core);
+our @IMPORTANT = qw(net xml adv aui gl html media richtext stc xrc);
 
 my $initialized;
 my( $wx_debug, $wx_unicode, $wx_monolithic );
@@ -138,8 +140,14 @@ sub awx_configure {
             foreach my $path ( @paths ) {
                 $found = 1 if -f File::Spec->catfile( $path, $v->{dll} );
             }
-            warn "'$k' library not found" and next
-                unless $found || $self->notes( 'build_wx' );
+            unless( $found || $self->notes( 'build_wx' ) ) {
+                if( grep $_ eq $k, @My::Build::Any_wx_config::CRITICAL ) {
+                    warn "'$k' library not found: can't use wxWidgets\n";
+                } elsif( grep $_ eq $k, @My::Build::Any_wx_config::IMPORTANT ) {
+                    warn "'$k' library not found: some functionality will be missing\n";
+                }
+                next;
+            }
         }
 
         $config{_libraries}{$k} = $v;
