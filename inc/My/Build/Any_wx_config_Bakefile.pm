@@ -27,6 +27,9 @@ sub awx_wx_config_data {
         $key = 'base' if $key =~ m/^base[ud]{0,2}/;
         $key = 'base' if $key =~ m/^carbon/; # here for Mac
         $key = 'core' if $key =~ m/^mac[ud]{0,2}/;
+        $key = 'core' if $key =~ m/^gtk2?[ud]{0,2}/
+                              && $self->awx_is_monolithic
+                              && $lib =~ m/(?:gtk2?|mac)[ud]{0,2}-/;
         my $dll = "lib${name}." . $self->awx_dlext;
 
         $data{dlls}{$key} = { dll  => $dll,

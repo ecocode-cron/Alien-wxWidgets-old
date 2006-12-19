@@ -43,7 +43,7 @@ use Module::Pluggable sub_name      => '_list',
                       instantiate   => 'config';
 
 our $AUTOLOAD;
-our $VERSION = '0.26';
+our $VERSION = '0.27';
 our %VALUES;
 our $dont_remap;
 
@@ -98,7 +98,7 @@ sub get_configurations {
  }
 
 my $lib_nok  = 'adv|base|html|net|xml|media';
-my $lib_mono = 'adv|base|html|net|xml|xrc|media';
+my $lib_mono = 'adv|base|html|net|xml|xrc|media|aui|richtext';
 
 sub _grep_libraries {
     my $lib_filter = $VALUES{version} >= 2.005001 ? qr/(?!a)a/ : # no match
