@@ -6,7 +6,6 @@ META.yml
 README.txt
 inc/Archive/Extract.pm
 inc/File/Fetch.pm
-inc/File/Fetch/Item.pm
 inc/File/Spec/Unix.pm
 inc/IPC/Cmd.pm
 inc/Locale/Maketext/Simple.pm
@@ -35,12 +34,11 @@ inc/bin/patch.exe
 lib/Alien/wxWidgets.pm
 lib/Alien/wxWidgets/Utility.pm
 patches/data
-patches/wxMSW-2.6.3-setup.patch
-patches/wxMSW-2.6.3-setup_u.patch
-patches/wxMSW-2.6.3-config.patch
-patches/wxMSW-2.6.3-magic.patch
-patches/wxMSW-2.6.3-makefiles.patch
-patches/wxWidgets-2.6.3.patch
+patches/wxMSW-2.8.0-setup.patch
+patches/wxMSW-2.8.0-setup_u.patch
+patches/wxMSW-2.8.0-config.patch
+patches/wxMSW-2.8.0-makefiles.patch
+patches/wxWidgets-2.8.0-magic.patch
 script/make_ppm.pl
 t/01_load.t
 t/zy_pod_coverage.t
