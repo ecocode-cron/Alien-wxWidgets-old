@@ -43,7 +43,7 @@ use Module::Pluggable sub_name      => '_list',
                       instantiate   => 'config';
 
 our $AUTOLOAD;
-our $VERSION = '0.28';
+our $VERSION = '0.29';
 our %VALUES;
 our $dont_remap;
 

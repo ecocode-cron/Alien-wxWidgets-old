@@ -22,7 +22,7 @@ my $build = $class->new
   ( module_name     => 'Alien::wxWidgets',
     license         => 'perl',
     author          => 'Mattia Barbon <mbarbon@cpan.org>',
-    requires        => { perl                             => '5.6',
+    requires        => { perl                             => '5.006',
                          'Module::Pluggable'              => '2.6',
                         },
     build_requires  => { 'Module::Build'                  => '0.26',
