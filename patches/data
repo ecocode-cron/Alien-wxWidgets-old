@@ -1,4 +1,4 @@
-my $VERSION = '2.8.1';
+my $VERSION = '2.8.2';
 my $URL     = "ftp://biolpc22.york.ac.uk/pub/$VERSION";
 my $BASE    = 'wxWidgets';
 # $TYPE from Build.PL

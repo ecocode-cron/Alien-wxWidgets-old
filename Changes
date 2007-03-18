@@ -1,5 +1,8 @@
 Revision history for Perl extension Alien::wxWidgets.
 
+0.30  Sun Mar 18 16:47:23 CET 2007
+	- Fetch and build wxWidgets 2.8.2.
+
 0.29  Fri Mar 16 20:11:31 CET 2007
 	- Must require Perl 5.006, not 5.6.
 
