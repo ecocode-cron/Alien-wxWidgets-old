@@ -1,5 +1,8 @@
 Revision history for Perl extension Alien::wxWidgets.
 
+0.31
+	- Automatically link in C++ runtime for MSVC 7.0 and above.
+
 0.30  Sun Mar 18 16:47:23 CET 2007
 	- Fetch and build wxWidgets 2.8.2.
 

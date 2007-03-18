@@ -3,6 +3,7 @@ package My::Build::Win32_MSVC;
 use strict;
 use base qw(My::Build::Win32);
 use My::Build::Utility qw(awx_install_arch_file awx_install_arch_dir);
+use Alien::wxWidgets::Utility qw(awx_cc_version);
 use Config;
 
 sub awx_configure {
@@ -46,6 +47,7 @@ sub awx_configure {
         next if m{(?:(?:zlib|regexu?|expat|png|jpeg|tiff)[uhd]{0,2}\.lib)$};
         $config{link_libraries} .= "$_ ";
     }
+    $config{link_libraries} .= 'msvcprt.lib ' if awx_cc_version( 'cl' ) > 6;
 
     my $dlls = $self->awx_wx_config_data->{dlls};
     $config{_libraries} = {};

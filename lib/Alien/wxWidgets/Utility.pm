@@ -34,6 +34,12 @@ sub awx_capture {
     qx!$^X -e ${quotes}open STDERR, q[>&STDOUT]; exec \@ARGV${quotes} -- $_[0]!;
 }
 
+sub awx_cc_is_msvc {
+    my( $cc ) = @_;
+
+    return $^O =~ /MSWin32/ and $cc =~ /^cl/i;
+}
+
 sub awx_cc_is_gcc {
     my( $cc ) = @_;
 
@@ -43,29 +49,48 @@ sub awx_cc_is_gcc {
 
 sub awx_cc_abi_version {
     my( $cc ) = @_;
+    my $is_gcc = awx_cc_is_gcc( $cc );
+    my $is_msvc = awx_cc_is_msvc( $cc );
+    return 0 unless $is_gcc || $is_msvc;
     my $ver = awx_cc_version( $cc );
-    return 0 unless $ver > 0;
-    return '3.4' if $ver >= 3.4;
-    return '3.2' if $ver >= 3.2;
-    return $ver;
+    if( $is_gcc ) {
+        return 0 unless $ver > 0;
+        return '3.4' if $ver >= 3.4;
+        return '3.2' if $ver >= 3.2;
+        return $ver;
+    } elsif( $is_msvc ) {
+        return 0 if $ver < 7;
+        return $ver;
+    }
 }
 
 sub awx_cc_version {
     my( $cc ) = @_;
-    return 0 unless awx_cc_is_gcc( $cc );
+    my $is_gcc = awx_cc_is_gcc( $cc );
+    my $is_msvc = awx_cc_is_msvc( $cc );
+    return 0 unless $is_gcc || $is_msvc;
 
-    my $ver = awx_capture( "$cc --version" );
-
-    $ver =~ m/(\d+\.\d+)(?:\.\d+)?/ or return 0;
-
-    return $1;
+    if( $is_gcc ) {
+        my $ver = awx_capture( "$cc --version" );
+        $ver =~ m/(\d+\.\d+)(?:\.\d+)?/ or return 0;
+        return $1;
+    } elsif( $is_msvc ) {
+        my $ver = awx_capture( $cc );
+        $ver =~ m/(\d+\.\d+)\.\d+/ or return 0;
+        return 8.0 if $1 >= 14;
+        return 7.1 if $1 >= 13.10;
+        return 7.0 if $1 >= 13;
+        return 6.0 if $1 >= 12;
+        return 5.0 if $1 >= 11;
+        return 0;
+    }
 }
 
 sub awx_compiler_kind {
     my( $cc ) = @_;
 
     return 'gcc' if awx_cc_is_gcc( $cc );
-    return 'cl'  if $^O =~ /MSWin32/ and $cc =~ /^cl/i;
+    return 'cl'  if awx_cc_is_msvc( $cc );
 
     return 'nc'; # as in 'No Clue'
 }
