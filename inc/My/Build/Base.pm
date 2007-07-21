@@ -238,10 +238,14 @@ sub extract_wxwidgets {
 
     print "Extracting wxWidgets...\n";
 
-    require Archive::Extract;
-    my $ae = Archive::Extract->new( archive => $archive );
+    if( $^O ne 'MSWin32' || $archive !~ /\.bz2$/i ) {
+        require Archive::Extract;
+        my $ae = Archive::Extract->new( archive => $archive );
 
-    die 'Error: ', $ae->error unless $ae->extract;
+        die 'Error: ', $ae->error unless $ae->extract;
+    } else {
+        system "bunzip2 -c $archive | tar xf -";
+    }
 
     $self->patch_wxwidgets;
 }
