@@ -1,6 +1,9 @@
 Revision history for Perl extension Alien::wxWidgets.
 
 0.32
+	- Correctly handle flags for wxWidgets Universal Mac builds.
+	- Allow building a monolithic wxWidgets.
+	- Updated bundled Archive::Extract to the latest version.
 
 0.31  Sat Mar 24 17:25:25 CET 2007
 	- Patch and build wxWidgets 2.8.3.
