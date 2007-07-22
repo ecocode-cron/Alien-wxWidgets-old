@@ -9,10 +9,10 @@ use File::Basename ();
 use Fatal qw(open close);
 use Data::Dumper;
 
-sub ACTION_build {
+sub ACTION_code {
     my $self = shift;
 
-    $self->SUPER::ACTION_build;
+    $self->SUPER::ACTION_code;
     if( $self->notes( 'build_wx' ) ) {
         $self->fetch_wxwidgets;
         $self->extract_wxwidgets;
