@@ -32,6 +32,7 @@ my $build = $class->new
                          mslu       => { type => '!' },
                          static     => { type => '!' },
                          monolithic => { type => '!' },
+                         universal  => { type => '!' },
                          build_wx   => { type => '!' },
                          build_wx_opengl => { type => '!' },
                          source     => { type => '=s' },

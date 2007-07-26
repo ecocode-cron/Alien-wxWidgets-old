@@ -212,10 +212,12 @@ sub build_wxwidgets {
     my $unicode = $self->awx_is_unicode ? 'enable' : 'disable';
     my $debug = $self->awx_is_debug ? 'enable' : 'disable';
     my $monolithic = $self->awx_is_monolithic ? 'enable' : 'disable';
+    my $universal = $self->awx_is_universal ? 'enable' : 'disable';
     my $dir = $self->notes( 'build_data' )->{data}{directory};
     my $cmd = "echo exit | " . # for OS X 10.3...
               "sh ../configure --prefix=$prefix $args --$unicode-unicode"
-            . " --$debug-debug --$monolithic-monolithic";
+            . " --$debug-debug --$monolithic-monolithic"
+            . " --$universal-universal_binary";
     my $old_dir = Cwd::cwd;
 
     chdir $dir;

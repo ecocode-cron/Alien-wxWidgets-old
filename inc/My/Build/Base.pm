@@ -2,26 +2,34 @@ package My::Build::Base;
 
 use strict;
 use base qw(Module::Build);
-use My::Build::Utility qw(awx_arch_file);
+use My::Build::Utility qw(awx_arch_file awx_touch);
 use Alien::wxWidgets::Utility qw(awx_sort_config awx_grep_config);
 use File::Path ();
 use File::Basename ();
-use Fatal qw(open close);
+use Fatal qw(open close unlink);
 use Data::Dumper;
+
+sub ACTION_build {
+    my $self = shift;
+    # try to make "perl Makefile.PL && make test" work
+    # but avoid doubly building wxWidgets when doing
+    # "perl Makefile.PL && make && make test"
+    unlink 'configured' if -f 'configured';
+    $self->SUPER::ACTION_build;
+}
 
 sub ACTION_code {
     my $self = shift;
 
     $self->SUPER::ACTION_code;
-    if( $self->notes( 'build_wx' ) ) {
-        $self->fetch_wxwidgets;
-        $self->extract_wxwidgets;
-        $self->massage_environment;
-        $self->build_wxwidgets;
-        $self->massage_environment; # twice on purpose
-    }
+    # see comment in ACTION_build for why 'configured' is used
+    return if -f 'configured';
+    $self->depends_on( 'build_wx' );
     $self->create_config_file( awx_arch_file( 'Config/Config.pm' ) );
     $self->install_wxwidgets;
+    # see comment in ACTION_build for why 'configured' is used
+    awx_touch( 'configured' );
+    $self->add_to_cleanup( 'configured' );
 }
 
 sub ACTION_build_wx {
@@ -144,17 +152,6 @@ sub _init_config {
 sub create_config_file {
     my( $self, $file ) = @_;
 
-=pod
-
-    if( -f 'configured' ) {
-        warn "Remove 'configured' to reconfigure wxWidgets";
-        my $config = do 'configured';
-        $self->{awx_base} = $self->{awx_key} = $config->{alien_base};
-        return;
-    }
-
-=cut
-
     my $directory = File::Basename::dirname( $file );
     my %config = $self->_init_config;
     my $base = $self->awx_key;
@@ -203,17 +200,6 @@ sub config {
 EOT
 
     close $fh;
-
-=pod
-
-    $self->add_to_cleanup( 'configured' );
-    {
-        open my $fh, '>', 'configured';
-        print $fh $body;
-    }
-
-=cut
-
 }
 
 sub fetch_wxwidgets {
@@ -329,6 +315,8 @@ sub awx_mslu { 0 }
 sub awx_is_mslu { $_[0]->awx_mslu }
 sub awx_static { $_[0]->args( 'static' ) ? 1 : 0 }
 sub awx_is_static { $_[0]->awx_static }
+sub awx_universal { $_[0]->args( 'universal' ) ? 1 : 0 }
+sub awx_is_universal { $_[0]->awx_universal }
 sub awx_get_package { local $_ = $_[0]; s/^My::Build:://; return $_ }
 
 sub awx_wx_patches {
