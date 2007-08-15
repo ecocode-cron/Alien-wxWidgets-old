@@ -3,6 +3,7 @@ Changes
 MANIFEST
 MANIFEST.SKIP
 META.yml
+Makefile.PL
 README.txt
 inc/Archive/Extract.pm
 inc/File/Fetch.pm
@@ -34,13 +35,12 @@ inc/bin/patch.exe
 lib/Alien/wxWidgets.pm
 lib/Alien/wxWidgets/Utility.pm
 patches/data
+patches/wxMSW-2.8.0-makefiles.patch
 patches/wxMSW-2.8.0-setup.patch
 patches/wxMSW-2.8.0-setup_u.patch
-patches/wxMSW-2.8.0-config.patch
-patches/wxMSW-2.8.0-makefiles.patch
+patches/wxMSW-2.8.4-config.patch
 patches/wxWidgets-2.8.0-magic.patch
 script/make_ppm.pl
 t/01_load.t
 t/zy_pod_coverage.t
 t/zz_pod.t
-Makefile.PL
