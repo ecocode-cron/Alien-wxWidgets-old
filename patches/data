@@ -1,4 +1,4 @@
-my $VERSION = '2.8.4';
+my $VERSION = '2.8.7';
 my $URL     = "ftp://biolpc22.york.ac.uk/pub/$VERSION";
 my $BASE    = 'wxWidgets';
 # $TYPE from Build.PL
@@ -16,8 +16,12 @@ wxMSW-2.8.4-config.patch
 wxMSW-2.8.0-makefiles.patch
                                ), @common ],
                },
-  mac     => { unicode => [ @common ],
-               ansi    => [ @common ],
+  mac     => { unicode => [ qw(
+wxMac-2.8.3-brokengcc.patch
+                               ), @common ],
+               ansi    => [ qw(
+wxMac-2.8.3-brokengcc.patch
+                               ), @common ],
                },
   unix    => { unicode => [ @common ],
                ansi    => [ @common ],
