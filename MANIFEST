@@ -28,6 +28,8 @@ inc/My/Build/Win32_MinGW_Bakefile.pm
 inc/My/Build/Win32_MinGW_Tmake.pm
 inc/My/Build/gmake.mak
 inc/My/Build/nmake.mak
+inc/version.pm
+inc/version/vpp.pm
 inc/Params/Check.pm
 inc/Text/Patch.pm
 inc/bin/patch
