@@ -1,5 +1,8 @@
 Revision history for Perl extension Alien::wxWidgets.
 
+0.34  Sun Apr 13 12:40:08 CEST 2008
+	- Correctly detect GCC 4.3. (patch by Roberto C. Sánchez)
+
 0.33  Sat Jan 19 17:35:57 CET 2008
 	- Patch and build wxWidgets 2.8.7.
 
