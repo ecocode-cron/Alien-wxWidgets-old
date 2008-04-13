@@ -6,7 +6,7 @@ use base qw(My::Build::Any_wx_config);
 sub awx_wx_config_data {
     my $self = shift;
     return $self->{awx_data} if $self->{awx_data};
-    my %data = %{$self->SUPER::awx_wx_config_data};
+    my %data = ( linkflags => '', %{$self->SUPER::awx_wx_config_data} );
 
     # MakeMaker does not like some options
     $data{libs} =~ s{-framework\s+\w+}{}g;
