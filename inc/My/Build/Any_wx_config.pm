@@ -183,7 +183,7 @@ sub awx_dlext { $Config{dlext} }
 
 sub _key {
     my $self = shift;
-    my $compiler = $ENV{CXX} || $Config{cc};
+    my $compiler = $ENV{CXX} || $Config{ccname};
     my $key = $self->awx_get_name
       ( toolkit          => $self->awx_build_toolkit,
         version          => $self->_version_2_dec

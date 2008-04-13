@@ -43,7 +43,7 @@ sub awx_cc_is_msvc {
 sub awx_cc_is_gcc {
     my( $cc ) = @_;
 
-    return    scalar( awx_capture( "$cc --version" ) =~ m/gcc/i ) # 3.x
+    return    scalar( awx_capture( "$cc --version" ) =~ m/g(cc|\+\+)/i ) # 3.x
            || scalar( awx_capture( "$cc" ) =~ m/gcc/i );          # 2.95
 }
 
@@ -184,7 +184,7 @@ sub awx_smart_config {
     # the key already identifies the configuration
     return %args if $args{key};
 
-    my $cc = $ENV{CXX} || $ENV{CC} || $Config{cc};
+    my $cc = $ENV{CXX} || $ENV{CC} || $Config{ccname};
     my $kind = awx_compiler_kind( $cc );
     my $version = awx_cc_abi_version( $cc );
 
