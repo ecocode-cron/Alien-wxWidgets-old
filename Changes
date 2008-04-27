@@ -2,6 +2,9 @@ Revision history for Perl extension Alien::wxWidgets.
 
 0.35
 	- Correctly handle monolithic build on Win32. (patch by Mark Dootson)
+	- Add mk_portable (Win32-only) build option to create a self-contained
+	  wxWidgets+Alien::wxWidgets installation even when not building
+	  wxWidgets together with Alien::wxWidgets. (patch by Mark Dootson)
 
 0.34  Sun Apr 13 12:40:08 CEST 2008
 	- Correctly detect GCC 4.3. (patch by Roberto C. Sánchez)

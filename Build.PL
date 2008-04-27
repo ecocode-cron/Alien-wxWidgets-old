@@ -34,6 +34,7 @@ my $build = $class->new
                          monolithic => { type => '!' },
                          universal  => { type => '!' },
                          build_wx   => { type => '!' },
+                         mk_portable => { type => '!' },
                          build_wx_opengl => { type => '!' },
                          source     => { type => '=s' },
                          },
@@ -59,6 +60,7 @@ if( $^O ne 'darwin' && $^O ne 'MSWin32' ) {
 my $build_wx = _askyn( $build, 'build_wx',
                        'Do you want to build wxWidgets?', $build_wx_dflt );
 $build->notes( 'build_wx' => $build_wx );
+$build->notes( 'mk_portable' => $build->args('mk_portable') );
 if( $build_wx ) {
     $TYPE = _ask( $build, 'source', 'Which archive type?', 'tar.gz' );
     $build->notes( 'build_data' => do 'patches/data' );

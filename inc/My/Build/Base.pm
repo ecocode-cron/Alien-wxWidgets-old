@@ -185,6 +185,35 @@ EOT
 }
 
 my $key = substr __PACKAGE__, 1 + rindex __PACKAGE__, ':';
+EOT
+
+    print $fh <<'EOT' if $self->notes( 'mk_portable' ) && ( $^O =~ /^MSWin/ );
+
+my ($portablebase);
+my $wxwidgetspath = __PACKAGE__ . '.pm';
+$wxwidgetspath =~ s/::/\//g;
+
+for (@INC) {
+    if( -f qq($_/$wxwidgetspath ) ) {
+        $portablebase = qq($_/Alien/wxWidgets/$key);
+        last;
+    }
+}
+
+if( $portablebase ) {
+    $portablebase =~ s{/}{\\}g;
+    my $portablelibpath = qq($portablebase\\lib);
+    my $portableincpath = qq($portablebase\\include);
+
+    $VALUES{include_path} = qq{-I$portablelibpath -I$portableincpath};
+    $VALUES{link_libraries} =~ s{-L\S+\s}{-L$portablelibpath };
+    $VALUES{shared_library_path} = $portablelibpath;
+    $VALUES{wx_base_directory} = $portablebase;
+    $VALUES{prefix} = $portablebase;
+}
+EOT
+
+    print $fh <<'EOT';
 
 sub values { %VALUES, key => $key }
 

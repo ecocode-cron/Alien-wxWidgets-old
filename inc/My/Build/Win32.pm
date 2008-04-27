@@ -152,17 +152,21 @@ sub files_to_install {
         $files{$lib} = awx_arch_file( "rEpLaCe/lib/$base" );
     }
 
-    if( $self->notes( 'build_wx' ) ) {
+    if( $self->notes( 'build_wx' ) || $self->notes( 'mk_portable' )  ) {
         require File::Find;
         my $no_platform = join '|', qw(unix gtk x11 motif mac cocoa
-                                       os2 palmos univ mgl msdos);
+                                       os2 palmos univ mgl msdos gtk1
+                                       dfb);
         my $wx_base = $self->awx_wx_config_data->{wxdir_build};
         foreach my $find_base ( File::Spec->catdir( $wx_base, qw(include wx) ),
                              File::Spec->catdir( $wx_base, qw(contrib
                                                  include wx) ) ) {
+            next unless -d $find_base;
             my $wanted = sub {
-                $File::Find::prune =
+                $File::Find::prune ||=
                   -d $_ && $_ =~ m{include[/\\]wx[/\\](?:$no_platform)$};
+                $File::Find::prune ||=
+                  -d $_ && $_ =~ m{[/\\]\.svn$};
                 return unless -f $_;
                 my $rel = File::Spec->abs2rel( $_, $find_base );
                 $files{$_} = awx_arch_file( "rEpLaCe/include/wx/$rel" );
