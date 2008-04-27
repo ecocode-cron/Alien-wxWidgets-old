@@ -69,7 +69,7 @@ sub awx_wx_config_data {
     chdir $dir;
     die 'Could not find wxWidgets lib directory' unless $libdir;
 
-    $data{dlls} = $self->awx_grep_dlls( $orig_libdir, $digits );
+    $data{dlls} = $self->awx_grep_dlls( $orig_libdir, $digits, $self->awx_is_monolithic );
     $data{version} = $digits;
 
     $self->{awx_data} = \%data;

@@ -286,7 +286,7 @@ sub awx_configure {
     $config{config}{debug} = $self->awx_is_debug;
     $config{config}{unicode} = $self->awx_is_unicode;
     $config{config}{mslu} = $self->awx_is_mslu;
-    $config{config}{build} = 'multi';
+    $config{config}{build} = $self->awx_is_monolithic ? 'mono' : 'multi';
     $config{link_flags} = '';
     $config{c_flags} = '';
 
