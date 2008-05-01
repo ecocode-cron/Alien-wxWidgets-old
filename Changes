@@ -1,6 +1,6 @@
 Revision history for Perl extension Alien::wxWidgets.
 
-0.35
+0.35  Thu May  1 16:25:04 CEST 2008
 	- Correctly handle monolithic build on Win32. (patch by Mark Dootson)
 	- Add mk_portable (Win32-only) build option to create a self-contained
 	  wxWidgets+Alien::wxWidgets installation even when not building
