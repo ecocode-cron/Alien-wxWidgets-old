@@ -49,11 +49,11 @@ sub awx_wx_config_data {
     };
 
     my $lib_link = sub {
-        awx_install_arch_file( 'rEpLaCe/lib/' . $_[0] .
+        awx_install_arch_file( $self, 'rEpLaCe/lib/' . $_[0] .
                                ( $self->awx_debug ? 'h' : '' ) . $Config{_a} );
     };
     my $link_implib = awx_install_arch_file
-      ( 'rEpLaCe/lib/'. File::Basename::basename( $implib ) );
+      ( $self, 'rEpLaCe/lib/' . File::Basename::basename( $implib ) );
 
     $data{dlls} = { core => { dll  => $dll,
                               lib  => $implib,

@@ -53,7 +53,7 @@ sub awx_wx_config_data {
             s{[-/]LIBPATH:(\S+)}
              {$orig_libdir = File::Spec->canonpath
                                  ( File::Spec->rel2abs( $1 ) );
-              '-L' . ( $libdir = awx_install_arch_file( 'rEpLaCe/lib' ) )}egi;
+              '-L' . ( $libdir = awx_install_arch_file( $self, 'rEpLaCe/lib' ) )}egi;
             $data{libs} = $_;
         } elsif( s/^\s*cl\s+// ) {
             s/\s+\S+\.(cpp|pdb|obj)/ /g;

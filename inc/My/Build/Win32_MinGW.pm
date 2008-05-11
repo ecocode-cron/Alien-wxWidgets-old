@@ -35,7 +35,7 @@ sub awx_configure {
     my $libs = $self->wx_config( 'libs' );
     my $incdir = $self->awx_wx_config_data->{wxinc};
     my $cincdir = $self->awx_wx_config_data->{wxcontrinc};
-    my $iincdir = awx_install_arch_dir( 'rEpLaCe/include' );
+    my $iincdir = awx_install_arch_dir( $self, 'rEpLaCe/include' );
 
     foreach ( split /\s+/, $cccflags ) {
         m(^-DSTRICT) && next;
@@ -49,7 +49,7 @@ sub awx_configure {
             }
             if( $_ =~ /-I\Q$self->{awx_setup_dir}\E/ ) {
                 $config{include_path} .=
-                  '-I' . awx_install_arch_file( 'rEpLaCe/lib' ) . ' ';
+                  '-I' . awx_install_arch_file( $self, 'rEpLaCe/lib' ) . ' ';
             } else {
                 $config{include_path} .= "$_ ";
             }

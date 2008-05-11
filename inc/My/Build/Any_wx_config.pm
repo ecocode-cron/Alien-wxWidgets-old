@@ -204,7 +204,7 @@ sub _key {
 sub build_wxwidgets {
     my $self = shift;
     my $prefix_dir = $self->_key;
-    my $prefix = awx_install_arch_dir( $prefix_dir );
+    my $prefix = awx_install_arch_dir( $self, $prefix_dir );
     my $opengl = $self->notes( 'build_wx_opengl' );
     my $args = sprintf '--with-%s %s--disable-compat24',
                        $self->awx_build_toolkit,
@@ -225,6 +225,7 @@ sub build_wxwidgets {
     # do not reconfigure unless necessary
     mkdir 'bld' unless -d 'bld';
     chdir 'bld';
+    # print $cmd, "\n";
     $self->_system( $cmd ) unless -f 'Makefile';
     $self->_system( 'make all' );
     chdir 'contrib/src/stc';

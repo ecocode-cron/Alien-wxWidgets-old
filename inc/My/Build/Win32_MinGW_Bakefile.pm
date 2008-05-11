@@ -40,7 +40,7 @@ sub awx_wx_config_data {
             s{-L(\S+)}
              {$orig_libdir = File::Spec->canonpath
                                  ( File::Spec->rel2abs( $1 ) );
-              '-L' . ( $libdir = awx_install_arch_file( 'rEpLaCe/lib' ) )}eg;
+              '-L' . ( $libdir = awx_install_arch_file( $self, 'rEpLaCe/lib' ) )}eg;
             $data{libs} = $_;
         } elsif( s/^\s*g\+\+\s+// ) {
             s/\s+\S+\.(cpp|o|d)/ /g;

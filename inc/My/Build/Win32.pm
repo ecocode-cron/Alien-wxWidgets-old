@@ -82,7 +82,7 @@ sub awx_wx_config_data {
     my $self = shift;
     my $wxdir_b = $ENV{WXDIR};
     my $wxdir = $self->notes( 'build_wx' ) ?
-      awx_install_arch_dir( 'rEpLaCe' ) : $wxdir_b;
+      awx_install_arch_dir( $self, 'rEpLaCe' ) : $wxdir_b;
 
     return { 'wxdir'       => $wxdir,
              'wxdir_build' => $wxdir_b,
@@ -98,7 +98,7 @@ sub awx_configure {
 
     $config{prefix} = $self->wx_config( 'wxdir' );
     $config{config}{toolkit} = $self->is_wince ? 'wce' : 'msw';
-    $config{shared_library_path} = awx_install_arch_file( "rEpLaCe/lib" );
+    $config{shared_library_path} = awx_install_arch_file( $self, "rEpLaCe/lib" );
 
     die "Unable to find setup.h directory"
       unless $self->wx_config( 'cxxflags' )
