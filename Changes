@@ -1,5 +1,8 @@
 Revision history for Perl extension Alien::wxWidgets.
 
+0.36  Mon May 19 22:35:46 CEST 2008
+	- Renamed 0.35_01 to 0.36.
+
 0.35_01  Mon May 12 23:43:02 CEST 2008
 	- Handle --install_base correctly when building wxWidgets
 	  during Alien::wxWidgets build.
