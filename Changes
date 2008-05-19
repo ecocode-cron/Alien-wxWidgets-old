@@ -1,6 +1,8 @@
 Revision history for Perl extension Alien::wxWidgets.
 
-0.36
+0.35_01  Mon May 12 23:43:02 CEST 2008
+	- Handle --install_base correctly when building wxWidgets
+	  during Alien::wxWidgets build.
 
 0.35  Thu May  1 16:25:04 CEST 2008
 	- Correctly handle monolithic build on Win32. (patch by Mark Dootson)
