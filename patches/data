@@ -1,5 +1,5 @@
 my $VERSION = '2.8.7';
-my $URL     = "ftp://biolpc22.york.ac.uk/pub/$VERSION";
+my $URL     = "http://prdownloads.sourceforge.net/wxwindows";
 my $BASE    = 'wxWidgets';
 # $TYPE from Build.PL
 
