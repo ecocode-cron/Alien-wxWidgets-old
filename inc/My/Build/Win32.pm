@@ -208,7 +208,7 @@ sub awx_get_package {
     return 'WinCE' if $INC{'Cross.pm'};
 
     SWITCH: {
-        local $_ = $Config{ccname};
+        local $_ = $Config{ccname} || $Config{cc};
 
         /^cl/i  and $package = 'Win32_MSVC'  and last SWITCH;
         /^gcc/i and $package = 'Win32_MinGW' and last SWITCH;

@@ -184,7 +184,7 @@ sub awx_smart_config {
     # the key already identifies the configuration
     return %args if $args{key};
 
-    my $cc = $ENV{CXX} || $ENV{CC} || $Config{ccname};
+    my $cc = $ENV{CXX} || $ENV{CC} || $Config{ccname} || $Config{cc};
     my $kind = awx_compiler_kind( $cc );
     my $version = awx_cc_abi_version( $cc );
 
