@@ -255,6 +255,7 @@ sub extract_wxwidgets {
 
     if( $^O ne 'MSWin32' || $archive !~ /\.bz2$/i ) {
         require Archive::Extract;
+        $Archive::Extract::PREFER_BIN = 1;
         my $ae = Archive::Extract->new( archive => $archive );
 
         die 'Error: ', $ae->error unless $ae->extract;
