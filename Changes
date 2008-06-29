@@ -1,6 +1,6 @@
 Revision history for Perl extension Alien::wxWidgets.
 
-0.37
+0.37  Sun Jun 29 21:40:16 CEST 2008
 	- Always use binary programs to extract archives, unless
 	  under Win32.
 
