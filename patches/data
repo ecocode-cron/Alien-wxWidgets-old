@@ -1,4 +1,4 @@
-my $VERSION = '2.8.7';
+my $VERSION = '2.8.8';
 my $URL     = "http://prdownloads.sourceforge.net/wxwindows";
 my $BASE    = 'wxWidgets';
 # $TYPE from Build.PL
