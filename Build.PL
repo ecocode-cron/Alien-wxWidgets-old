@@ -56,7 +56,21 @@ if( $^O eq 'MSWin32' && ( $ENV{WXWIN} || $ENV{WXDIR} ) ) {
 if( $^O ne 'darwin' && $^O ne 'MSWin32' ) {
     $build_wx_opengl_dflt = 'no';
 }
+if( $ENV{AUTOMATED_TESTING} ) {
+    if( $^O ne 'darwin' && $^O ne 'MSWin32' ) {
+        my $pkg_config = $ENV{PKG_CONFIG} || 'pkg-config';
+        my $ans = `$pkg_config --modversion gtk+-2.0 2>&1`;
+        unless( $ans =~ /^2\./ ) {
+            print <<EOT;
+Could not detect GTK+ 2 by running '$pkg_config': aborting
 
+== pkg-config output: ====================================
+$ans==========================================================
+EOT
+            exit 0;
+        }
+    }
+}
 my $build_wx = _askyn( $build, 'build_wx',
                        'Do you want to build wxWidgets?', $build_wx_dflt );
 $build->notes( 'build_wx' => $build_wx );
