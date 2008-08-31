@@ -18,6 +18,7 @@ sub awx_wx_config_data {
                      $data{cxxflags} .= " $1 ";
                      ' '}eg;
 
+    $data{cxx} =~ s{-isysroot\s+\S+}{}g;
     $data{ld} = $data{cxx};
     $data{cxxflags} .= ' -UWX_PRECOMP ';
 
