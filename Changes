@@ -1,5 +1,7 @@
 Revision history for Perl extension Alien::wxWidgets.
 
+0.40
+
 0.39  Mon Sep  8 20:56:44 CEST 2008
 	- Add missing file to MANIFEST.
 
