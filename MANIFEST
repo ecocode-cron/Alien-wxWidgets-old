@@ -42,6 +42,7 @@ patches/wxMSW-2.8.0-setup.patch
 patches/wxMSW-2.8.0-setup_u.patch
 patches/wxMSW-2.8.4-config.patch
 patches/wxWidgets-2.8.0-magic.patch
+patches/wxMac-2.8.3-brokengcc.patch
 script/make_ppm.pl
 t/01_load.t
 t/zy_pod_coverage.t
