@@ -92,9 +92,10 @@ sub awx_configure {
     my $cf = $self->wx_config( 'cxxflags' );
 
     $config{prefix} = $self->wx_config( 'prefix' );
-    $cf =~ m/__WX(x11|msw|motif|gtk|mac)__/i or
+    $cf =~ m/__WX(x11|msw|motif|gtk|mac|osx_carbon)__/i or
       die "Unable to determine toolkit!";
-    $config{config}{toolkit} = lc $1;
+    my $toolkit = $1 eq 'OSX_CARBON' ? 'MAC' : $1;
+    $config{config}{toolkit} = lc $toolkit;
     $config{config}{build} = $self->awx_is_monolithic ? 'mono' : 'multi';
 
     if( $config{config}{toolkit} eq 'gtk' ) {
