@@ -1,5 +1,7 @@
 Revision history for Perl extension Alien::wxWidgets.
 
+0.41
+
 0.40  Wed Oct 15 20:23:15 CEST 2008
 	- Always use Archive::Extract to extract the wxWidgets archive
 	  since it now handles .bz2 files correctly on all platforms.
