@@ -329,7 +329,8 @@ License.
 =item inc/bin/patch.exe
 
 was downloaded from http://gnuwin32.sourceforge.net/packages/patch.htm
-ad is copyrighted by its authors.
+ad is copyrighted by its authors, sources are included inside the
+inc/src directory.
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

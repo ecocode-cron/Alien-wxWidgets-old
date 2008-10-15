@@ -28,12 +28,14 @@ inc/My/Build/Win32_MinGW_Bakefile.pm
 inc/My/Build/Win32_MinGW_Tmake.pm
 inc/My/Build/gmake.mak
 inc/My/Build/nmake.mak
-inc/version.pm
-inc/version/vpp.pm
 inc/Params/Check.pm
 inc/Text/Patch.pm
 inc/bin/patch
 inc/bin/patch.exe
+inc/src/patch-2.5.9-7-src.zip
+inc/src/patch.exe.manifest
+inc/version.pm
+inc/version/vpp.pm
 lib/Alien/wxWidgets.pm
 lib/Alien/wxWidgets/Utility.pm
 patches/data
@@ -41,8 +43,8 @@ patches/wxMSW-2.8.0-makefiles.patch
 patches/wxMSW-2.8.0-setup.patch
 patches/wxMSW-2.8.0-setup_u.patch
 patches/wxMSW-2.8.4-config.patch
-patches/wxWidgets-2.8.0-magic.patch
 patches/wxMac-2.8.3-brokengcc.patch
+patches/wxWidgets-2.8.0-magic.patch
 script/make_ppm.pl
 t/01_load.t
 t/zy_pod_coverage.t
