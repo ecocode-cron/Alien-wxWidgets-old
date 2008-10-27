@@ -1,6 +1,10 @@
 Revision history for Perl extension Alien::wxWidgets.
 
-0.41
+0.41  Mon Oct 27 22:22:25 CET 2008
+	- Rewrite show_configurations to display a pretty-printed version of
+	  the available wxWidgets builds.
+	- When load() fails to find a compatible configuration, display a
+	  the selection criteria and a list of available configurations.
 
 0.40  Wed Oct 15 20:23:15 CEST 2008
 	- Always use Archive::Extract to extract the wxWidgets archive

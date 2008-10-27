@@ -61,7 +61,8 @@ sub AUTOLOAD {
 sub import {
     my $class = shift;
     if( @_ == 1 ) {
-        $class->show_configurations if $_[0] eq ':dump';
+        $class->dump_configurations if $_[0] eq ':dump';
+        $class->show_configurations if $_[0] eq ':show';
         return;
     }
 
@@ -75,15 +76,58 @@ sub load {
     my @configs = awx_sort_config awx_grep_config [ $class->_list ], %crit ;
 
     unless( @configs ) {
-        require Data::Dumper;
-        die "No matching config:\n",
-          Data::Dumper->Dump( [ { %crit } ] );
+        my @all_configs = $class->get_configurations;
+
+        my $message = "Searching configuration for:\n";
+        $message .= _pretty_print_criteria( \%crit );
+        $message .= "\nAvailable configurations:\n";
+        if( @all_configs ) {
+            $message .= _pretty_print_configuration( $_ ) foreach @all_configs;
+        } else {
+            $message .= "No wxWidgets build found\n";
+        }
+
+        die $message;
     }
 
     %VALUES = $configs[0]->{package}->values;
 }
 
+sub _pretty_print_criteria {
+    my $criteria = shift;
+    my %display = %$criteria;
+
+    $display{version} = join '-', @{$display{version}} if ref $display{version};
+    $display{version} = '(any version)' unless $display{version};
+    $display{toolkit} = '(any toolkit)' unless $display{toolkit};
+    $display{compiler_kind} = '(any compiler)' unless $display{compiler_kind};
+    $display{compiler_version} = '(any version)' unless $display{compiler_version};
+
+    return _pretty_print_configuration( \%display );
+}
+
+sub _pretty_print_configuration {
+    my $config = shift;
+    my @options = map { !defined $config->{$_} ? () :
+                                 $config->{$_} ? ( $_ ) :
+                                                 ( "no $_" ) }
+                      qw(debug unicode mslu);
+
+    return "wxWidgets $config->{version} for $config->{toolkit}; " .
+           "compiler compatibility: $config->{compiler_kind} " .
+           $config->{compiler_version} . '; ' .
+           ( @options ? 'options: ' . join( ', ', @options ) : '' ) .
+           "\n";
+}
+
 sub show_configurations {
+    my $class = shift;
+    my @configs = $class->get_configurations( @_ );
+
+    print _pretty_print_configuration( $_ ) foreach @configs;
+}
+
+sub dump_configurations {
     my $class = shift;
     my @configs = $class->get_configurations( @_ );
 
@@ -287,12 +331,19 @@ of wxWidgets libraries has been installed.
 
 Returns the install prefix for wxWidgets.
 
+=head2 dump_configurations
+
+    Alien::wxWidgets->dump_configurations( %filters );
+
+Prints a list of available configurations (mainly useful for
+interactive use/debugging).
+
 =head2 show_configurations
 
     Alien::wxWidgets->show_configurations( %filters );
 
-Prints a list of available configurations (mainly useful for
-interactive use/debugging).
+Prints a human-readable list of available configurations (mainly
+useful for interactive use/debugging).
 
 =head2 get_configurations
 
@@ -310,7 +361,7 @@ Mattia Barbon <mbarbon@cpan.org>
 
 =item Alien::wxWidgets
 
-Copyright (c) 2005, 2006 Mattia Barbon <mbarbon@cpan.org>
+Copyright (c) 2005-2008 Mattia Barbon <mbarbon@cpan.org>
 
 This program is free software; you can redistribute it and/or
 modify it under the same terms as Perl itself
