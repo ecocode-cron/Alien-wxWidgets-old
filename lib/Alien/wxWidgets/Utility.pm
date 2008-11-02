@@ -13,6 +13,7 @@ use Config;
 BEGIN {
     if( $^O eq 'MSWin32' && $Config{_a} ne $Config{lib_ext} ) {
         print STDERR <<EOT;
+
 \$Config{_a} is '$Config{_a}' and \$Config{lib_ext} is '$Config{lib_ext}':
 they need to be equal for the build to succeed. If you are using ActivePerl
 with MinGW/GCC, please:
@@ -20,6 +21,7 @@ with MinGW/GCC, please:
 - install ExtUtils::FakeConfig
 - set PERL5OPT=-MConfig_m
 - rerun Build.PL
+
 EOT
         exit 1;
     }
@@ -29,6 +31,32 @@ our @EXPORT_OK = qw(awx_capture awx_cc_is_gcc awx_cc_version awx_cc_abi_version
                     awx_sort_config awx_grep_config awx_smart_config);
 
 my $quotes = $^O =~ /MSWin32/ ? '"' : "'";
+my $compiler_checked = '';
+
+sub _warn_nonworking_compiler {
+    my( $cc ) = @_;
+
+    return if $compiler_checked eq $cc;
+
+    eval { require ExtUtils::CBuilder; };
+    return if $@; # avoid failing when called a Build.PL time
+
+    my $b = ExtUtils::CBuilder->new( config => { cc => $cc, ld => $cc },
+                                     quiet  => 1,
+                                     );
+
+    if( !$b->have_compiler ) {
+        print STDERR <<EOT;
+
+ATTENTION: It apperars '$cc' is not a working compiler, please make
+sure all necessary packages are installed.
+
+EOT
+        sleep 5;
+    }
+
+    $compiler_checked = $cc;
+}
 
 sub awx_capture {
     qx!$^X -e ${quotes}open STDERR, q[>&STDOUT]; exec \@ARGV${quotes} -- $_[0]!;
@@ -49,6 +77,9 @@ sub awx_cc_is_gcc {
 
 sub awx_cc_abi_version {
     my( $cc ) = @_;
+
+    _warn_nonworking_compiler( $cc );
+
     my $is_gcc = awx_cc_is_gcc( $cc );
     my $is_msvc = awx_cc_is_msvc( $cc );
     return 0 unless $is_gcc || $is_msvc;
@@ -66,6 +97,9 @@ sub awx_cc_abi_version {
 
 sub awx_cc_version {
     my( $cc ) = @_;
+
+    _warn_nonworking_compiler( $cc );
+
     my $is_gcc = awx_cc_is_gcc( $cc );
     my $is_msvc = awx_cc_is_msvc( $cc );
     return 0 unless $is_gcc || $is_msvc;
@@ -88,6 +122,8 @@ sub awx_cc_version {
 
 sub awx_compiler_kind {
     my( $cc ) = @_;
+
+    _warn_nonworking_compiler( $cc );
 
     return 'gcc' if awx_cc_is_gcc( $cc );
     return 'cl'  if awx_cc_is_msvc( $cc );

@@ -1,6 +1,8 @@
 Revision history for Perl extension Alien::wxWidgets.
 
 0.42
+	- Use ExtUtils::CBuilder to try to detect non-working
+	  (or non-installed) compilers.
 
 0.41  Mon Oct 27 22:22:25 CET 2008
 	- Rewrite show_configurations to display a pretty-printed version of
