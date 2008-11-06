@@ -101,6 +101,12 @@ if( $build_wx ) {
     $build->notes( 'build_data' => do 'patches/data' );
 }
 if( $build_wx ) {
+    my $build_wx_unicode = _askyn( $build, 'unicode',
+                                   'Do you want to enable Unicode support',
+                                   'yes' );
+    $build->notes( 'build_wx_unicode' => $build_wx_unicode );
+}
+if( $build_wx ) {
     my $build_wx_opengl = _askyn( $build, 'build_wx_opengl',
                                   'Do you want to include OpenGL support',
                                   $build_wx_opengl_dflt );

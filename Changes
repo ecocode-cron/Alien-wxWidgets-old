@@ -1,6 +1,8 @@
 Revision history for Perl extension Alien::wxWidgets.
 
 0.42
+	- Add an option for building with Unicode support in interactive
+	  configuration (defaults to yes).
 	- Use ExtUtils::CBuilder to try to detect non-working
 	  (or non-installed) compilers.
 

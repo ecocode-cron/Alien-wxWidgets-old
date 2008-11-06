@@ -335,7 +335,7 @@ sub awx_monolithic { $_[0]->args( 'monolithic' ) ? 1 : 0 }
 sub awx_is_monolithic { $_[0]->awx_monolithic }
 sub awx_debug { $_[0]->args( 'debug' ) ? 1 : 0 }
 sub awx_is_debug { $_[0]->awx_debug }
-sub awx_unicode { $_[0]->args( 'unicode' ) ? 1 : 0 }
+sub awx_unicode { $_[0]->notes( 'build_wx_unicode' ) ? 1 : 0 }
 sub awx_is_unicode { $_[0]->awx_unicode }
 sub awx_mslu { 0 }
 sub awx_is_mslu { $_[0]->awx_mslu }
