@@ -230,7 +230,7 @@ sub awx_get_package {
 # been explicitly disabled
 sub awx_mslu {
     return $_[0]->args( 'mslu' ) if defined $_[0]->args( 'mslu' );
-    return $_[0]->awx_unicode;
+    return $_[0]->args( 'unicode' );
 }
 
 sub massage_environment {
