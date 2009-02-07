@@ -7,7 +7,9 @@ our @ISA = qw(My::Build::Any_wx_config::Base);
 
 our $WX_CONFIG_LIBSEP;
 our @LIBRARIES = qw(base net xml adv animate aui core fl gizmos
-                    gizmos_xrc gl html media ogl plot qa richtext stc svg xrc);
+                    gl html media qa richtext stc xrc);
+our @MONO_LIBRARIES = qw(core gl);
+our @CONTRIB_LIBRARIES = qw(gizmos_xrc ogl plot svg);
 our @CRITICAL  = qw(base core);
 our @IMPORTANT = qw(net xml adv aui gl html media richtext stc xrc);
 
@@ -92,10 +94,9 @@ sub awx_configure {
     my $cf = $self->wx_config( 'cxxflags' );
 
     $config{prefix} = $self->wx_config( 'prefix' );
-    $cf =~ m/__WX(x11|msw|motif|gtk|mac|osx_carbon)__/i or
+    $cf =~ m/__WX(x11|msw|motif|gtk|mac|osx_carbon|osx_cocoa)__/i or
       die "Unable to determine toolkit!";
-    my $toolkit = $1 eq 'OSX_CARBON' ? 'MAC' : $1;
-    $config{config}{toolkit} = lc $toolkit;
+    $config{config}{toolkit} = lc $1;
     $config{config}{build} = $self->awx_is_monolithic ? 'mono' : 'multi';
 
     if( $config{config}{toolkit} eq 'gtk' ) {

@@ -139,10 +139,11 @@ sub get_configurations {
     my $class = shift;
 
     return awx_sort_config awx_grep_config [ $class->_list ], @_;
- }
+}
 
 my $lib_nok  = 'adv|base|html|net|xml|media';
-my $lib_mono = 'adv|base|html|net|xml|xrc|media|aui|richtext';
+my $lib_mono_28 = 'adv|base|html|net|xml|xrc|media|aui|richtext';
+my $lib_mono_29 = 'adv|base|html|net|xml|xrc|media|aui|richtext|stc';
 
 sub _grep_libraries {
     my $lib_filter = $VALUES{version} >= 2.005001 ? qr/(?!a)a/ : # no match
@@ -156,6 +157,7 @@ sub _grep_libraries {
     @libs = keys %$dlls unless @libs;
     push @libs, 'core', 'base'  unless grep /^core|mono$/, @libs;
 
+    my $lib_mono = $VALUES{version} >= 2.009 ? $lib_mono_29 : $lib_mono_28;
     if( ( $VALUES{config}{build} || '' ) eq 'mono' ) {
         @libs = map { $_ eq 'core'            ? ( 'mono' ) :
                       $_ =~ /^(?:$lib_mono)$/ ? () :

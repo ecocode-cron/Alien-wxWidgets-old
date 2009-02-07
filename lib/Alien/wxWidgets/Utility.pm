@@ -197,12 +197,20 @@ sub awx_grep_config {
         my $k = shift;
         sub { exists $a{$k} ? $a{$k} eq $_->{$k} : 1 }
     };
+    my $compare_tk = sub {
+        return 1 unless exists $a{toolkit};
+        my $atk = $a{toolkit} eq 'mac'   ? 'osx_carbon' :
+                                           $a{toolkit};
+        my $btk = $_->{toolkit} eq 'mac' ? 'osx_carbon' :
+                                           $_->{toolkit};
+        return $atk eq $btk;
+    };
 
     # note tha if the criteria was not supplied, the comparison is a noop
     my $wver = $make_cmpr->( 'version' );
     my $ckind = $make_cmps->( 'compiler_kind' );
     my $cver = $make_cmpn->( 'compiler_version' );
-    my $tkit = $make_cmps->( 'toolkit' );
+    my $tkit = $compare_tk;
     my $deb = $make_cmpn->( 'debug' );
     my $uni = $make_cmpn->( 'unicode' );
     my $mslu = $make_cmpn->( 'mslu' );

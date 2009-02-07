@@ -18,14 +18,17 @@ sub awx_wx_config_data {
 
     my $arg = 'libs' . $My::Build::Any_wx_config::WX_CONFIG_LIBSEP .
         join ',', grep { !m/base/ }
-        @My::Build::Any_wx_config::LIBRARIES;
+                       ( $self->awx_is_monolithic ?
+                             @My::Build::Any_wx_config::MONO_LIBRARIES :
+                             @My::Build::Any_wx_config::LIBRARIES );
     my $libraries = $self->_call_wx_config( $arg );
 
     foreach my $lib ( grep { m/\-lwx/ } split ' ', $libraries ) {
         $lib =~ m/-l(.*_(\w+)-.*)/ or die $lib;
         my( $key, $name ) = ( $2, $1 );
         $key = 'base' if $key =~ m/^base[ud]{0,2}/;
-        $key = 'base' if $key =~ m/^carbon/; # here for Mac
+        $key = 'base' if $key =~ m/^carbon|^cocoa/ && $name !~ /osx_/; # here for Mac
+        $key = 'core' if $key =~ m/^carbon|^cocoa/ && $name =~ /osx_/; # here for Mac
         $key = 'core' if $key =~ m/^mac[ud]{0,2}/;
         $key = 'core' if $key =~ m/^gtk2?[ud]{0,2}/
                               && $self->awx_is_monolithic
