@@ -43,7 +43,7 @@ use Module::Pluggable sub_name      => '_list',
                       instantiate   => 'config';
 
 our $AUTOLOAD;
-our $VERSION = '0.42';
+our $VERSION = '0.43';
 our %VALUES;
 our $dont_remap;
 
@@ -363,7 +363,7 @@ Mattia Barbon <mbarbon@cpan.org>
 
 =item Alien::wxWidgets
 
-Copyright (c) 2005-2008 Mattia Barbon <mbarbon@cpan.org>
+Copyright (c) 2005-2009 Mattia Barbon <mbarbon@cpan.org>
 
 This program is free software; you can redistribute it and/or
 modify it under the same terms as Perl itself
