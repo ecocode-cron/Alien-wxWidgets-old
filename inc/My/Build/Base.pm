@@ -285,7 +285,8 @@ sub patch_wxwidgets {
 sub _patch_command {
     my( $self, $base_dir, $patch_file ) = @_;
 
-    my $cmd = $^X . ' ' . File::Spec->catfile( $base_dir,
+    $patch_file = File::Spec->abs2rel( $patch_file );
+    my $cmd = $^X . ' ' . File::Spec->catfile( File::Spec->abs2rel( $base_dir ),
                                                qw(inc bin patch) )
       . " -N -p0 -u -b .bak < $patch_file";
 
