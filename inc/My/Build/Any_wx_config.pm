@@ -124,14 +124,12 @@ sub awx_configure {
 
     foreach ( split /\s+/, $libs ) {
         m{^-[lL]|/} && do { $config{link_libraries} .= " $_"; next; };
-        if( $_ eq '-pthread' && $^O =~ m/linux/i ) {
+        if( $_ eq '-pthread' && $^O =~ m/(?:linux|freebsd)/i ) {
             $config{link_libraries} .= " -lpthread";
             next;
         }
         $config{link_libraries} .= " $_";
     }
-
-    $config{link_libraries} .= ' -lc_r' if $^O =~ /freebsd/i;
 
     my %dlls = %{$self->wx_config( 'dlls' )};
     $config{_libraries} = {};
