@@ -269,12 +269,13 @@ sub patch_wxwidgets {
 
     print "Patching wxWidgets...\n";
 
-    chdir File::Spec->rel2abs
-              ( $self->notes( 'build_data' )->{data}{directory} );
+    my $wx_dir = $self->notes( 'build_data' )->{data}{directory};
+    my $build_dir = File::Spec->rel2abs( $wx_dir );
+    chdir $wx_dir;
 
     foreach my $i ( @patches ) {
         print "Applying patch: ", $i, "\n";
-        my $cmd = $self->_patch_command( $old_dir, $i );
+        my $cmd = $self->_patch_command( $build_dir, $i );
         print $cmd, "\n";
         system $cmd and die 'Error: ', $?;
     }
@@ -285,8 +286,8 @@ sub patch_wxwidgets {
 sub _patch_command {
     my( $self, $base_dir, $patch_file ) = @_;
 
-    $patch_file = File::Spec->abs2rel( $patch_file );
-    my $cmd = $^X . ' ' . File::Spec->catfile( File::Spec->abs2rel( $base_dir ),
+    $patch_file = File::Spec->abs2rel( $patch_file, $base_dir );
+    my $cmd = $^X . ' ' . File::Spec->catfile( File::Spec->updir,
                                                qw(inc bin patch) )
       . " -N -p0 -u -b .bak < $patch_file";
 
