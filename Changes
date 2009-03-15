@@ -1,8 +1,10 @@
 Revision history for Perl extension Alien::wxWidgets.
 
 0.43
+	- Fix building under recent FreeBSD versions (patch by Cezary Morga).
 	- Correctly handle monolithic build on wxWidgets' 2.9.x.
 	- Support Cocoa builds for wxWidgets' 2.9.x.
+	- Fix building wxWidgets when the build path contains spaces.
 
 0.42  Sat Nov  8 00:51:18 CET 2008
 	- Add an option for building with Unicode support in interactive
