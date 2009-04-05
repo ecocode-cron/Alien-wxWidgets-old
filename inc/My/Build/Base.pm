@@ -108,7 +108,7 @@ sub _version_2_dec {
     $ver =~ m/^(\d+)\.(\d+)\.(\d+)$/ and
       $dec = $1 + $2 / 1000 + $3 / 1000000;
 
-    return $dec;
+    return sprintf( "%.6f", $dec );
 }
 
 sub _init_config {
