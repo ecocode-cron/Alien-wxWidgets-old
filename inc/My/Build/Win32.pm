@@ -37,7 +37,8 @@ EOT
 
 sub _patch_command {
     my( $self, $base_dir, $patch_file ) = @_;
-    my $patch_exe = File::Spec->catfile( $base_dir, qw(inc bin patch.exe) );
+    my $patch_exe = File::Spec->catfile( File::Spec->updir,
+                                         qw(inc bin patch.exe) );
 
     my $cmd = qq{perl -pe "" -- $patch_file} .
               qq{ | $patch_exe -N -p0 -u -b -z .bak};
