@@ -44,7 +44,7 @@ sub awx_wx_config_data {
             $data{libs} = $_;
         } elsif( s/^\s*g\+\+\s+// ) {
             s/\s+\S+\.(cpp|o|d)/ /g;
-            s/\s+-MD\s+/ /g;
+            s/\s+-M[DP]\b/ /g;
             s/(?:\s|^)-[co]//g;
             s{[-/]I(\S+)}{'-I' . File::Spec->canonpath
                                      ( File::Spec->rel2abs( $1 ) )}egi;
