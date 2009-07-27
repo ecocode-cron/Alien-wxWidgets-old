@@ -6,7 +6,7 @@ use strict;
 use lib "lib", "inc";
 use My::Build;
 
-our $TYPE;
+our( $TYPE, $URL );
 
 # new_from_context is broken: it does not restore
 # @INC set in Build.PL before trying to load a base class not
@@ -76,6 +76,9 @@ EOP
 if( $^O ne 'darwin' && $^O ne 'MSWin32' ) {
     $build_wx_opengl_dflt = 'no';
 }
+if( $ENV{AWX_URL} ) {
+    $build_wx_dflt = 'yes';
+}
 if( $ENV{AUTOMATED_TESTING} ) {
     if( $^O ne 'darwin' && $^O ne 'MSWin32' ) {
         my $pkg_config = $ENV{PKG_CONFIG} || 'pkg-config';
@@ -98,6 +101,7 @@ $build->notes( 'build_wx' => $build_wx );
 $build->notes( 'mk_portable' => $build->args('mk_portable') );
 if( $build_wx ) {
     $TYPE = _ask( $build, 'source', 'Which archive type?', 'tar.gz' );
+    $URL = $ENV{AWX_URL};
     $build->notes( 'build_data' => do 'patches/data' );
 }
 if( $build_wx ) {
@@ -117,18 +121,20 @@ $build->create_build_script;
 
 sub _askyn {
     my( $build, $arg, $question, $default ) = @_;
-    my $res = defined $build->args( $arg )
-                  ? $build->args( $arg )
-                  : $build->y_n( $question, $default );
+    my $res =
+      defined $build->args( $arg ) ? $build->args( $arg ) :
+      exists $ENV{"AWX_\U$arg"}    ? exists $ENV{"AWX_\U$arg"} :
+                                     $build->y_n( $question, $default );
 
     return $res
 }
 
 sub _ask {
     my( $build, $arg, $question, $default ) = @_;
-    my $res = defined $build->args( $arg )
-                  ? $build->args( $arg )
-                  : $build->prompt( $question, $default );
+    my $res =
+      defined $build->args( $arg ) ? $build->args( $arg ) :
+      exists $ENV{"AWX_\U$arg"}    ? exists $ENV{"AWX_\U$arg"} :
+                                     $build->prompt( $question, $default );
 
     return $res
 }
