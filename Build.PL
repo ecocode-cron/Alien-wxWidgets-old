@@ -44,6 +44,8 @@ my $build = $class->new
     create_makefile_pl => 'passthrough',
   );
 
+my $accept_defaults = $ENV{PERL5_CPANPLUS_IS_RUNNING}
+                   || $ENV{CPAN_SHELL_LEVEL}; 
 my $build_wx_dflt = 'yes';
 my $build_wx_opengl_dflt = 'yes';
 my $build_prompt = 'Do you want to fetch and build wxWidgets from sources?';
@@ -123,7 +125,8 @@ sub _askyn {
     my( $build, $arg, $question, $default ) = @_;
     my $res =
       defined $build->args( $arg ) ? $build->args( $arg ) :
-      exists $ENV{"AWX_\U$arg"}    ? exists $ENV{"AWX_\U$arg"} :
+      exists $ENV{"AWX_\U$arg"}    ? $ENV{"AWX_\U$arg"} :
+      $accept_defaults             ? $default :
                                      $build->y_n( $question, $default );
 
     return $res
@@ -133,7 +136,8 @@ sub _ask {
     my( $build, $arg, $question, $default ) = @_;
     my $res =
       defined $build->args( $arg ) ? $build->args( $arg ) :
-      exists $ENV{"AWX_\U$arg"}    ? exists $ENV{"AWX_\U$arg"} :
+      exists $ENV{"AWX_\U$arg"}    ? $ENV{"AWX_\U$arg"} :
+      $accept_defaults             ? $default :
                                      $build->prompt( $question, $default );
 
     return $res
