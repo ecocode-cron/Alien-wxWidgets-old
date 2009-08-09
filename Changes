@@ -1,6 +1,8 @@
 Revision history for Perl extension Alien::wxWidgets.
 
-0.44
+0.44  Sun Aug  9 12:56:05 CEST 2009
+	- Rename all command line options to avoid clashing with
+	  Module::Build options.
 
 0.43  Sun May 10 09:46:05 CEST 2009
 	- Fix building under recent FreeBSD versions (patch by Cezary Morga).

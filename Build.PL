@@ -30,16 +30,16 @@ my $build = $class->new
                          },
     configure_requires => { 'Module::Build'               => '0.28',
                             },
-    get_options     => { debug      => { type => '!' },
-                         unicode    => { type => '!' },
-                         mslu       => { type => '!' },
-                         static     => { type => '!' },
-                         monolithic => { type => '!' },
-                         universal  => { type => '!' },
-                         build_wx   => { type => '!' },
-                         mk_portable => { type => '!' },
-                         build_wx_opengl => { type => '!' },
-                         source     => { type => '=s' },
+    get_options     => { 'wxWidgets-debug'         => { type => '!' },
+                         'wxWidgets-unicode'       => { type => '!' },
+                         'wxWidgets-mslu'          => { type => '!' },
+                         'wxWidgets-static'        => { type => '!' },
+                         'wxWidgets-monolithic'    => { type => '!' },
+                         'wxWidgets-universal'     => { type => '!' },
+                         'wxWidgets-build'         => { type => '!' },
+                         'wxWidgets-portable'      => { type => '!' },
+                         'wxWidgets-build-opengl'  => { type => '!' },
+                         'wxWidgets-source'        => { type => '=s' },
                          },
     create_makefile_pl => 'passthrough',
   );
@@ -97,23 +97,23 @@ EOT
     }
 }
 chomp $build_prompt;
-my $build_wx = _askyn( $build, 'build_wx',
+my $build_wx = _askyn( $build, 'wxWidgets-build',
                        $build_prompt, $build_wx_dflt );
 $build->notes( 'build_wx' => $build_wx );
-$build->notes( 'mk_portable' => $build->args('mk_portable') );
+$build->notes( 'mk_portable' => $build->args('wxWidgets-portable') );
 if( $build_wx ) {
-    $TYPE = _ask( $build, 'source', 'Which archive type?', 'tar.gz' );
+    $TYPE = _ask( $build, 'wxWidgets-source', 'Which archive type?', 'tar.gz' );
     $URL = $ENV{AWX_URL};
     $build->notes( 'build_data' => do 'patches/data' );
 }
 if( $build_wx ) {
-    my $build_wx_unicode = _askyn( $build, 'unicode',
+    my $build_wx_unicode = _askyn( $build, 'wxWidgets-unicode',
                                    'Do you want to enable Unicode support',
                                    'yes' );
     $build->notes( 'build_wx_unicode' => $build_wx_unicode );
 }
 if( $build_wx ) {
-    my $build_wx_opengl = _askyn( $build, 'build_wx_opengl',
+    my $build_wx_opengl = _askyn( $build, 'wxWidgets-build-opengl',
                                   'Do you want to include OpenGL support',
                                   $build_wx_opengl_dflt );
     $build->notes( 'build_wx_opengl' => $build_wx_opengl );

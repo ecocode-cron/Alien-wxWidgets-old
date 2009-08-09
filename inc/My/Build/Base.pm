@@ -333,18 +333,18 @@ sub wx_config {
     return @{$data}{@_};
 }
 
-sub awx_monolithic { $_[0]->args( 'monolithic' ) ? 1 : 0 }
+sub awx_monolithic { $_[0]->args( 'wxWidgets-monolithic' ) ? 1 : 0 }
 sub awx_is_monolithic { $_[0]->awx_monolithic }
-sub awx_debug { $_[0]->args( 'debug' ) ? 1 : 0 }
+sub awx_debug { $_[0]->args( 'wxWidgets-debug' ) ? 1 : 0 }
 sub awx_is_debug { $_[0]->awx_debug }
 sub awx_unicode { $_[0]->notes( 'build_wx_unicode' )
-                    || $_[0]->args( 'unicode' ) ? 1 : 0 }
+                    || $_[0]->args( 'wxWidgets-unicode' ) ? 1 : 0 }
 sub awx_is_unicode { $_[0]->awx_unicode }
 sub awx_mslu { 0 }
 sub awx_is_mslu { $_[0]->awx_mslu }
-sub awx_static { $_[0]->args( 'static' ) ? 1 : 0 }
+sub awx_static { $_[0]->args( 'wxWidgets-static' ) ? 1 : 0 }
 sub awx_is_static { $_[0]->awx_static }
-sub awx_universal { $_[0]->args( 'universal' ) ? 1 : 0 }
+sub awx_universal { $_[0]->args( 'wxWidgets-universal' ) ? 1 : 0 }
 sub awx_is_universal { $_[0]->awx_universal }
 sub awx_get_package { local $_ = $_[0]; s/^My::Build:://; return $_ }
 

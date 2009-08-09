@@ -38,7 +38,7 @@ wx-config.
     <add your compiler to the path>
     <build wxWidgets>
     set WXDIR=C:\Path\to\wxWidgets
-    perl Build.PL [--debug] [--unicode] [--mslu]
+    perl Build.PL [--wxWidgets-debug] [--wxWidgets-unicode] [--wxWidgets-mslu]
     perl Build
     perl Build test
     perl Build install

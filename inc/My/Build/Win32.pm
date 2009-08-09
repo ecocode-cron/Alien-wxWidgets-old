@@ -230,8 +230,9 @@ sub awx_get_package {
 # MSLU is default when using Unicode *and* it has not
 # been explicitly disabled
 sub awx_mslu {
-    return $_[0]->args( 'mslu' ) if defined $_[0]->args( 'mslu' );
-    return $_[0]->args( 'unicode' );
+    return $_[0]->args( 'wxWidgets-mslu' )
+      if defined $_[0]->args( 'wxWidgets-mslu' );
+    return $_[0]->args( 'wxWidgets-unicode' );
 }
 
 sub massage_environment {
