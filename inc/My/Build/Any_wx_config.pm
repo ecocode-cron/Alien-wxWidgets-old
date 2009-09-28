@@ -203,6 +203,19 @@ sub _key {
 
 sub build_wxwidgets {
     my $self = shift;
+
+    my $extra_flags = '';
+
+    # on Snow Leopard, force wxWidgets 2.8.x builds to be 32-bit
+    if(    $Config{osname} =~ /darwin/
+         && `uname -r` =~ /^10\./
+         && `sysctl hw.cpu64bit_capable` =~ /^hw.cpu64bit_capable: 1/ ) {
+        print "Forcing wxWidgets build to 32 bit\n";
+        $extra_flags = join ' ', map { qq{$_="-arch i386"} }
+                                     qw(CFLAGS CXXFLAGS LDFLAGS
+                                        OBJCFLAGS OBJCXXFLAGS);
+    }
+
     my $prefix_dir = $self->_key;
     my $prefix = awx_install_arch_dir( $self, $prefix_dir );
     my $opengl = $self->notes( 'build_wx_opengl' );
@@ -217,7 +230,7 @@ sub build_wxwidgets {
     my $cmd = "echo exit | " . # for OS X 10.3...
               "sh ../configure --prefix=$prefix $args --$unicode-unicode"
             . " --$debug-debug --$monolithic-monolithic"
-            . " --$universal-universal_binary";
+            . " --$universal-universal_binary $extra_flags";
     my $old_dir = Cwd::cwd;
 
     chdir $dir;
