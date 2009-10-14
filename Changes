@@ -1,5 +1,9 @@
 Revision history for Perl extension Alien::wxWidgets.
 
+0.45  Wed Oct 14 22:54:35 CEST 2009
+	- On Snow Leopard, abort wxWidgets build if Perl is 64 bit.
+	- On Snow Leopard, force wxWidgets build to be 32 bit.
+
 0.44  Sun Aug  9 12:56:05 CEST 2009
 	- Rename all command line options to avoid clashing with
 	  Module::Build options.
