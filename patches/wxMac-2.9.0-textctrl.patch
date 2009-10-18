@@ -1,5 +1,5 @@
---- wxWidgets-2.9.0.orig/src/osx/cocoa/textctrl.mm	2009-09-04 06:53:00.000000000 +0200
-+++ wxWidgets-2.9.0/src/osx/cocoa/textctrl.mm	2009-10-18 20:47:57.000000000 +0200
+--- src/osx/cocoa/textctrl.mm	2009-09-04 06:53:00.000000000 +0200
++++ src/osx/cocoa/textctrl.mm	2009-10-18 20:47:57.000000000 +0200
 @@ -141,7 +141,7 @@
  
  - (void) keyDown:(NSEvent*) event
