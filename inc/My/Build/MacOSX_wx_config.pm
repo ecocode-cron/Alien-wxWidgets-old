@@ -46,10 +46,12 @@ sub build_wxwidgets {
     if(    $Config{ptrsize} == 8
         && $self->notes( 'build_data' )->{data}{version} =~ /^2.8/ ) {
         print <<EOT;
-======================================================================
-Can't build wxWidgets 2.8.x to work with a 64-bit Perl, you will need
-to recompile your Perl as a 32-bit binary.
-======================================================================
+=======================================================================
+The 2.8.x wxWidgets for OS X does not support 64-bit. In order to build
+wxPerl you will need to either recompile Perl as a 32-bit binary or (if
+using the Apple-provided Perl) force it to run in 32-bit mode (see "man
+perl").  Alpha 64-bit wx for OS X is in 2.9.x, but untested in wxPerl.
+=======================================================================
 EOT
         exit 1;
     }
