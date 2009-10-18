@@ -8,6 +8,12 @@ use My::Build;
 
 our( $TYPE, $URL );
 
+my %VERSIONS =
+  ( '2.8.10'        => 'patches/data-2.8.10',
+    '2.9.0'         => 'patches/data-2.9.0',
+    );
+my $DEFAULT_VERSION = '2.8.10';
+
 # new_from_context is broken: it does not restore
 # @INC set in Build.PL before trying to load a base class not
 # defined using ->subclass...
@@ -40,6 +46,7 @@ my $build = $class->new
                          'wxWidgets-portable'      => { type => '!' },
                          'wxWidgets-build-opengl'  => { type => '!' },
                          'wxWidgets-source'        => { type => '=s' },
+                         'wxWidgets-version'       => { type => '=s' },
                          },
     create_makefile_pl => 'passthrough',
   );
@@ -99,18 +106,25 @@ EOT
 chomp $build_prompt;
 my $build_wx = _askyn( $build, 'wxWidgets-build',
                        $build_prompt, $build_wx_dflt );
+my $wx_version;
 $build->notes( 'build_wx' => $build_wx );
 $build->notes( 'mk_portable' => $build->args('wxWidgets-portable') );
 if( $build_wx ) {
+    $wx_version = _askmulti( $build, 'wxWidgets-version',
+                             'Which wxWidgets version?',
+                             [ sort keys %VERSIONS ], $DEFAULT_VERSION );
     $TYPE = _ask( $build, 'wxWidgets-source', 'Which archive type?', 'tar.gz' );
     $URL = $ENV{AWX_URL};
-    $build->notes( 'build_data' => do 'patches/data' );
+    $build->notes( 'build_data' => do $VERSIONS{$wx_version} );
 }
-if( $build_wx ) {
+if( $build_wx && $wx_version !~ /^2\.9/ ) {
     my $build_wx_unicode = _askyn( $build, 'wxWidgets-unicode',
                                    'Do you want to enable Unicode support',
                                    'yes' );
     $build->notes( 'build_wx_unicode' => $build_wx_unicode );
+} elsif( $build_wx ) {
+    # Unicode-only for 2.9.x and higher
+    $build->notes( 'build_wx_unicode' => 1 );
 }
 if( $build_wx ) {
     my $build_wx_opengl = _askyn( $build, 'wxWidgets-build-opengl',
@@ -128,6 +142,22 @@ sub _askyn {
       exists $ENV{"AWX_\U$arg"}    ? $ENV{"AWX_\U$arg"} :
       $accept_defaults             ? $default :
                                      $build->y_n( $question, $default );
+
+    return $res
+}
+
+sub _askmulti {
+    my( $build, $arg, $question, $options, $default ) = @_;
+    $question .= " (" . join( ', ', @$options ) . ")";
+    my $res =
+      defined $build->args( $arg ) ? $build->args( $arg ) :
+      exists $ENV{"AWX_\U$arg"}    ? $ENV{"AWX_\U$arg"} :
+      $accept_defaults             ? $default :
+                                     $build->prompt( $question, $default );
+
+    die "Invalid value '$res' for option '$arg': must be one of ",
+        join( ', ', map "'$_'", @$options ), "\n"
+        unless grep $_ eq $res, @$options;
 
     return $res
 }
