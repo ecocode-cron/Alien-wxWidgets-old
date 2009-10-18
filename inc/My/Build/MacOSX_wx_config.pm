@@ -36,7 +36,38 @@ sub awx_configure {
     return %config;
 }
 
-sub awx_build_toolkit { 'mac' }
+sub wxwidgets_configure_extra_flags {
+    my( $self ) = @_;
+    my $extra_flags = '';
+
+    # on Snow Leopard, force wxWidgets 2.8.x builds to be 32-bit;
+    if(    $self->notes( 'build_data' )->{data}{version} =~ /^2.8/
+        && `uname -r` =~ /^10\./
+        && `sysctl hw.cpu64bit_capable` =~ /^hw.cpu64bit_capable: 1/ ) {
+        print "Forcing wxWidgets build to 32 bit\n";
+        $extra_flags = join ' ', map { qq{$_="-arch i386"} }
+                                     qw(CFLAGS CXXFLAGS LDFLAGS
+                                        OBJCFLAGS OBJCXXFLAGS);
+    }
+    # build fix for 2.9.0 on Snow Leopard
+    if(    `uname -r` =~ /^10\./
+        && $self->notes( 'build_data' )->{data}{version} eq '2.9.0' ) {
+        $extra_flags .= ' --with-macosx-version-min=10.5';
+    }
+
+    return $extra_flags;
+}
+
+sub awx_build_toolkit {
+    # use Cocoa for OS X wxWidgets builds with 64 bit Perl
+    if(    $Config{osname} =~ /darwin/
+        && $Config{ptrsize} == 8 ) {
+        return 'osx_cocoa';
+    } else {
+        return 'mac';
+    }
+}
+
 sub awx_dlext { 'dylib' }
 
 sub build_wxwidgets {
