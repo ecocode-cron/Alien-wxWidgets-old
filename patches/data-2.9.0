@@ -12,6 +12,7 @@ wxMSW-2.8.0-makefiles.patch
                                ), @common ],
                },
   mac     => { unicode => [ qw(wxMac-2.9.0-textctrl.patch
+                               wxMac-2.9.0-msgdlg.patch
                                ), @common ],
                },
   unix    => { unicode => [ @common ],

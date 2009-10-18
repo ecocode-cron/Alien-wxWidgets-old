@@ -48,6 +48,7 @@ patches/wxMSW-2.9.0-config.patch
 patches/wxMSW-2.9.0-makefiles.patch
 patches/wxMSW-2.9.0-setup.patch
 patches/wxMac-2.8.3-brokengcc.patch
+patches/wxMac-2.9.0-msgdlg.patch
 patches/wxMac-2.9.0-textctrl.patch
 patches/wxWidgets-2.8.0-magic.patch
 patches/wxWidgets-2.9.0-magic.patch
