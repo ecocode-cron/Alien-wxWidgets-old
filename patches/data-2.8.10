@@ -23,8 +23,12 @@ wxMac-2.8.3-brokengcc.patch
 wxMac-2.8.3-brokengcc.patch
                                ), @common ],
                },
-  unix    => { unicode => [ @common ],
-               ansi    => [ @common ],
+  unix    => { unicode => [ qw(
+wxWidgets-2.8.10-gsocket.patch
+                               ), @common ],
+               ansi    => [ qw(
+wxWidgets-2.8.10-gsocket.patch
+                               ), @common ],
                },
   data    => { url  => ( sprintf '%s/%s-%s.%s', $URL, $BASE, $VERSION, $TYPE ),
                directory => ( sprintf '%s-%s', $BASE, $VERSION ),
