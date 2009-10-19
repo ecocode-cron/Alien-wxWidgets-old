@@ -9,7 +9,7 @@ my @common = qw(wxWidgets-2.9.0-magic.patch
 { msw     => { unicode => [ qw(
 wxMSW-2.9.0-setup.patch
 wxMSW-2.9.0-config.patch
-wxMSW-2.8.0-makefiles.patch
+wxMSW-2.9.0-makefiles.patch
                                ), @common ],
                },
   mac     => { unicode => [ qw(wxMac-2.9.0-textctrl.patch
