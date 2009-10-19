@@ -1,6 +1,11 @@
 Revision history for Perl extension Alien::wxWidgets.
 
 0.46
+	- Allow choosing the wxWidgets version to build (defaults to
+	  the latest stable release when building from the CPAN shell).
+	- Add a build configuration for wxWidgets 2.9.0.
+	- On Snow Leopard, build wxCocoa when building wxWidgets 2.9.0
+	  with a 64 bit Perl.
 
 0.45  Wed Oct 14 22:54:35 CEST 2009
 	- On Snow Leopard, abort wxWidgets build if Perl is 64 bit.
