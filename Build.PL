@@ -135,12 +135,16 @@ if( $build_wx ) {
 
 $build->create_build_script;
 
+sub _is_yes {
+    return lc( $_[0] ) eq 'y' || lc( $_[0] ) eq 'yes';
+}
+
 sub _askyn {
     my( $build, $arg, $question, $default ) = @_;
     my $res =
-      defined $build->args( $arg ) ? $build->args( $arg ) :
-      exists $ENV{"AWX_\U$arg"}    ? $ENV{"AWX_\U$arg"} :
-      $accept_defaults             ? $default :
+      defined $build->args( $arg ) ? _is_yes( $build->args( $arg ) ) :
+      exists $ENV{"AWX_\U$arg"}    ? _is_yes( $ENV{"AWX_\U$arg"} ) :
+      $accept_defaults             ? _is_yes( $default ) :
                                      $build->y_n( $question, $default );
 
     return $res
