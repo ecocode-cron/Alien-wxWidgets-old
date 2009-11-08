@@ -6,6 +6,9 @@ Revision history for Perl extension Alien::wxWidgets.
 	- Add a build configuration for wxWidgets 2.9.0.
 	- On Snow Leopard, build wxCocoa when building wxWidgets 2.9.0
 	  with a 64 bit Perl.
+	- On Windows, enable the 'portable' option by default (finds the
+	  wxWidgets libraries relative to the Alien::wxWidgets installation
+	  directory).
 
 0.45  Wed Oct 14 22:54:35 CEST 2009
 	- On Snow Leopard, abort wxWidgets build if Perl is 64 bit.
