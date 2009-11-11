@@ -1,6 +1,8 @@
 Revision history for Perl extension Alien::wxWidgets.
 
 0.47
+	- Do not give a warning when installed using WiX
+	  (patch by Curtis Jewell).
 
 0.46  Sun Nov  8 16:25:02 CET 2009
 	- Allow choosing the wxWidgets version to build (defaults to
