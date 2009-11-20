@@ -29,7 +29,8 @@ sub awx_wx_config_data {
                  'ld'      => 'link',
                );
 
-    die "PANIC: you are not using nmake!" unless $Config{make} eq 'nmake';
+    my $make =  File::Basename::basename( lc $Config{make}, '.exe' );
+    die "PANIC: you are not using nmake!" unless $make eq 'nmake';
 
     my $orig_libdir;
     my $final = $self->awx_debug ? 'BUILD=debug   DEBUG_RUNTIME_LIBS=0'
