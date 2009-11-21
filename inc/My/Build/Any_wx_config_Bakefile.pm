@@ -23,8 +23,15 @@ sub awx_wx_config_data {
                              @My::Build::Any_wx_config::LIBRARIES );
     my $libraries = $self->_call_wx_config( $arg );
 
+    if( $^O eq 'openbsd' ) {
+        $libname_re = '-l(.*_(\w+))';
+        $libsuffix = '.1.0';
+    } else {
+        $libname_re = '-l(.*_(\w+)-.*)';
+        $libsuffix = '';
+    }
     foreach my $lib ( grep { m/\-lwx/ } split ' ', $libraries ) {
-        $lib =~ m/-l(.*_(\w+)-.*)/ or die $lib;
+        $lib =~ m/$libname_re/ or die $lib;
         my( $key, $name ) = ( $2, $1 );
         $key = 'base' if $key =~ m/^base[ud]{0,2}/;
         $key = 'base' if $key =~ m/^carbon|^cocoa/ && $name !~ /osx_/; # here for Mac
@@ -33,7 +40,7 @@ sub awx_wx_config_data {
         $key = 'core' if $key =~ m/^gtk2?[ud]{0,2}/
                               && $self->awx_is_monolithic
                               && $lib =~ m/(?:gtk2?|mac)[ud]{0,2}-/;
-        my $dll = "lib${name}." . $self->awx_dlext;
+        my $dll = "lib${name}." . $self->awx_dlext . $libsuffix;
 
         $data{dlls}{$key} = { dll  => $dll,
                               link => $lib };
