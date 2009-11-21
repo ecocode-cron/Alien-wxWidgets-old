@@ -23,6 +23,7 @@ sub awx_wx_config_data {
                              @My::Build::Any_wx_config::LIBRARIES );
     my $libraries = $self->_call_wx_config( $arg );
 
+    my( $libname_re, $libsuffix );
     if( $^O eq 'openbsd' ) {
         $libname_re = '-l(.*_(\w+))';
         $libsuffix = '.1.0';
