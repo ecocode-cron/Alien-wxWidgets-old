@@ -15,6 +15,9 @@ sub _init {
     $initialized = 1;
 
     return if Module::Build->current->notes( 'build_wx' );
+    # install_only is set when a wxWidgets build is already configured
+    # with Alien::wxWidgets
+    return if Module::Build->current->notes( 'install_only' );
 
     # check for WXDIR and WXWIN environment variables
     unless( exists $ENV{WXDIR} or exists $ENV{WXWIN} ) {
