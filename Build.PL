@@ -103,6 +103,16 @@ EOT
             exit 0;
         }
     }
+    if( $^O eq 'solaris' )
+    {
+        my $ans = `gmake -v`;
+        unless( $ans =~ /gnu make/i ) {
+            print <<EOT;
+Could not find GNU Make as 'gmake': aborting
+EOT
+            exit 0;
+        }
+    }
 }
 chomp $build_prompt;
 my $build_wx = _askyn( $build, 'wxWidgets-build',

@@ -203,6 +203,18 @@ sub _key {
 
 sub wxwidgets_configure_extra_flags { '' }
 
+sub awx_make {
+    my( $self ) = @_;
+    my $make = 'make';
+    if( $^O eq 'solaris' ) {
+        $make = $self->awx_path_search( 'gmake' );
+        die "GNU make required under Solaris"
+            unless $make;
+    }
+
+    return $make;
+}
+
 sub build_wxwidgets {
     my $self = shift;
 
@@ -231,10 +243,11 @@ sub build_wxwidgets {
     chdir 'bld';
     # print $cmd, "\n";
     $self->_system( $cmd ) unless -f 'Makefile';
-    $self->_system( 'make all' );
+    my $make = $self->awx_make;
+    $self->_system( "$make all" );
     if( $self->notes( 'build_data' )->{data}{version} !~ /^2.9/ ) {
         chdir 'contrib/src/stc';
-        $self->_system( 'make all' );
+        $self->_system( "$make all" );
     }
 
     chdir $old_dir;
@@ -273,10 +286,11 @@ sub install_system_wxwidgets {
     chdir $dir;
 
     chdir 'bld';
-    $self->_system( 'make install' . $destdir );
+    my $make = $self->awx_make;
+    $self->_system( "$make install" . $destdir );
     if( $self->notes( 'build_data' )->{data}{version} !~ /^2.9/ ) {
         chdir 'contrib/src/stc';
-        $self->_system( 'make install' . $destdir );
+        $self->_system( "$make install" . $destdir );
     }
 
     chdir $old_dir;
