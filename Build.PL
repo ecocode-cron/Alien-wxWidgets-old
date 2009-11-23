@@ -168,7 +168,7 @@ my $build_wx = _askyn( $build, 'wxWidgets-build',
 my $wx_version;
 $build->notes( 'build_wx' => $build_wx );
 $build->notes( 'mk_portable' => $build->args('wxWidgets-portable') );
-$build->notes( 'install_only' => $have_alien_configuration && !$build_wx );
+$build->notes( 'install_only' => $have_alien_configuration && !$build_wx && $accept_defaults );
 if( $build_wx ) {
     $wx_version = _askmulti( $build, 'wxWidgets-version',
                              'Which wxWidgets version?',
