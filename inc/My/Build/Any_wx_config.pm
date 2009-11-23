@@ -1,9 +1,8 @@
 package My::Build::Any_wx_config;
 
 use strict;
+use base qw(My::Build::Any_wx_config_Bakefile);
 use My::Build::Utility qw(awx_arch_dir awx_install_arch_dir);
-
-our @ISA = qw(My::Build::Any_wx_config::Base);
 
 our $WX_CONFIG_LIBSEP;
 our @LIBRARIES = qw(base net xml adv animate aui core fl gizmos
@@ -48,17 +47,9 @@ sub _init {
     $wx_debug = $base =~ m/d$/ ? 1 : 0;
     $wx_unicode = $base =~ m/ud?$/ ? 1 : 0;
 
-    if( $ver >= 2.005001 ) {
-        $WX_CONFIG_LIBSEP = `$wx_config --libs base > /dev/null 2>&1 || echo 'X'` eq "X\n" ?
-          '=' : ' ';
-        $wx_monolithic = `$wx_config --libs${WX_CONFIG_LIBSEP}adv` eq
-                         `$wx_config --libs${WX_CONFIG_LIBSEP}core`;
-        require My::Build::Any_wx_config_Bakefile;
-        @ISA = qw(My::Build::Any_wx_config_Bakefile);
-    } else {
-        require My::Build::Any_wx_config_Tmake;
-        @ISA = qw(My::Build::Any_wx_config_Tmake);
-    }
+    $WX_CONFIG_LIBSEP = `$wx_config --libs base > /dev/null 2>&1 || echo 'X'` eq "X\n" ? '=' : ' ';
+    $wx_monolithic = `$wx_config --libs${WX_CONFIG_LIBSEP}adv` eq
+                     `$wx_config --libs${WX_CONFIG_LIBSEP}core`;
 
     sub awx_is_debug {
         $_[0]->notes( 'build_wx' )

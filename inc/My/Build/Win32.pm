@@ -221,13 +221,7 @@ sub awx_get_package {
         die "Your compiler is not currently supported on Win32"
     };
 
-    if( Module::Build->current->notes( 'build_wx' ) ) {
-        return $package . '_Bakefile';
-    } else {
-        my $mak_env_in =
-          File::Spec->catfile( $ENV{WXDIR}, 'src', 'make.env.in' );
-        return -f $mak_env_in ? $package . '_Tmake' : $package . '_Bakefile';
-    }
+    return $package . '_Bakefile';
 }
 
 # MSLU is default when using Unicode *and* it has not
