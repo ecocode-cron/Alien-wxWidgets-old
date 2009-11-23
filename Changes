@@ -7,6 +7,9 @@ Revision history for Perl extension Alien::wxWidgets.
 	  based on RT ticket 41678.
 	- Under Solaris, use GNU Make to build wxWidgets, and fail if it
 	  is not present or can't be detected.
+	- Detect wxWidgets versions that have been installed using
+	  Alien::wxWidgets itself and avoid needlessly recompiling/reinstalling
+	  it.
 
 0.46  Sun Nov  8 16:25:02 CET 2009
 	- Allow choosing the wxWidgets version to build (defaults to

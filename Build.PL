@@ -57,6 +57,54 @@ my $accept_defaults = $ENV{PERL5_CPANPLUS_IS_RUNNING}
 my $build_wx_dflt = 'yes';
 my $build_wx_opengl_dflt = 'yes';
 my $build_prompt = 'Do you want to fetch and build wxWidgets from sources?';
+my $have_alien_configuration = 0;
+
+# try to detect if wxWidgets has been installed using Alien::wxWidgets and if
+# it is the latest version; the rule is:
+#
+# if there is any any wxWidgets installation registered with Alien::wxWidgets
+# it will only get upgraded if it was compiled using Alien::wxWidgets itself and
+# it is older than $DEFAULT_VERSION
+my $ok = eval {
+    require Alien::wxWidgets;
+    require File::Basename;
+    require File::Spec;
+    require Cwd;
+
+    $DEFAULT_VERSION =~ m/^(\d+)\.(\d+)\.(\d+)$/ or die "Wrong default version";
+    my $install_version = $1 + $2 / 1000 + $3 / 1000000;
+    my @configs = Alien::wxWidgets->get_configurations;
+
+    $build_wx_dflt = 'no' if @configs;
+    $have_alien_configuration = @configs;
+
+    foreach my $config ( @configs ) {
+        last if $config->{version} >= $install_version;
+
+        # installed version is older than $DEFAULT_VERSION, check if it
+        # has been installed using Alien::wxWidgets
+        my %values = $config->{package}->values;
+        ( my $pm_filename = $config->{package} . '.pm' ) =~ s{::}{/}g;
+        my $pm_file = $INC{$pm_filename};
+        my $pm_path = File::Spec->catdir( File::Basename::dirname( $pm_file ),
+                                          File::Spec->updir );
+        my $prefix = File::Spec->catdir( $values{prefix}, File::Spec->updir );
+
+        if( Cwd::realpath( $pm_path ) eq Cwd::realpath( $prefix ) ) {
+            $build_wx_dflt = 'yes';
+        }
+    }
+
+    1;
+};
+# if anything went wrong in the autodetection, revert to the correct
+# default
+if( !$ok ) {
+    $build_wx_dflt = 'yes';
+}
+
+# detect wxWidgets using WXDIR/WXWIN environment variables on Win32
+# and wx-config on other platforms
 if( $^O eq 'MSWin32' && ( $ENV{WXWIN} || $ENV{WXDIR} ) ) {
     $build_wx_dflt = 'no';
     $build_prompt = sprintf <<EOP, ( $ENV{WXWIN} || $ENV{WXDIR} );
@@ -120,6 +168,7 @@ my $build_wx = _askyn( $build, 'wxWidgets-build',
 my $wx_version;
 $build->notes( 'build_wx' => $build_wx );
 $build->notes( 'mk_portable' => $build->args('wxWidgets-portable') );
+$build->notes( 'install_only' => $have_alien_configuration && !$build_wx );
 if( $build_wx ) {
     $wx_version = _askmulti( $build, 'wxWidgets-version',
                              'Which wxWidgets version?',

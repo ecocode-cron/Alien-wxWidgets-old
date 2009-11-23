@@ -22,6 +22,9 @@ sub ACTION_code {
     my $self = shift;
 
     $self->SUPER::ACTION_code;
+    # install_only is set when a wxWidgets build is already configured
+    # with Alien::wxWidgets
+    return if $self->notes( 'install_only' );
     # see comment in ACTION_build for why 'configured' is used
     return if -f 'configured';
     $self->depends_on( 'build_wx' );
