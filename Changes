@@ -1,6 +1,6 @@
 Revision history for Perl extension Alien::wxWidgets.
 
-0.46_01
+0.46_01  Tue Nov 24 20:34:25 CET 2009
 	- Do not give a warning when installed using WiX
 	  (patch by Curtis Jewell).
 	- Tentative patch to correctly detect wxWidgets under OpenBSD,
