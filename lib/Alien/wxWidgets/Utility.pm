@@ -9,6 +9,7 @@ Alien::wxWidgets::Utility - INTERNAL: do not use
 use strict;
 use base qw(Exporter);
 use Config;
+use File::Basename qw();
 
 BEGIN {
     if( $^O eq 'MSWin32' && $Config{_a} ne $Config{lib_ext} ) {
@@ -33,6 +34,10 @@ our @EXPORT_OK = qw(awx_capture awx_cc_is_gcc awx_cc_version awx_cc_abi_version
 my $quotes = $^O =~ /MSWin32/ ? '"' : "'";
 my $compiler_checked = '';
 
+sub _exename {
+    return File::Basename::basename( lc $_[0], '.exe' );
+}
+
 sub _warn_nonworking_compiler {
     my( $cc ) = @_;
 
@@ -41,7 +46,9 @@ sub _warn_nonworking_compiler {
     eval { require ExtUtils::CBuilder; };
     return if $@; # avoid failing when called a Build.PL time
 
-    my $b = ExtUtils::CBuilder->new( config => { cc => $cc, ld => $cc },
+    # a C++ compiler can act as a linker, except for MS cl.exe
+    my $ld = _exename( $Config{cc} ) eq 'cl' ? 'link' : $cc;
+    my $b = ExtUtils::CBuilder->new( config => { cc => $cc, ld => $ld },
                                      quiet  => 1,
                                      );
 
