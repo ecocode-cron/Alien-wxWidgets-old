@@ -1,5 +1,8 @@
 Revision history for Perl extension Alien::wxWidgets.
 
+0.48
+	- Fix the compiler check for Visual C++.
+
 0.47  Sat Dec  5 16:16:05 CET 2009
 	- Released 0.46_01 as 0.47.
 
