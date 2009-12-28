@@ -16,10 +16,13 @@ sub awx_wx_config_data {
     $data{ld} =~ s/\-o\s*$/ /; # wxWidgets puts 'ld -o' into LD
     $data{libs} =~ s/\-lwx\S+//g;
 
+    my @mono_libs = $self->_version_2_dec( $data{version} ) >= 2.009 ?
+                        @My::Build::Any_wx_config::MONO_LIBRARIES_2_9 :
+                        @My::Build::Any_wx_config::MONO_LIBRARIES_2_8;
     my $arg = 'libs' . $My::Build::Any_wx_config::WX_CONFIG_LIBSEP .
         join ',', grep { !m/base/ }
                        ( $self->awx_is_monolithic ?
-                             @My::Build::Any_wx_config::MONO_LIBRARIES :
+                             @mono_libs :
                              @My::Build::Any_wx_config::LIBRARIES );
     my $libraries = $self->_call_wx_config( $arg );
 
