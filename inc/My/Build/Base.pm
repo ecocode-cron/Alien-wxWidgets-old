@@ -394,7 +394,12 @@ sub awx_path_search {
 
     foreach my $d ( File::Spec->path ) {
         my $full = File::Spec->catfile( $d, $file );
-        return $full if -f $full;
+        # escape spaces as glob() takes space as a separator
+        $full =~ s/ /\\ /g;
+        # we are gonna use glob() to accept wildcards
+        foreach my $f ( glob( $full ) ) {
+            return $f if -f $f;
+        }
     }
 
     return;
