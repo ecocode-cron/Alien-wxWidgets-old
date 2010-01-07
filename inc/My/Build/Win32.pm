@@ -7,6 +7,7 @@ use My::Build::Utility qw(awx_arch_file awx_install_arch_file
 use Config;
 use Fatal qw(open close);
 use Carp qw(cluck);
+use File::Glob qw(bsd_glob);
 
 my $initialized;
 
@@ -56,10 +57,10 @@ sub awx_grep_dlls {
                ( $self->awx_debug ? 'd' : '' );
 
     my @dlls = grep { m/${digits}\d*${suff}_/ }
-               glob( File::Spec->catfile( $libdir, '*.dll' ) );
+               bsd_glob( File::Spec->catfile( $libdir, '*.dll' ) );
     my @libs = grep { m/(?:lib)?wx(?:wince|msw|base)[\w\.]+$/ }
                grep { m/${digits}\d*${suff}(_|\.)/ }
-               glob( File::Spec->catfile( $libdir, "*$Config{lib_ext}" ) );
+               bsd_glob( File::Spec->catfile( $libdir, "*$Config{lib_ext}" ) );
 
     foreach my $full ( @dlls, @libs ) {
         my( $name, $type );

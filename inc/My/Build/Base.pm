@@ -8,6 +8,7 @@ use File::Path ();
 use File::Basename ();
 use Fatal qw(open close unlink);
 use Data::Dumper;
+use File::Glob qw(bsd_glob);
 
 sub ACTION_build {
     my $self = shift;
@@ -394,10 +395,8 @@ sub awx_path_search {
 
     foreach my $d ( File::Spec->path ) {
         my $full = File::Spec->catfile( $d, $file );
-        # escape spaces as glob() takes space as a separator
-        $full =~ s/ /\\ /g;
         # we are gonna use glob() to accept wildcards
-        foreach my $f ( glob( $full ) ) {
+        foreach my $f ( bsd_glob( $full ) ) {
             return $f if -f $f;
         }
     }

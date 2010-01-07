@@ -6,6 +6,7 @@ use My::Build::Utility qw(awx_arch_file awx_install_arch_file
                           awx_install_arch_dir awx_arch_dir);
 use Config;
 use File::Basename qw();
+use File::Glob qw(bsd_glob);
 
 sub _find_make {
     my( @try ) = qw(mingw32-make gmake make);
@@ -107,7 +108,7 @@ sub files_to_install {
 
 sub awx_strip_dlls {
     my( $self ) = @_;
-    my( $dir ) = grep !/Config/, glob( awx_arch_dir( '*' ) );
+    my( $dir ) = grep !/Config/, bsd_glob( awx_arch_dir( '*' ) );
 
     $self->_system( "attrib -r $dir\\lib\\*.dll" );
     $self->_system( "strip $dir\\lib\\*.dll" );
