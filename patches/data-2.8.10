@@ -10,12 +10,14 @@ wxMSW-2.8.0-setup_u.patch
 wxMSW-2.8.10-config.patch
 wxMSW-2.8.0-makefiles.patch
 wxMSW-2.8.10-version.patch
+wxMSW-2.8.10-mingw64.patch
                                ), @common ],
                ansi    => [ qw(
 wxMSW-2.8.0-setup.patch
 wxMSW-2.8.10-config.patch
 wxMSW-2.8.0-makefiles.patch
 wxMSW-2.8.10-version.patch
+wxMSW-2.8.10-mingw64.patch
                                ), @common ],
                },
   mac     => { unicode => [ qw(

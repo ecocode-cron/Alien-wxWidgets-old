@@ -11,6 +11,7 @@ wxMSW-2.9.0-setup.patch
 wxMSW-2.9.0-config.patch
 wxMSW-2.9.0-makefiles.patch
 wxMSW-2.9.0-version.patch
+wxMSW-2.8.10-mingw64.patch
                                ), @common ],
                },
   mac     => { unicode => [ qw(wxMac-2.9.0-textctrl.patch
