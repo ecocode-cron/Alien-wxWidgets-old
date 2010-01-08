@@ -50,6 +50,15 @@ my $build = $class->new
                          'wxWidgets-version'       => { type => '=s' },
                          },
     create_makefile_pl => 'passthrough',
+    meta_merge =>
+      { resources       =>
+          { 'license'       => 'http://dev.perl.org/licenses/',
+            'homepage'      => 'http://wxperl.eu/',
+            'bugtracker'    => 'http://rt.cpan.org/NoAuth/Bugs.html?Dist=Alien-wxWidgets',
+            'repository'    => 'https://wxperl.svn.sourceforge.net/svnroot/wxperl/Alien-wxWidgets',
+            'MailingList'   => 'http://lists.perl.org/list/wxperl-users.html',
+            },
+        },
   );
 
 my $accept_defaults = $ENV{PERL5_CPANPLUS_IS_RUNNING}
