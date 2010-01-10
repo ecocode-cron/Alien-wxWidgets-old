@@ -1,5 +1,7 @@
 Revision history for Perl extension Alien::wxWidgets.
 
+0.50
+
 0.49  Sat Jan  9 10:39:02 CET 2010
 	- Support GCC 4 and 64 bit GCC builds on Windows (patch by KMX).
 	- Fix monolithic build handling for wxWidgets' 2.8.x.
