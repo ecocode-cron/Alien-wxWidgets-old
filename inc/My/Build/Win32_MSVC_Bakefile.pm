@@ -80,8 +80,22 @@ sub _make_command { "nmake -f makefile.vc all " }
 
 sub build_wxwidgets {
     my( $self ) = shift;
+    my $old_dir = Cwd::cwd();
 
     $self->My::Build::Win32_Bakefile::build_wxwidgets( @_ );
+
+    # Compiling with MSVC 9 (VS 2008) and probably with VS 2005, the
+    # linker creates a manifest that must be embedded in the DLL to
+    # make it load correctly
+    chdir File::Spec->catdir( $ENV{WXDIR} );
+    foreach my $dll ( glob( 'lib/vc_dll*/*.dll' ) ) {
+        next unless -f "${dll}.manifest";
+        $self->_system( 'mt', '-nologo', '-manifest', "${dll}.manifest",
+                        "-outputresource:${dll};2" );
+        unlink "${dll}.manifest";
+    }
+
+    chdir $old_dir;
 }
 
 1;
