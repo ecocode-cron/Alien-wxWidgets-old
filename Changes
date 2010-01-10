@@ -4,6 +4,7 @@ Revision history for Perl extension Alien::wxWidgets.
 	- When compiling on Windows with MSVC 9, make the generated
 	  wxWidgets DLL load correctly by adding a manifest to them
 	  (suggested by IKEGAMI).
+	- Add a missing file to the distribution.
 
 0.49  Sat Jan  9 10:39:02 CET 2010
 	- Support GCC 4 and 64 bit GCC builds on Windows (patch by KMX).
