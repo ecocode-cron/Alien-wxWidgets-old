@@ -22,9 +22,11 @@ wxMSW-2.8.10-mingw64.patch
                },
   mac     => { unicode => [ qw(
 wxMac-2.8.3-brokengcc.patch
+wxMac-2.8.10-fontdlg.patch
                                ), @common ],
                ansi    => [ qw(
 wxMac-2.8.3-brokengcc.patch
+wxMac-2.8.10-fontdlg.patch
                                ), @common ],
                },
   unix    => { unicode => [ qw(
