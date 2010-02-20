@@ -48,6 +48,7 @@ my $build = $class->new
                          'wxWidgets-build-opengl'  => { type => '!' },
                          'wxWidgets-source'        => { type => '=s' },
                          'wxWidgets-version'       => { type => '=s' },
+                         'wxWidgets-extraflags'    => { type => '=s' },
                          },
     create_makefile_pl => 'passthrough',
     meta_merge =>
@@ -178,6 +179,7 @@ my $wx_version;
 $build->notes( 'build_wx' => $build_wx );
 $build->notes( 'mk_portable' => $build->args('wxWidgets-portable') );
 $build->notes( 'install_only' => $have_alien_configuration && !$build_wx && $accept_defaults );
+$build->notes( 'extraflags' => $build->args('wxWidgets-extraflags') || '' );
 if( $build_wx ) {
     $wx_version = _askmulti( $build, 'wxWidgets-version',
                              'Which wxWidgets version?',

@@ -193,7 +193,7 @@ sub _key {
     return $key;
 }
 
-sub wxwidgets_configure_extra_flags { '' }
+sub wxwidgets_configure_extra_flags { $_[0]->notes( 'extraflags' ) }
 
 sub awx_make {
     my( $self ) = @_;

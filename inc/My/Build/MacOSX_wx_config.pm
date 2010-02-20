@@ -38,8 +38,11 @@ sub awx_configure {
 
 sub wxwidgets_configure_extra_flags {
     my( $self ) = @_;
-    my $extra_flags = '';
-
+    my $extra_flags = $self->notes( 'extraflags' );
+    return $extra_flags if $extra_flags;
+    
+    print qq(Standard Mac Flags in use\n);
+    
     # on Snow Leopard, force wxWidgets 2.8.x builds to be 32-bit;
     if(    $self->notes( 'build_data' )->{data}{version} =~ /^2.8/
         && `uname -r` =~ /^10\./
