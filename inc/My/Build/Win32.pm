@@ -257,6 +257,8 @@ sub build_wxwidgets {
     my $dbg = $self->awx_debug   ? 'BUILD=debug' : 'BUILD=release';
     my $opt = join ' ', $uni, $mslu, $dbg, 'SHARED=1';
 
+    $opt .= ' ' . $self->notes( 'extraflags' ) if($self->notes( 'extraflags' ));
+
     chdir File::Spec->catdir( $ENV{WXDIR}, 'build', 'msw' );
     $self->_system( $self->_make_command . ' ' . $opt );
     chdir File::Spec->catdir( $ENV{WXDIR}, 'contrib', 'build', 'stc' );
