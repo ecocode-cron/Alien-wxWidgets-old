@@ -1,5 +1,8 @@
 Revision history for Perl extension Alien::wxWidgets.
 
+0.51
+        - added wxWidgets-extraflags build option
+
 0.50  Sun Jan 10 16:16:44 CET 2010
 	- When compiling on Windows with MSVC 9, make the generated
 	  wxWidgets DLL load correctly by adding a manifest to them
