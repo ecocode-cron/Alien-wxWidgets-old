@@ -26,7 +26,8 @@ sub awx_wx_config_data {
     my $dir = Cwd::cwd;
     my $make = $self->_find_make;
     chdir File::Spec->catdir( $ENV{WXDIR}, 'samples', 'minimal' );
-    my @t = qx($make -n -f makefile.gcc $final $unicode $cflags SHARED=1);
+    my $extraflags = $self->notes( 'extraflags');
+    my @t = qx($make -n -f makefile.gcc $final $unicode $cflags SHARED=1 $extraflags);
 
     my( $orig_libdir, $libdir, $digits );
     foreach ( @t ) {
