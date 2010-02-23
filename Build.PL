@@ -14,6 +14,16 @@ my %VERSIONS =
     );
 my $DEFAULT_VERSION = '2.8.10';
 
+if( $^O eq 'cygwin' ) {
+    print <<EOT;
+==========================================================
+There is no support to build Alien::wxWidgets (and wxPerl)
+on Cygwin.
+==========================================================
+EOT
+    exit 1;
+}
+
 # new_from_context is broken: it does not restore
 # @INC set in Build.PL before trying to load a base class not
 # defined using ->subclass...
