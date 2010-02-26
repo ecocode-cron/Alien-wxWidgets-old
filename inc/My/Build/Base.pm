@@ -10,6 +10,25 @@ use Fatal qw(open close unlink);
 use Data::Dumper;
 use File::Glob qw(bsd_glob);
 
+# use the system version of a module if present; in theory this could lead to
+# compatibility problems (if the latest version of one of the dependencies,
+# installed in @INC is incompatible with the bundled version of a module)
+sub _load_bundled_modules {
+    # the load order is important: all dependencies must be loaded
+    # before trying to load a module
+    require inc::latest;
+
+    inc::latest->import( $_ )
+        foreach qw(version
+                   Locale::Maketext::Simple
+                   Params::Check
+                   Module::Load
+                   Module::Load::Conditional
+                   IPC::Cmd
+                   Archive::Extract
+                   File::Fetch);
+}
+
 sub ACTION_build {
     my $self = shift;
     # try to make "perl Makefile.PL && make test" work
@@ -239,7 +258,7 @@ sub fetch_wxwidgets {
     my $self = shift;
 
     return if -f $self->notes( 'build_data' )->{data}{archive};
-    require File::Fetch;
+    $self->_load_bundled_modules;
 
     print "Fetching wxWidgets...\n";
     print "fetching from: ", $self->notes( 'build_data' )->{data}{url}, "\n";
@@ -257,7 +276,7 @@ sub extract_wxwidgets {
 
     print "Extracting wxWidgets...\n";
 
-    require Archive::Extract;
+    $self->_load_bundled_modules;
     $Archive::Extract::PREFER_BIN = 1;
     my $ae = Archive::Extract->new( archive => $archive );
 
