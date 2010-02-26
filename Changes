@@ -1,6 +1,6 @@
 Revision history for Perl extension Alien::wxWidgets.
 
-0.51
+0.50_01  Fri Feb 26 17:08:21 CET 2010
         - Added wxWidgets-extraflags build option.
 	- Exit with an error message under Cygwin.
 	- Use the system version of Archive::Extract and File::Fetch
