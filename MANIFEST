@@ -25,7 +25,6 @@ inc/My/Build/Win32_MinGW_Bakefile.pm
 inc/My/Build/gmake.mak
 inc/My/Build/nmake.mak
 inc/Params/Check.pm
-inc/Text/Patch.pm
 inc/bin/patch
 inc/bin/patch.exe
 inc/src/patch-2.5.9-7-src.zip
