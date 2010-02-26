@@ -26,3 +26,7 @@
 \.bak$
 \#$
 \b\.#
+^MYMETA.yml$
+
+# Avoid Mac OS X stuff
+\.DS_Store$
