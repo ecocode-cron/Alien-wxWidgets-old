@@ -27,6 +27,8 @@ inc/My/Build/nmake.mak
 inc/Params/Check.pm
 inc/bin/patch
 inc/bin/patch.exe
+inc/latest.pm
+inc/latest/private.pm
 inc/src/patch-2.5.9-7-src.zip
 inc/src/patch.exe.manifest
 inc/version.pm
