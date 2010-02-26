@@ -7,7 +7,6 @@ Makefile.PL
 README.txt
 inc/Archive/Extract.pm
 inc/File/Fetch.pm
-inc/File/Spec/Unix.pm
 inc/IPC/Cmd.pm
 inc/Locale/Maketext/Simple.pm
 inc/Module/Load.pm

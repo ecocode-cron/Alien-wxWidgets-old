@@ -43,6 +43,7 @@ my $build = $class->new
                         },
     build_requires  => { 'Module::Build'                  => '0.28',
                          'ExtUtils::CBuilder'             => '0.24',
+                         'File::Spec'                     => '1.50',
                          },
     configure_requires => { 'Module::Build'               => '0.28',
                             },
