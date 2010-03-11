@@ -24,8 +24,8 @@ inc/inc_Archive-Extract/Archive/Extract.pm
 inc/inc_File-Fetch/File/Fetch.pm
 inc/inc_IPC-Cmd/IPC/Cmd.pm
 inc/inc_Locale-Maketext-Simple/Locale/Maketext/Simple.pm
-inc/inc_Module-Load/Module/Load.pm
 inc/inc_Module-Load-Conditional/Module/Load/Conditional.pm
+inc/inc_Module-Load/Module/Load.pm
 inc/inc_Params-Check/Params/Check.pm
 inc/inc_version/version.pm
 inc/inc_version/version/vpp.pm
@@ -47,8 +47,9 @@ patches/wxMSW-2.9.0-config.patch
 patches/wxMSW-2.9.0-makefiles.patch
 patches/wxMSW-2.9.0-setup.patch
 patches/wxMSW-2.9.0-version.patch
-patches/wxMac-2.8.3-brokengcc.patch
+patches/wxMSW-2.9.0-w64-filefn.patch
 patches/wxMac-2.8.10-fontdlg.patch
+patches/wxMac-2.8.3-brokengcc.patch
 patches/wxMac-2.9.0-textctrl.patch
 patches/wxWidgets-2.8.0-magic.patch
 patches/wxWidgets-2.8.10-gsocket.patch
