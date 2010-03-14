@@ -11,7 +11,7 @@ wxMSW-2.9.0-setup.patch
 wxMSW-2.9.0-config.patch
 wxMSW-2.9.0-makefiles.patch
 wxMSW-2.9.0-version.patch
-wxMSW-2.8.10-mingw64.patch
+wxMSW-2.8.10-w64-mslu.patch
 wxMSW-2.9.0-w64-filefn.patch
                                ), @common ],
                },

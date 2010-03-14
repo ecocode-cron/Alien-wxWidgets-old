@@ -41,7 +41,6 @@ patches/wxMSW-2.8.0-makefiles.patch
 patches/wxMSW-2.8.0-setup.patch
 patches/wxMSW-2.8.0-setup_u.patch
 patches/wxMSW-2.8.10-config.patch
-patches/wxMSW-2.8.10-mingw64.patch
 patches/wxMSW-2.8.10-version.patch
 patches/wxMSW-2.9.0-config.patch
 patches/wxMSW-2.9.0-makefiles.patch
@@ -59,3 +58,8 @@ script/make_ppm.pl
 t/01_load.t
 t/zy_pod_coverage.t
 t/zz_pod.t
+patches/wxMSW-2.8.10-makefiles.patch
+patches/wxMSW-2.8.10-w64-mslu.patch
+patches/wxMSW-2.8.10-w64-winhash.patch
+patches/wxMSW-2.8.10-w64.patch
+patches/wxMSW-2.8.10-w64-stc.patch

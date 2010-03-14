@@ -1,5 +1,5 @@
---- include\wx\filefn.h	Fri Sep 04 06:51:54 2009
-+++ include\wx\filefn.h	Wed Mar 10 21:41:47 2010
+--- include/wx/filefn.h	Fri Sep 04 06:51:54 2009
++++ include/wx/filefn.h	Wed Mar 10 21:41:47 2010
 @@ -203,7 +203,7 @@
      // to avoid using them as they're not present in earlier versions and
      // always using the native functions spelling is easier than testing for
