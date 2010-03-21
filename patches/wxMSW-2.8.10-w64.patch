@@ -478,12 +478,85 @@ Index: src/msw/textctrl.cpp
      eds.pfnCallback = (EDITSTREAMCALLBACK)wxRichEditStreamIn;
  
 Index: include/wx/defs.h
-===================================================================
---- include/wx/defs.h	(revisione 63679)
-+++ include/wx/defs.h	(copia locale)
-@@ -823,14 +823,27 @@
+--- include/wx/defs.h	2009-03-06 13:10:51.000000000 +0100
++++ include/wx/defs.h	2010-03-20 14:17:40.000000000 +0100
+@@ -823,73 +823,6 @@
  
  typedef wxUint32 wxDword;
+ 
+-/*
+-   Define an integral type big enough to contain all of long, size_t and void *.
+- */
+-#if SIZEOF_LONG >= SIZEOF_VOID_P && SIZEOF_LONG >= SIZEOF_SIZE_T
+-    /* normal case */
+-    typedef unsigned long wxUIntPtr;
+-#elif SIZEOF_SIZE_T >= SIZEOF_VOID_P
+-    /* Win64 case */
+-    typedef size_t wxUIntPtr;
+-#else
+-    /*
+-       This should never happen for the current architectures but if you're
+-       using one where it does, please contact wx-dev@lists.wxwidgets.org.
+-     */
+-    #error "Pointers can't be stored inside integer types."
+-#endif
+-
+-#ifdef __cplusplus
+-/* And also define a couple of simple functions to cast pointer to/from it. */
+-inline wxUIntPtr wxPtrToUInt(const void *p)
+-{
+-    /*
+-       VC++ 7.1 gives warnings about casts such as below even when they're
+-       explicit with /Wp64 option, suppress them as we really know what we're
+-       doing here. Same thing with icc with -Wall.
+-     */
+-#ifdef __VISUALC__
+-    #if __VISUALC__ >= 1200
+-        #pragma warning(push)
+-    #endif
+-    /* pointer truncation from '' to '' */
+-    #pragma warning(disable: 4311)
+-#elif defined(__INTELC__)
+-    #pragma warning(push)
+-    /* conversion from pointer to same-sized integral type */
+-    #pragma warning(disable: 1684)
+-#endif
+-
+-    return wx_reinterpret_cast(wxUIntPtr, p);
+-
+-#if (defined(__VISUALC__) && __VISUALC__ >= 1200) || defined(__INTELC__)
+-    #pragma warning(pop)
+-#endif
+-}
+-
+-inline void *wxUIntToPtr(wxUIntPtr p)
+-{
+-#ifdef __VISUALC__
+-    #if __VISUALC__ >= 1200
+-        #pragma warning(push)
+-    #endif
+-    /* conversion to type of greater size */
+-    #pragma warning(disable: 4312)
+-#elif defined(__INTELC__)
+-    #pragma warning(push)
+-    /* invalid type conversion: "wxUIntPtr={unsigned long}" to "void *" */
+-    #pragma warning(disable: 171)
+-#endif
+-
+-    return wx_reinterpret_cast(void *, p);
+-
+-#if (defined(__VISUALC__) && __VISUALC__ >= 1200) || defined(__INTELC__)
+-    #pragma warning(pop)
+-#endif
+-}
+-#endif /*__cplusplus*/
+-
+ 
+ /*  64 bit */
+ 
+@@ -1021,6 +954,87 @@
+ #endif
+ 
  
 +// we can't rely on Windows _W64 being defined as windows.h may not be included
 +// so define our own equivalent: this should be used with types like WXLPARAM
@@ -496,16 +569,76 @@ Index: include/wx/defs.h
 +    #define wxW64
 +#endif
 +
- /*
-    Define an integral type big enough to contain all of long, size_t and void *.
-  */
- #if SIZEOF_LONG >= SIZEOF_VOID_P && SIZEOF_LONG >= SIZEOF_SIZE_T
-     /* normal case */
++/*
++   Define an integral type big enough to contain all of long, size_t and void *.
++ */
++#if SIZEOF_LONG >= SIZEOF_VOID_P && SIZEOF_LONG >= SIZEOF_SIZE_T
++    /* normal case */
 +    typedef long wxIntPtr;
-     typedef unsigned long wxUIntPtr;
- #elif SIZEOF_SIZE_T >= SIZEOF_VOID_P
-     /* Win64 case */
++    typedef unsigned long wxUIntPtr;
++#elif SIZEOF_SIZE_T >= SIZEOF_VOID_P
++    /* Win64 case */
 +    typedef wxW64 ssize_t wxIntPtr;
-     typedef size_t wxUIntPtr;
- #else
-     /*
++    typedef size_t wxUIntPtr;
++#else
++    /*
++       This should never happen for the current architectures but if you're
++       using one where it does, please contact wx-dev@lists.wxwidgets.org.
++     */
++    #error "Pointers can't be stored inside integer types."
++#endif
++
++#ifdef __cplusplus
++/* And also define a couple of simple functions to cast pointer to/from it. */
++inline wxUIntPtr wxPtrToUInt(const void *p)
++{
++    /*
++       VC++ 7.1 gives warnings about casts such as below even when they're
++       explicit with /Wp64 option, suppress them as we really know what we're
++       doing here. Same thing with icc with -Wall.
++     */
++#ifdef __VISUALC__
++    #if __VISUALC__ >= 1200
++        #pragma warning(push)
++    #endif
++    /* pointer truncation from '' to '' */
++    #pragma warning(disable: 4311)
++#elif defined(__INTELC__)
++    #pragma warning(push)
++    /* conversion from pointer to same-sized integral type */
++    #pragma warning(disable: 1684)
++#endif
++
++    return wx_reinterpret_cast(wxUIntPtr, p);
++
++#if (defined(__VISUALC__) && __VISUALC__ >= 1200) || defined(__INTELC__)
++    #pragma warning(pop)
++#endif
++}
++
++inline void *wxUIntToPtr(wxUIntPtr p)
++{
++#ifdef __VISUALC__
++    #if __VISUALC__ >= 1200
++        #pragma warning(push)
++    #endif
++    /* conversion to type of greater size */
++    #pragma warning(disable: 4312)
++#elif defined(__INTELC__)
++    #pragma warning(push)
++    /* invalid type conversion: "wxUIntPtr={unsigned long}" to "void *" */
++    #pragma warning(disable: 171)
++#endif
++
++    return wx_reinterpret_cast(void *, p);
++
++#if (defined(__VISUALC__) && __VISUALC__ >= 1200) || defined(__INTELC__)
++    #pragma warning(pop)
++#endif
++}
++#endif /*__cplusplus*/
++
++
+ /*  base floating point types */
+ /*  wxFloat32: 32 bit IEEE float ( 1 sign, 8 exponent bits, 23 fraction bits */
+ /*  wxFloat64: 64 bit IEEE float ( 1 sign, 11 exponent bits, 52 fraction bits */

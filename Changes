@@ -1,7 +1,7 @@
 Revision history for Perl extension Alien::wxWidgets.
 
 0.50_02
-	- More 64 bit patches for wxWidgets 2.9.0 from KMX.
+	- Fixed 64 bit compilation when using the MinGW-w64 compiler.
 
 0.50_01  Fri Feb 26 17:08:21 CET 2010
         - Added wxWidgets-extraflags build option.
