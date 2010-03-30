@@ -1,5 +1,8 @@
 Revision history for Perl extension Alien::wxWidgets.
 
+0.51  Tue Mar 30 22:28:51 CEST 2010
+	- Build fix for Perl 5.12.
+
 0.50_02  Sun Mar 21 10:33:00 CET 2010
 	- Fixed 64 bit compilation when using the MinGW-w64 compiler.
 
