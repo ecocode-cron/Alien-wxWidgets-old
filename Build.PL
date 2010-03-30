@@ -9,7 +9,9 @@ use My::Build;
 our( $TYPE, $URL );
 
 my %VERSIONS =
-  ( '2.8.10'        => 'patches/data-2.8.10',
+
+  ( '2.8.11'        => 'patches/data-2.8.11',
+    '2.8.10'        => 'patches/data-2.8.10',
     '2.9.0'         => 'patches/data-2.9.0',
     );
 my $DEFAULT_VERSION = '2.8.10';

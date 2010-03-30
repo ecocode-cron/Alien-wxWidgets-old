@@ -35,6 +35,7 @@ inc/src/patch-2.5.9-7-src.zip
 inc/src/patch.exe.manifest
 lib/Alien/wxWidgets.pm
 lib/Alien/wxWidgets/Utility.pm
+patches/data-2.8.11
 patches/data-2.8.10
 patches/data-2.9.0
 patches/wxMSW-2.8.0-makefiles.patch
@@ -63,3 +64,5 @@ patches/wxMSW-2.8.10-w64-mslu.patch
 patches/wxMSW-2.8.10-w64-winhash.patch
 patches/wxMSW-2.8.10-w64.patch
 patches/wxMSW-2.8.10-w64-stc.patch
+patches/wxMSW-2.8.11-makefiles.patch
+patches/wxMSW-2.8.11-w64.patch
