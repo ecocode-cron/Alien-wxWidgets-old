@@ -406,7 +406,26 @@ Index: src/msw/printdlg.cpp
      WinPrinter printer;
      LPTSTR szPrinterName = (LPTSTR)data.GetPrinterName().wx_str();
  
-@@ -493,7 +493,7 @@
+@@ -452,18 +452,12 @@
+         // Use PRINTDLG as a way of creating a DEVMODE object
+         PRINTDLG pd;
+ 
+-        // GNU-WIN32 has the wrong size PRINTDLG - can't work out why.
+-#ifdef __GNUWIN32__
+-        memset(&pd, 0, 66);
+-        pd.lStructSize    = 66;
+-#else
+         memset(&pd, 0, sizeof(PRINTDLG));
+ #ifdef __WXWINCE__
+         pd.cbStruct    = sizeof(PRINTDLG);
+ #else
+         pd.lStructSize    = sizeof(PRINTDLG);
+ #endif
+-#endif
+ 
+         pd.hwndOwner      = (HWND)NULL;
+         pd.hDevMode       = NULL; // Will be created by PrintDlg
+@@ -493,7 +487,7 @@
          else
          {
              hDevMode = pd.hDevMode;
@@ -415,7 +434,7 @@ Index: src/msw/printdlg.cpp
              pd.hDevMode = NULL;
  
              // We'll create a new DEVNAMEs structure below.
-@@ -688,7 +688,7 @@
+@@ -688,7 +682,7 @@
      }
  
      // TODO: I hope it's OK to pass some empty strings to DEVNAMES.
@@ -424,7 +443,21 @@ Index: src/msw/printdlg.cpp
  
      return true;
  }
-@@ -820,13 +820,13 @@
+@@ -797,12 +791,8 @@
+     memset( pd, 0, sizeof(PRINTDLG) );
+     m_printDlg = (void*) pd;
+ 
+-    // GNU-WIN32 has the wrong size PRINTDLG - can't work out why.
+-#ifdef __GNUWIN32__
+-    pd->lStructSize    = 66;
+-#else
+     pd->lStructSize    = sizeof(PRINTDLG);
+-#endif
++
+     pd->hwndOwner      = (HWND)NULL;
+     pd->hDevMode       = NULL; // Will be created by PrintDlg
+     pd->hDevNames      = NULL; // Ditto
+@@ -820,13 +810,13 @@
      if (pd->hDevNames)
          GlobalFree(pd->hDevNames);
  
@@ -440,7 +473,19 @@ Index: src/msw/printdlg.cpp
      native_data->SetDevNames( (void*) NULL);
  
  
-@@ -897,9 +897,9 @@
+@@ -839,11 +829,7 @@
+ 
+     pd->Flags = PD_RETURNDC;
+ 
+-#ifdef __GNUWIN32__
+-    pd->lStructSize = 66;
+-#else
+     pd->lStructSize = sizeof( PRINTDLG );
+-#endif
+ 
+     pd->hwndOwner=(HWND)NULL;
+ //    pd->hDevNames=(HANDLE)NULL;
+@@ -897,9 +883,9 @@
          if (native_data->GetDevMode())
          {
              // Make sure we don't leak memory
@@ -452,7 +497,7 @@ Index: src/msw/printdlg.cpp
          pd->hDevMode = NULL;
      }
  
-@@ -909,9 +909,9 @@
+@@ -909,9 +895,9 @@
          if (native_data->GetDevNames())
          {
              // Make sure we don't leak memory
