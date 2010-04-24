@@ -13,7 +13,7 @@ wxMSW-2.8.10-w64-mslu.patch
 wxMSW-2.8.10-w64-winhash.patch
 wxMSW-2.8.11-w64.patch
 wxMSW-2.8.10-w64-stc.patch
-wxMSW-2.9.0-w64-filefn.patch
+wxMSW-2.8.11-filefn.patch
                                ), @common ],
                ansi    => [ qw(
 wxMSW-2.8.0-setup.patch
@@ -23,7 +23,7 @@ wxMSW-2.8.10-w64-mslu.patch
 wxMSW-2.8.10-w64-winhash.patch
 wxMSW-2.8.11-w64.patch
 wxMSW-2.8.10-w64-stc.patch
-wxMSW-2.9.0-w64-filefn.patch
+wxMSW-2.8.11-filefn.patch
                                ), @common ],
                },
   mac     => { unicode => [ qw(
@@ -33,8 +33,11 @@ wxMac-2.8.3-brokengcc.patch
 wxMac-2.8.3-brokengcc.patch
                                ), @common ],
                },
-  unix    => { unicode => [ qw( ), @common ],
-               ansi    => [ qw( ), @common ],
+  unix    => { unicode => [ qw( 
+  
+  							   ), @common ],
+               ansi    => [ qw(
+               				   ), @common ],
                },
   data    => { url  => ( sprintf '%s/%s-%s.%s', $URL, $BASE, $VERSION, $TYPE ),
                directory => ( sprintf '%s-%s', $BASE, $VERSION ),
