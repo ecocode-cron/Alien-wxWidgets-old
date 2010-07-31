@@ -1,0 +1,326 @@
+--- build/msw/makefile.gcc	2010-07-31 10:54:02.000000000 +0200
++++ build/msw/makefile.gcc	2010-07-31 10:54:26.000000000 +0200
+@@ -292,7 +292,7 @@
+ 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
+ 	$(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
+ 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
+-	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall \
++	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -Wall \
+ 	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
+ 	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib -DwxUSE_BASE=1 \
+ 	-DWXMAKINGDLL -I..\..\src\stc\scintilla\include \
+@@ -303,7 +303,7 @@
+ 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
+ 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
+ 	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I..\..\include \
+-	$(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall -DWXBUILDING \
++	$(____CAIRO_INCLUDEDIR_FILENAMES) -Wall -DWXBUILDING \
+ 	-I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib \
+ 	-I..\..\src\regex -I..\..\src\expat\lib -DwxUSE_BASE=1 -DWXMAKINGDLL \
+ 	-I..\..\src\stc\scintilla\include -I..\..\src\stc\scintilla\src -D__WX__ \
+@@ -441,7 +441,7 @@
+ 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
+ 	$(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
+ 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
+-	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall \
++	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -Wall \
+ 	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
+ 	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib -DwxUSE_BASE=1 \
+ 	-I..\..\src\stc\scintilla\include -I..\..\src\stc\scintilla\src -D__WX__ \
+@@ -451,7 +451,7 @@
+ 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
+ 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
+ 	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I..\..\include \
+-	$(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall -DWXBUILDING \
++	$(____CAIRO_INCLUDEDIR_FILENAMES) -Wall -DWXBUILDING \
+ 	-I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib \
+ 	-I..\..\src\regex -I..\..\src\expat\lib -DwxUSE_BASE=1 \
+ 	-I..\..\src\stc\scintilla\include -I..\..\src\stc\scintilla\src -D__WX__ \
+@@ -588,7 +588,7 @@
+ 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
+ 	$(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
+ 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
+-	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall \
++	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -Wall \
+ 	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
+ 	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib -DwxUSE_GUI=0 \
+ 	-DWXMAKINGDLL_BASE -DwxUSE_BASE=1 $(CPPFLAGS) $(CFLAGS)
+@@ -597,7 +597,7 @@
+ 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
+ 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
+ 	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I..\..\include \
+-	$(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall -DWXBUILDING \
++	$(____CAIRO_INCLUDEDIR_FILENAMES) -Wall -DWXBUILDING \
+ 	-I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib \
+ 	-I..\..\src\regex -I..\..\src\expat\lib -DwxUSE_GUI=0 -DWXMAKINGDLL_BASE \
+ 	-DwxUSE_BASE=1 $(__RTTIFLAG) $(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy \
+@@ -719,7 +719,7 @@
+ 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
+ 	$(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
+ 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
+-	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall \
++	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -Wall \
+ 	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
+ 	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib -DwxUSE_GUI=0 \
+ 	-DwxUSE_BASE=1 $(CPPFLAGS) $(CFLAGS)
+@@ -728,7 +728,7 @@
+ 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
+ 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
+ 	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I..\..\include \
+-	$(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall -DWXBUILDING \
++	$(____CAIRO_INCLUDEDIR_FILENAMES) -Wall -DWXBUILDING \
+ 	-I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib \
+ 	-I..\..\src\regex -I..\..\src\expat\lib -DwxUSE_GUI=0 -DwxUSE_BASE=1 \
+ 	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy $(CPPFLAGS) \
+@@ -849,7 +849,7 @@
+ 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
+ 	$(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
+ 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
+-	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall \
++	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -Wall \
+ 	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
+ 	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib -DwxUSE_GUI=0 \
+ 	-DWXUSINGDLL -DWXMAKINGDLL_NET $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
+@@ -873,7 +873,7 @@
+ 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
+ 	$(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
+ 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
+-	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall \
++	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -Wall \
+ 	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
+ 	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib -DwxUSE_GUI=0 \
+ 	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy $(CPPFLAGS) \
+@@ -897,7 +897,7 @@
+ 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
+ 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
+ 	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I..\..\include \
+-	$(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall -DWXBUILDING \
++	$(____CAIRO_INCLUDEDIR_FILENAMES) -Wall -DWXBUILDING \
+ 	-I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib \
+ 	-I..\..\src\regex -I..\..\src\expat\lib -DWXUSINGDLL -DWXMAKINGDLL_CORE \
+ 	-DwxUSE_BASE=0 $(__RTTIFLAG) $(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy \
+@@ -919,7 +919,7 @@
+ 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
+ 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
+ 	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I..\..\include \
+-	$(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall -DWXBUILDING \
++	$(____CAIRO_INCLUDEDIR_FILENAMES) -Wall -DWXBUILDING \
+ 	-I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib \
+ 	-I..\..\src\regex -I..\..\src\expat\lib -DwxUSE_BASE=0 $(__RTTIFLAG) \
+ 	$(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
+@@ -938,7 +938,7 @@
+ 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
+ 	$(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
+ 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
+-	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall \
++	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -Wall \
+ 	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
+ 	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib -DWXUSINGDLL \
+ 	-DWXMAKINGDLL_ADV $(__RTTIFLAG) $(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy \
+@@ -951,7 +951,7 @@
+ 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
+ 	$(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
+ 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
+-	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall \
++	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -Wall \
+ 	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
+ 	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib $(__RTTIFLAG) \
+ 	$(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
+@@ -963,7 +963,7 @@
+ 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
+ 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
+ 	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I..\..\include \
+-	$(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall -DWXBUILDING \
++	$(____CAIRO_INCLUDEDIR_FILENAMES) -Wall -DWXBUILDING \
+ 	-I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib \
+ 	-I..\..\src\regex -I..\..\src\expat\lib -DWXUSINGDLL -DWXMAKINGDLL_MEDIA \
+ 	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy $(CPPFLAGS) \
+@@ -980,7 +980,7 @@
+ 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
+ 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
+ 	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I..\..\include \
+-	$(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall -DWXBUILDING \
++	$(____CAIRO_INCLUDEDIR_FILENAMES) -Wall -DWXBUILDING \
+ 	-I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib \
+ 	-I..\..\src\regex -I..\..\src\expat\lib $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
+ 	-Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
+@@ -995,7 +995,7 @@
+ 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
+ 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
+ 	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I..\..\include \
+-	$(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall -DWXBUILDING \
++	$(____CAIRO_INCLUDEDIR_FILENAMES) -Wall -DWXBUILDING \
+ 	-I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib \
+ 	-I..\..\src\regex -I..\..\src\expat\lib -DWXUSINGDLL -DWXMAKINGDLL_HTML \
+ 	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy $(CPPFLAGS) \
+@@ -1034,7 +1034,7 @@
+ 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
+ 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
+ 	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I..\..\include \
+-	$(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall -DWXBUILDING \
++	$(____CAIRO_INCLUDEDIR_FILENAMES) -Wall -DWXBUILDING \
+ 	-I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib \
+ 	-I..\..\src\regex -I..\..\src\expat\lib $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
+ 	-Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
+@@ -1070,7 +1070,7 @@
+ 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
+ 	$(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
+ 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
+-	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall \
++	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -Wall \
+ 	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
+ 	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib -DWXUSINGDLL \
+ 	-DWXMAKINGDLL_QA $(__RTTIFLAG) $(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy \
+@@ -1084,7 +1084,7 @@
+ 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
+ 	$(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
+ 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
+-	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall \
++	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -Wall \
+ 	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
+ 	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib $(__RTTIFLAG) \
+ 	$(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
+@@ -1096,7 +1096,7 @@
+ 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
+ 	$(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
+ 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
+-	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall \
++	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -Wall \
+ 	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
+ 	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib -DwxUSE_GUI=0 \
+ 	-DWXUSINGDLL -DWXMAKINGDLL_XML $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
+@@ -1110,7 +1110,7 @@
+ 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
+ 	$(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
+ 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
+-	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall \
++	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -Wall \
+ 	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
+ 	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib -DwxUSE_GUI=0 \
+ 	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy $(CPPFLAGS) \
+@@ -1123,7 +1123,7 @@
+ 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
+ 	$(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
+ 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
+-	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall \
++	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -Wall \
+ 	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
+ 	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib -DWXUSINGDLL \
+ 	-DWXMAKINGDLL_XRC $(__RTTIFLAG) $(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy \
+@@ -1196,7 +1196,7 @@
+ 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
+ 	$(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
+ 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
+-	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall \
++	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -Wall \
+ 	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
+ 	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib $(__RTTIFLAG) \
+ 	$(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
+@@ -1267,7 +1267,7 @@
+ 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
+ 	$(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
+ 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
+-	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall \
++	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -Wall \
+ 	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
+ 	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib -DWXUSINGDLL \
+ 	-DWXMAKINGDLL_AUI $(__RTTIFLAG) $(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy \
+@@ -1285,7 +1285,7 @@
+ 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
+ 	$(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
+ 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
+-	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall \
++	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -Wall \
+ 	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
+ 	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib $(__RTTIFLAG) \
+ 	$(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
+@@ -1302,7 +1302,7 @@
+ 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
+ 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
+ 	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I..\..\include \
+-	$(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall -DWXBUILDING \
++	$(____CAIRO_INCLUDEDIR_FILENAMES) -Wall -DWXBUILDING \
+ 	-I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib \
+ 	-I..\..\src\regex -I..\..\src\expat\lib -DWXUSINGDLL -DWXMAKINGDLL_RIBBON \
+ 	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy $(CPPFLAGS) \
+@@ -1325,7 +1325,7 @@
+ 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
+ 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
+ 	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I..\..\include \
+-	$(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall -DWXBUILDING \
++	$(____CAIRO_INCLUDEDIR_FILENAMES) -Wall -DWXBUILDING \
+ 	-I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib \
+ 	-I..\..\src\regex -I..\..\src\expat\lib $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
+ 	-Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
+@@ -1346,7 +1346,7 @@
+ 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
+ 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
+ 	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I..\..\include \
+-	$(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall -DWXBUILDING \
++	$(____CAIRO_INCLUDEDIR_FILENAMES) -Wall -DWXBUILDING \
+ 	-I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib \
+ 	-I..\..\src\regex -I..\..\src\expat\lib -DWXUSINGDLL -DWXMAKINGDLL_PROPGRID \
+ 	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy $(CPPFLAGS) \
+@@ -1367,7 +1367,7 @@
+ 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
+ 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
+ 	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I..\..\include \
+-	$(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall -DWXBUILDING \
++	$(____CAIRO_INCLUDEDIR_FILENAMES) -Wall -DWXBUILDING \
+ 	-I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib \
+ 	-I..\..\src\regex -I..\..\src\expat\lib $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
+ 	-Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
+@@ -1386,7 +1386,7 @@
+ 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
+ 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
+ 	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I..\..\include \
+-	$(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall -DWXBUILDING \
++	$(____CAIRO_INCLUDEDIR_FILENAMES) -Wall -DWXBUILDING \
+ 	-I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib \
+ 	-I..\..\src\regex -I..\..\src\expat\lib -DWXUSINGDLL -DWXMAKINGDLL_RICHTEXT \
+ 	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy $(CPPFLAGS) \
+@@ -1408,7 +1408,7 @@
+ 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
+ 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
+ 	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I..\..\include \
+-	$(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall -DWXBUILDING \
++	$(____CAIRO_INCLUDEDIR_FILENAMES) -Wall -DWXBUILDING \
+ 	-I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib \
+ 	-I..\..\src\regex -I..\..\src\expat\lib $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
+ 	-Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
+@@ -1427,7 +1427,7 @@
+ 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
+ 	$(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
+ 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
+-	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall \
++	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -Wall \
+ 	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
+ 	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib \
+ 	-I..\..\src\stc\scintilla\include -I..\..\src\stc\scintilla\src -D__WX__ \
+@@ -1443,7 +1443,7 @@
+ 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
+ 	$(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
+ 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
+-	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall \
++	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -Wall \
+ 	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
+ 	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib \
+ 	-I..\..\src\stc\scintilla\include -I..\..\src\stc\scintilla\src -D__WX__ \
+@@ -1458,7 +1458,7 @@
+ 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
+ 	$(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
+ 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
+-	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall \
++	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -Wall \
+ 	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
+ 	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib -DWXUSINGDLL \
+ 	-DWXMAKINGDLL_GL $(__RTTIFLAG) $(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy \
+@@ -1472,7 +1472,7 @@
+ 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
+ 	$(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
+ 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
+-	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall \
++	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -Wall \
+ 	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
+ 	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib $(__RTTIFLAG) \
+ 	$(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
