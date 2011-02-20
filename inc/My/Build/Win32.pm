@@ -53,8 +53,9 @@ sub _patch_command {
 sub awx_grep_dlls {
     my( $self, $libdir, $digits, $mono ) = @_;
     my $ret = {};
+    my $ver = $self->_version_2_dec( $self->awx_w32_bakefile_version );
     my $suff = ( $self->awx_unicode ? 'u' : '' ) .
-               ( $self->awx_debug ? 'd' : '' );
+               ( $self->awx_debug && $ver <= 2.009 ? 'd' : '' );
 
     my @dlls = grep { m/${digits}\d*${suff}_/ }
                bsd_glob( File::Spec->catfile( $libdir, '*.dll' ) );
@@ -105,15 +106,20 @@ sub awx_configure {
     $config{config}{toolkit} = $self->is_wince ? 'wce' : 'msw';
     $config{shared_library_path} = awx_install_arch_file( $self, "rEpLaCe/lib" );
 
+    $self->awx_w32_find_setup_dir( $self->wx_config( 'cxxflags' ) );
+
+    return %config;
+}
+
+sub awx_w32_find_setup_dir {
+    my( $self, $cxxflags ) = @_;
+
     die "Unable to find setup.h directory"
-      unless $self->wx_config( 'cxxflags' )
-                 =~ m{[/-]I\s*(\S+lib[\\/][\w\\/]+)(?:\s|$)};
+      unless $cxxflags =~ m{[/-]I\s*(\S+lib[\\/][\w\\/]+)(?:\s|$)};
     $self->{awx_setup_dir} = $1;
 
     $self->{awx_data}{version} = $self->awx_w32_bakefile_version
       if -f $self->awx_w32_build_cfg;
-
-    return %config;
 }
 
 sub awx_w32_bakefile_version {
