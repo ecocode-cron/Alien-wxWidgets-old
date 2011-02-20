@@ -26,8 +26,6 @@ sub awx_configure {
     my $self = shift;
     my %config = $self->SUPER::awx_configure;
 
-    $config{c_flags} .= " -fvtable-thunks ";
-
     if( $self->awx_debug ) {
         $config{c_flags} .= ' -g ';
     } else {
