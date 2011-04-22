@@ -5,6 +5,7 @@ BEGIN { our $NO_INIT = 1 }
 use strict;
 use lib "lib", "inc";
 use My::Build;
+use Config;
 
 our( $TYPE, $URL );
 
@@ -16,7 +17,8 @@ my %VERSIONS =
     '2.9.0'         => 'patches/data-2.9.0',
     '2.9.1'         => 'patches/data-2.9.1',
     );
-my $DEFAULT_VERSION = '2.8.10';
+
+my ($DEFAULT_VERSION, $DEFAULT_ARCHIVE_TYPE) = _get_default_wxwidgets_version_and_type();
 
 if( $^O eq 'cygwin' ) {
     print <<EOT;
@@ -146,13 +148,15 @@ EOP
         if( $ans =~ /^2\./ ) {
             my $prefix = `wx-config --prefix`;
             chomp foreach $ans, $prefix;
-            $build_wx_dflt = 'no' ;
-            $build_prompt = sprintf <<EOP, $ans, $prefix;
+            if( _check_installed_widgets_ok($ans, $prefix) ) {
+                $build_wx_dflt = 'no' ;
+                $build_prompt = sprintf <<EOP, $ans, $prefix;
 wxWidgets %s seems to be installed in '%s', so it should be safe to
 answer 'no' to the following question:
 
 $build_prompt
 EOP
+            }
         }
     }
 }
@@ -199,7 +203,10 @@ if( $build_wx ) {
     $wx_version = _askmulti( $build, 'wxWidgets-version',
                              'Which wxWidgets version?',
                              [ sort keys %VERSIONS ], $DEFAULT_VERSION );
-    $TYPE = _ask( $build, 'wxWidgets-source', 'Which archive type?', 'tar.gz' );
+    
+    $DEFAULT_ARCHIVE_TYPE = 'tar.bz2' if $wx_version eq '2.9.1'; # no tar.gz at sourceforge site
+    
+    $TYPE = _ask( $build, 'wxWidgets-source', 'Which archive type?', $DEFAULT_ARCHIVE_TYPE );
     $URL = $ENV{AWX_URL};
     $build->notes( 'build_data' => do $VERSIONS{$wx_version} );
 }
@@ -262,3 +269,52 @@ sub _ask {
 
     return $res
 }
+
+sub _get_default_wxwidgets_version_and_type {
+    
+    my $defver = '2.8.12';
+    my $deftype = 'tar.gz';
+    
+    if ($^O =~ /^darwin/i ) {
+        # 2.9.1 if this is 64 bit perl on 64 bit mac
+        if( $Config{ptrsize} == 8 ) {
+            $defver = '2.9.1';
+            $deftype = 'tar.bz2'; # no tar.gz at sourceforge site for 2.9.1
+        }
+    }
+    
+    if( $^O =~ /^linux/i) {
+        # 2.8.10 if this is gtk < 2.4
+        my $pkg_config = $ENV{PKG_CONFIG} || 'pkg-config';
+        if( my $gtkfullver = qx($pkg_config --modversion gtk+-2.0 2>&1) ) {
+            if($gtkfullver =~ /^\d+\.(\d+)\.\d+/) {
+                $defver = '2.8.10' if $1 < 4;
+            }
+        }
+    }
+    
+    return ($defver, $deftype);
+}
+
+sub _check_installed_widgets_ok {
+    my($wxversion, $wxprefix) = @_;
+    
+    return 1 if $^O !~ /^darwin/i;
+    
+    # catch current common case of system installed
+    # widgets 2.8.x on a 64 bit capable Mac + 64 bit
+    # perl
+    # assume installed 2.9.x is osx-cocoa 64 bit
+    
+    if( $Config{ptrsize} == 8
+        && $wxversion =~ /^2\.8\./
+       ) {
+        return 0;
+    } else {
+        return 1;
+    }
+}
+
+1;
+
+
