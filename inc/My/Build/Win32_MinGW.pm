@@ -99,9 +99,24 @@ sub files_to_install {
             last;
         }
     }
-
-    return ( $self->SUPER::files_to_install(),
+    
+    if(!defined($dll)) {
+        # check for special case ActivePerl mingw PPM
+        my $ppmmingw = qq($Config{sitearch}/auto/MinGW/bin/mingwm10.dll);
+        if( -f $ppmmingw ) {
+            $dll_from = $ppmmingw;
+            $dll = File::Basename::basename( $dll_from );
+        }
+    }
+    
+    if( defined( $dll_from ) && defined( $dll ) ) {
+        return ( $self->SUPER::files_to_install(),
              ( $dll_from => awx_arch_file( "rEpLaCe/lib/$dll" ) ) );
+    } else {
+        die 'Cannot find libc (mingwm10.dll/ libgcc_*.dll) for install';
+    }
+
+    
 }
 
 sub awx_strip_dlls {
