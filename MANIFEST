@@ -40,6 +40,7 @@ patches/data-2.8.11
 patches/data-2.8.10
 patches/data-2.9.0
 patches/data-2.9.1
+patches/data-2.9.2
 patches/wxMSW-2.8.0-makefiles.patch
 patches/wxMSW-2.8.0-setup.patch
 patches/wxMSW-2.8.0-setup_u.patch
@@ -74,3 +75,5 @@ patches/wxMSW-2.8.11-w64.patch
 patches/wxMSW-2.8.11-filefn.patch
 patches/wxMSW-2.8.12-w64.patch
 patches/wxMSW-2.8.12-w64-stc.patch
+patches/wxMSW-2.9.2-setup.patch
+patches/wxMSW-2.9.2-setup_gctx.patch
