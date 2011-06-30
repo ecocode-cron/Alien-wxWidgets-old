@@ -16,6 +16,7 @@ my %VERSIONS =
     '2.8.10'        => 'patches/data-2.8.10',
     '2.9.0'         => 'patches/data-2.9.0',
     '2.9.1'         => 'patches/data-2.9.1',
+    '2.9.2'         => 'patches/data-2.9.2',
     );
 
 my ($DEFAULT_VERSION, $DEFAULT_ARCHIVE_TYPE) = _get_default_wxwidgets_version_and_type();
@@ -204,7 +205,7 @@ if( $build_wx ) {
                              'Which wxWidgets version?',
                              [ sort keys %VERSIONS ], $DEFAULT_VERSION );
     
-    $DEFAULT_ARCHIVE_TYPE = 'tar.bz2' if $wx_version eq '2.9.1'; # no tar.gz at sourceforge site
+    $DEFAULT_ARCHIVE_TYPE = 'tar.bz2' if $wx_version =~ /^2\.9/; # no tar.gz at sourceforge site
     
     $TYPE = _ask( $build, 'wxWidgets-source', 'Which archive type?', $DEFAULT_ARCHIVE_TYPE );
     $URL = $ENV{AWX_URL};
@@ -278,6 +279,7 @@ sub _get_default_wxwidgets_version_and_type {
     if ($^O =~ /^darwin/i ) {
         # 2.9.1 if this is 64 bit perl on 64 bit mac
         if( $Config{ptrsize} == 8 ) {
+        # TODO: switch to 2.9.2 when released
             $defver = '2.9.1';
             $deftype = 'tar.bz2'; # no tar.gz at sourceforge site for 2.9.1
         }
