@@ -5,12 +5,13 @@ my $BASE    = 'wxWidgets';
 
 my @common = qw(wxWidgets-2.9.0-magic.patch);
 
-my $winsetuppatch = ($ENV{WX_USE_GRAPHICS_CONTEXT}) ? 'wxMSW-2.9.2-setup_gctx.patch' : 'wxMSW-2.9.2-setup.patch';
+my $winsetuppatch = ( $FORCE_GTX ) ? 'wxMSW-2.9.2-setup_gctx.patch' : 'wxMSW-2.9.2-setup.patch';
 
-{ msw     => { unicode => [ qw(
-wxMSW-2.9.1-makefiles.patch
-wxMSW-2.9.1-w64-mslu.patch 
-                               ), $winsetuppatch, @common ],
+{ msw     => { unicode => [ 
+  'wxMSW-2.9.2-makefiles.patch',
+  $winsetuppatch, 
+  @common 
+  ],
                },
   mac     => { unicode => [ @common ],
                },
@@ -22,5 +23,3 @@ wxMSW-2.9.1-w64-mslu.patch
                version   => $VERSION,
                },
   };
-  
-  

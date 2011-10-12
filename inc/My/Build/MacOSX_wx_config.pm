@@ -39,10 +39,14 @@ sub awx_configure {
 sub wxwidgets_configure_extra_flags {
     my( $self ) = @_;
     my $extra_flags = $self->notes( 'extraflags' );
-    return $extra_flags if $extra_flags;
     
-    print qq(Standard Mac Flags in use\n);
-    
+    if($extra_flags) {
+    	if( $self->notes( 'graphicscontext' ) ) {
+			$extra_flags .= ' --enable-graphics_ctx';
+    	}
+        return $extra_flags;
+    }
+        
     my $darwinver = 0;
     if(`uname -r` =~ /^(\d+)\./) {
         $darwinver = $1;
@@ -61,6 +65,10 @@ sub wxwidgets_configure_extra_flags {
     if( $darwinver >= 10
         && $self->notes( 'build_data' )->{data}{version} =~ /^2.9/ ) {
         $extra_flags .= ' --with-macosx-version-min=10.5';
+    }
+    
+    if( $self->notes( 'graphicscontext' ) ) {
+	    $extra_flags .= ' --enable-graphics_ctx';
     }
 
     return $extra_flags;

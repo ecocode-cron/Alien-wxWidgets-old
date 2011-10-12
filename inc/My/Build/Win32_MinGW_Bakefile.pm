@@ -18,16 +18,25 @@ sub awx_wx_config_data {
                );
 
     my $cflags = 'CXXFLAGS=" -Os -DNO_GCC_PRAGMA "';
+        
     my $final = $self->awx_debug ? 'BUILD=debug'
                                  : 'BUILD=release';
+                                 
+    if( my $xbuildflags = $self->awx_w32_extra_buildflags ) {
+		$final .= ' ' . $xbuildflags;
+	}
+    
     my $unicode = $self->awx_unicode ? 'UNICODE=1' : 'UNICODE=0';
     $unicode .= ' MSLU=1' if $self->awx_mslu;
 
     my $dir = Cwd::cwd;
     my $make = $self->_find_make;
     chdir File::Spec->catdir( $ENV{WXDIR}, 'samples', 'minimal' );
-    my $extraflags = $self->notes( 'extraflags');
-    my @t = qx($make -n -B -f makefile.gcc $final $unicode $cflags SHARED=1 $extraflags);
+    
+    # help xcomp tools
+    local $ENV{GNUTARGET} = ( $Config{ptrsize} == 8  ) ? 'pe-x86-64' : 'pe-i386';
+    
+    my @t = qx($make -n -B -f makefile.gcc $final $unicode $cflags SHARED=1);
 
     my( $orig_libdir, $libdir, $digits );
     foreach ( @t ) {
@@ -76,5 +85,29 @@ sub build_wxwidgets {
 
     $self->My::Build::Win32_Bakefile::build_wxwidgets( @_ );
 }
+
+sub awx_w32_ldflags {
+	my $self = shift;
+	# MinGW.org gcc 4.5.2 links shared libstdc++ by default.
+	# gcc 4.4.x and below doesn't understand -static-libstdc++
+	# (MinGW.org 3.4.5 compiler and many versions of mingw-w64 compiler)
+	# TDM mingw bundles do understand so no harm in specifying even
+	# though static is the defautl there
+	my $cmdout = qx(g++ -static-libstdc++ 2>&1);
+	my $ldflags = ($cmdout =~ /unrecognized option/) ? '' : '-static-libstdc++';
+	# add -m32 / -m64  flags for mingw-w64 builds that combine 32bit / 64bit
+	# The mingw bundle from TDM requires this
+	$ldflags .= ( $Config{ptrsize} == 8 ) ? ' -m64' : ' -m32';
+	return $ldflags;
+}
+
+sub awx_w32_cppflags {
+	my $self = shift;
+	# see awx_w32_ldflags
+	my $cppflags = ( $Config{ptrsize} == 8 ) ? '-m64' : '-m32';
+	
+	return $cppflags;
+}
+
 
 1;

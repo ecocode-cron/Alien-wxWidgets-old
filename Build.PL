@@ -7,7 +7,7 @@ use lib "lib", "inc";
 use My::Build;
 use Config;
 
-our( $TYPE, $URL );
+our( $TYPE, $URL, $FORCE_GTX );
 
 my %VERSIONS =
 
@@ -54,19 +54,21 @@ my $build = $class->new
                          },
     configure_requires => { 'Module::Build'               => '0.28',
                             },
-    get_options     => { 'wxWidgets-debug'         => { type => '!' },
-                         'wxWidgets-unicode'       => { type => '!' },
-                         'wxWidgets-mslu'          => { type => '!' },
-                         'wxWidgets-static'        => { type => '!' },
-                         'wxWidgets-monolithic'    => { type => '!' },
-                         'wxWidgets-universal'     => { type => '!' },
-                         'wxWidgets-build'         => { type => '!' },
-                         'wxWidgets-portable'      => { type => '!',
+    get_options     => { 'wxWidgets-debug'           => { type => '!' },
+                         'wxWidgets-unicode'         => { type => '!' },
+                         'wxWidgets-mslu'            => { type => '!' },
+                         'wxWidgets-static'          => { type => '!' },
+                         'wxWidgets-monolithic'      => { type => '!' },
+                         'wxWidgets-universal'       => { type => '!' },
+                         'wxWidgets-build'           => { type => '!' },
+                         'wxWidgets-portable'        => { type => '!',
                                                         default => $^O eq 'MSWin32' },
-                         'wxWidgets-build-opengl'  => { type => '!' },
-                         'wxWidgets-source'        => { type => '=s' },
-                         'wxWidgets-version'       => { type => '=s' },
-                         'wxWidgets-extraflags'    => { type => '=s' },
+                         'wxWidgets-build-opengl'    => { type => '!' },
+                         'wxWidgets-source'          => { type => '=s' },
+                         'wxWidgets-version'         => { type => '=s' },
+                         'wxWidgets-extraflags'      => { type => '=s' },
+                         'wxWidgets-graphicscontext' => { type => '!',
+                                                        default => $^O ne 'MSWin32' },
                          },
     create_makefile_pl => 'passthrough',
     meta_merge =>
@@ -200,6 +202,8 @@ $build->notes( 'build_wx' => $build_wx );
 $build->notes( 'mk_portable' => $build->args('wxWidgets-portable') );
 $build->notes( 'install_only' => $have_alien_configuration && !$build_wx && $accept_defaults );
 $build->notes( 'extraflags' => $build->args('wxWidgets-extraflags') || '' );
+$build->notes( 'graphicscontext' => $build->args('wxWidgets-graphicscontext') );
+
 if( $build_wx ) {
     $wx_version = _askmulti( $build, 'wxWidgets-version',
                              'Which wxWidgets version?',
@@ -209,8 +213,10 @@ if( $build_wx ) {
     
     $TYPE = _ask( $build, 'wxWidgets-source', 'Which archive type?', $DEFAULT_ARCHIVE_TYPE );
     $URL = $ENV{AWX_URL};
+    $FORCE_GTX = $build->args('wxWidgets-graphicscontext');
     $build->notes( 'build_data' => do $VERSIONS{$wx_version} );
 }
+
 if( $build_wx && $wx_version !~ /^2\.9/ ) {
     my $build_wx_unicode = _askyn( $build, 'wxWidgets-unicode',
                                    'Do you want to enable Unicode support',

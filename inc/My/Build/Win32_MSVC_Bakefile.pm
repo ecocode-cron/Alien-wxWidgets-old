@@ -35,13 +35,18 @@ sub awx_wx_config_data {
     my $orig_libdir;
     my $final = $self->awx_debug ? 'BUILD=debug   DEBUG_RUNTIME_LIBS=0'
                                  : 'BUILD=release DEBUG_RUNTIME_LIBS=0';
+
+	if( my $xbuildflags = $self->awx_w32_extra_buildflags ) {
+		$final .= ' ' . $xbuildflags;
+	}
+    
     my $unicode = $self->awx_unicode ? 'UNICODE=1' : 'UNICODE=0';
     $unicode .= ' MSLU=1' if $self->awx_mslu;
 
     my $dir = Cwd::cwd;
     chdir File::Spec->catdir( $ENV{WXDIR}, 'samples', 'minimal' );
-    my $extraflags = $self->notes( 'extraflags');
-    my @t = qx(nmake /nologo /n /a /u /f makefile.vc $final $unicode SHARED=1 $extraflags);
+
+    my @t = qx(nmake /nologo /n /a /u /f makefile.vc $final $unicode SHARED=1);
 
     my( $accu, $libdir, $digits );
     foreach ( @t ) {
@@ -100,5 +105,27 @@ sub build_wxwidgets {
 
     chdir $old_dir;
 }
+
+
+sub awx_w32_ldflags {
+	my $self = shift;
+	my $ldflags = '';
+	
+	# security cookie lib for Platform SDK 2003
+	# ActivePerl will configure $Config{libs}
+	# according to cl version.
+	# For other MSVC built Perl, we'll assume
+	# same cl as built Perl is building wxWidgets
+	
+	my $libs = $Config{libs};
+	if($libs =~ /bufferoverflowU\.lib/i) {
+		$ldflags = 'bufferoverflowU.lib';
+	}
+	
+	return $ldflags;
+	
+}
+
+sub awx_w32_cppflags { return ''; }
 
 1;

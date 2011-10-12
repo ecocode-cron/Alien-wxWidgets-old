@@ -1,5 +1,9 @@
 Revision history for Perl extension Alien::wxWidgets.
 
+TBR   
+    - 2.9.2 build changes for msw
+    - support serveral mingw builds
+
 0.52  Thu May 05 08:00:00 BST 2011
     - release 0.51_01 as 0.52
 

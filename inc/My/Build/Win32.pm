@@ -252,6 +252,7 @@ package My::Build::Win32_Bakefile;
 
 use strict;
 use Carp;
+use Config;
 # mixin: no use base
 
 sub build_wxwidgets {
@@ -262,9 +263,14 @@ sub build_wxwidgets {
     my $mslu = $self->awx_mslu   ? 'MSLU=1'      : 'MSLU=0';
     my $dbg = $self->awx_debug   ? 'BUILD=debug' : 'BUILD=release';
     my $opt = join ' ', $uni, $mslu, $dbg, 'SHARED=1';
-
-    $opt .= ' ' . $self->notes( 'extraflags' ) if($self->notes( 'extraflags' ));
-
+    
+    if( my $xbuildflags = $self->awx_w32_extra_buildflags ) {
+		$opt .= ' ' . $xbuildflags;
+	}
+    
+    # help windres in x compiler
+    local $ENV{GNUTARGET} = ( $Config{ptrsize} == 8 )  ? 'pe-x86-64' : 'pe-i386';
+    
     chdir File::Spec->catdir( $ENV{WXDIR}, 'build', 'msw' );
     $self->_system( $self->_make_command . ' ' . $opt );
     chdir File::Spec->catdir( $ENV{WXDIR}, 'contrib', 'build', 'stc' );
@@ -273,6 +279,58 @@ sub build_wxwidgets {
     chdir $old_dir;
 }
 
+sub awx_w32_configure_extra_flags {
+    my $self = shift; 
+    return $self->notes( 'extraflags' );
+}
+
+sub awx_w32_extra_buildflags {
+    my $self = shift;
+    my $buildflags = '';
+	my $extraflags = $self->awx_w32_configure_extra_flags;
+	
+	$buildflags .= $extraflags if $extraflags;
+
+	# extra flags for vers != 2.8 - that is >= 2.9
+
+	if( $self->notes( 'build_data' )->{data}{version} !~ /^2.8/ ) {
+		if($self->awx_debug) {
+			$buildflags .= ' DEBUG_INFO=default DEBUG_FLAG=1';
+		} else {
+			$buildflags .= ' DEBUG_INFO=0 DEBUG_FLAG=0'; 
+		}
+	}
+
+	# flags for vers == 2.8
+
+	if( $self->notes( 'build_data' )->{data}{version} =~ /^2.8/ ) {
+
+		# do graphicscontext for 2.8 build if requested
+		if( $self->notes( 'graphicscontext' ) ) {
+			$buildflags .= ' USE_GDIPLUS=1';
+		}
+
+	}
+
+	if( my $ldflags = $self->awx_w32_ldflags ) {
+		# only add if user has not specified LDFLAGS in 'extraflags'
+		if( $extraflags !~ / LDFLAGS=/ ) {
+			$buildflags .= qq( LDFLAGS=\"$ldflags\");
+		}
+	}
+
+	if( my $cppflags = $self->awx_w32_cppflags ) {
+		# only add if user has not specified CPPFLAGS in 'extraflags'
+		if( $extraflags !~ / CPPFLAGS=/ ) {
+			$buildflags .= qq( CPPFLAGS=\"$cppflags\");
+		}
+	}
+	
+	return $buildflags;
+	
+}
+
 sub is_wince { 0 }
+
 
 1;

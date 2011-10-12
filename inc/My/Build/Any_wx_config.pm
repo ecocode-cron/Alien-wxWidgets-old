@@ -193,7 +193,17 @@ sub _key {
     return $key;
 }
 
-sub wxwidgets_configure_extra_flags { $_[0]->notes( 'extraflags' ) }
+sub wxwidgets_configure_extra_flags {
+    my $self = shift;
+    
+    my $extraflags = $self->notes( 'extraflags' );
+    
+    if( $self->notes( 'graphicscontext' ) ) {    
+        $extraflags .= ' --enable-graphics_ctx';
+    }
+    
+    return $extraflags;
+}
 
 sub awx_make {
     my( $self ) = @_;
