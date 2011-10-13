@@ -1,6 +1,8 @@
 Revision history for Perl extension Alien::wxWidgets.
 
-TBR   
+0.53  TBR 
+    - SDK fix for 2.8.x on Mac OSX Lion
+    - 2.9.2 default for 64bit MacOSX
     - 2.9.2 build changes for msw
     - support serveral mingw builds
 

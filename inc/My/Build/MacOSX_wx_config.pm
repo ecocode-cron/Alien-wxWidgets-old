@@ -53,6 +53,7 @@ sub wxwidgets_configure_extra_flags {
     }
     
     # on Snow Leopard, force wxWidgets 2.8.x builds to be 32-bit;
+    # on Lion force use of 10.6 SDK for 2.8 builds
     if(    $self->notes( 'build_data' )->{data}{version} =~ /^2.8/
         && $darwinver >= 10
         && `sysctl hw.cpu64bit_capable` =~ /^hw.cpu64bit_capable: 1/ ) {
@@ -60,16 +61,21 @@ sub wxwidgets_configure_extra_flags {
         $extra_flags = join ' ', map { qq{$_="-arch i386"} }
                                      qw(CFLAGS CXXFLAGS LDFLAGS
                                         OBJCFLAGS OBJCXXFLAGS);
+        
+        if( $darwinver >= 11 ) {
+        	$extra_flags .= ' --with-macosx-version-min=10.5 --with-macosx-sdk=/Developer/SDKs/MacOSX10.6.sdk';
+        }
+        
     }
+    
     # build fix for 2.9.x on darwin 10 +
     if( $darwinver >= 10
         && $self->notes( 'build_data' )->{data}{version} =~ /^2.9/ ) {
         $extra_flags .= ' --with-macosx-version-min=10.5';
     }
     
-    if( $self->notes( 'graphicscontext' ) ) {
-	    $extra_flags .= ' --enable-graphics_ctx';
-    }
+    # by default always add graphics context
+	$extra_flags .= ' --enable-graphics_ctx';
 
     return $extra_flags;
 }
