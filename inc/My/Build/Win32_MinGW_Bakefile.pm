@@ -88,16 +88,7 @@ sub build_wxwidgets {
 
 sub awx_w32_ldflags {
 	my $self = shift;
-	# MinGW.org gcc 4.5.2 links shared libstdc++ by default.
-	# gcc 4.4.x and below doesn't understand -static-libstdc++
-	# (MinGW.org 3.4.5 compiler and many versions of mingw-w64 compiler)
-	# TDM mingw bundles do understand so no harm in specifying even
-	# though static is the defautl there
-	my $cmdout = qx(g++ -static-libstdc++ 2>&1);
-	my $ldflags = ($cmdout =~ /unrecognized option/) ? '' : '-static-libstdc++';
-	# add -m32 / -m64  flags for mingw-w64 builds that combine 32bit / 64bit
-	# The mingw bundle from TDM requires this
-	$ldflags .= ( $Config{ptrsize} == 8 ) ? ' -m64' : ' -m32';
+	my $ldflags = ( $Config{ptrsize} == 8 ) ? ' -m64' : ' -m32';
 	return $ldflags;
 }
 

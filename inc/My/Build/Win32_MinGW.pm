@@ -7,6 +7,7 @@ use My::Build::Utility qw(awx_arch_file awx_install_arch_file
 use Config;
 use File::Basename qw();
 use File::Glob qw(bsd_glob);
+use Data::Dumper;
 
 sub _find_make {
     my( @try ) = qw(mingw32-make gmake make);
@@ -93,38 +94,66 @@ sub awx_compiler_kind { 'gcc' }
 
 sub files_to_install {
     my $self = shift;
-    my( @try ) = qw(libgcc_*.dll mingwm10.dll);
-    my( $dll, $dll_from );
     
-    # TODO: we need to determine this by testing one of
-    # the build DLL's
-    #
-    # A mingw build may link as static or dynamic to libgcc
-    # and libstdc++
+    # wxWidgets dlls may be linked to
+    # libgcc_* ( suffix could be may variants as some mingw dists distinguish between 32 / 64 bit dlls )
+    # libstdc++*
+    # mingwm10.dll
+    
+    my @searchfordlls;
+    
+    # get the dlls used
+    
+    {
+    	# objdump will give us confirmed dll names
+    	# while a fallback wildcard search may fail
+    	# if multiple different named libcc files exist 
+    	my $wxdlls = $self->awx_wx_config_data->{dlls};
+    	
+    	my $checkfile = ( exists($wxdlls->{base}) ) ? $wxdlls->{base}->{dll} : $wxdlls->{mono}->{dll};
+        #$checkfile =~ s/\\+/\//g;
+        #print qq(CHECKING FILE $checkfile\n);
+		my @dumplines = qx(objdump -x $checkfile);
+		
+		for ( @dumplines ) {
+			if( /^\s+DLL Name: (libgcc_|mingwm|libstdc++)(.+\.dll)\s+$/ ) {
+				push @searchfordlls, $1 . $2;
+			}
+		}
+		
+	}
+	
+	my @try = ( @searchfordlls ) ? @searchfordlls : (qw(libgcc_*.dll mingwm10.dll));
+	       
+    my @gccdlls;
 
     foreach my $d ( @try ) {
-        $dll_from = $self->awx_path_search( $d );
+        my $dll_from = $self->awx_path_search( $d );
         if( defined $dll_from ) {
-            $dll = File::Basename::basename( $dll_from );
-            last;
+            my $dll = File::Basename::basename( $dll_from );
+            push @gccdlls, [ $dll_from, $dll  ];
+     
         }
     }
     
-    if(!defined($dll)) {
-        # check for special case ActivePerl mingw PPM
+    if(!@gccdlls) {
+        # check for special case ActivePerl mingw 3.4 PPM
         my $ppmmingw = qq($Config{sitearch}/auto/MinGW/bin/mingwm10.dll);
         if( -f $ppmmingw ) {
-            $dll_from = $ppmmingw;
-            $dll = File::Basename::basename( $dll_from );
+            my $dll = File::Basename::basename( $ppmmingw );
+            push @gccdlls, [ $ppmmingw, $dll  ];
         }
     }
     
-    if( defined( $dll_from ) && defined( $dll ) ) {
-        return ( $self->SUPER::files_to_install(),
-             ( $dll_from => awx_arch_file( "rEpLaCe/lib/$dll" ) ) );
-    } else {
-        die 'Cannot find libc (mingwm10.dll/ libgcc_*.dll) for install';
+    my %returnfiles = $self->SUPER::files_to_install();
+    
+    for( @gccdlls ) {
+    	$returnfiles{$_->[0]} = awx_arch_file( "rEpLaCe/lib/$_->[1]" );
     }
+    
+    print qq(MinGW gcc libs - none found\n) if !@gccdlls;
+    
+    return %returnfiles;
 
 }
 
