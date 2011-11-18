@@ -39,6 +39,7 @@ patches/data-2.8.12
 patches/data-2.9.0
 patches/data-2.9.1
 patches/data-2.9.2
+patches/data-2.9.3
 patches/wxMac-2.8.10-fontdlg.patch
 patches/wxMac-2.8.3-brokengcc.patch
 patches/wxMac-2.9.0-textctrl.patch
@@ -70,6 +71,9 @@ patches/wxMSW-2.9.1-w64-mslu.patch
 patches/wxMSW-2.9.2-makefiles.patch
 patches/wxMSW-2.9.2-setup.patch
 patches/wxMSW-2.9.2-setup_gctx.patch
+patches/wxMSW-2.9.3-makefiles.patch
+patches/wxMSW-2.9.3-setup.patch
+patches/wxMSW-2.9.3-setup_gctx.patch
 patches/wxWidgets-2.8.0-magic.patch
 patches/wxWidgets-2.8.10-gsocket.patch
 patches/wxWidgets-2.9.0-magic.patch
