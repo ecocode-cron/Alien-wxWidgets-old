@@ -237,7 +237,7 @@ if( $build_wx ) {
 $build->create_build_script;
 
 sub _is_yes {
-    return lc( $_[0] ) eq 'y' || lc( $_[0] ) eq 'yes';
+    return lc( $_[0] ) eq 'y' || lc( $_[0] ) eq 'yes' || $_[0] eq 1;
 }
 
 sub _askyn {
