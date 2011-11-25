@@ -126,6 +126,13 @@ sub awx_w32_ldflags {
 	
 }
 
-sub awx_w32_cppflags { return ''; }
+sub awx_w32_cppflags {
+	my $self = shift;
+	my $cppflags = '';
+	for ( qw( -D_USE_32BIT_TIME_T ) ) {
+		$cppflags .= qq( $_) if $Config{ccflags} =~ /$_/;
+	}
+	return $cppflags;
+}
 
 1;

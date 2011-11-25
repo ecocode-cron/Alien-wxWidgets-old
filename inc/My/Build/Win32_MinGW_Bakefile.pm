@@ -94,9 +94,10 @@ sub awx_w32_ldflags {
 
 sub awx_w32_cppflags {
 	my $self = shift;
-	# see awx_w32_ldflags
 	my $cppflags = ( $Config{ptrsize} == 8 ) ? '-m64' : '-m32';
-	
+	for ( qw( -D_USE_32BIT_TIME_T ) ) {
+		$cppflags .= qq( $_) if $Config{ccflags} =~ /$_/;
+	}
 	return $cppflags;
 }
 
