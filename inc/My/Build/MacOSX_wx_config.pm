@@ -52,29 +52,28 @@ sub wxwidgets_configure_extra_flags {
         $darwinver = $1;
     }
     
+    # we are determining extra flags
+    $extra_flags = '';
+    
     # on Snow Leopard, force wxWidgets 2.8.x builds to be 32-bit;
     
     if(    $self->notes( 'build_data' )->{data}{version} =~ /^2.8/
         && $darwinver >= 10
         && `sysctl hw.cpu64bit_capable` =~ /^hw.cpu64bit_capable: 1/ ) {
         print "Forcing wxWidgets build to 32 bit\n";
-        $extra_flags = join ' ', map { qq{$_="-arch i386"} }
+        $extra_flags .= ' ' . join ' ', map { qq{$_="-arch i386"} }
                                      qw(CFLAGS CXXFLAGS LDFLAGS
                                         OBJCFLAGS OBJCXXFLAGS);
     }
     
-    # on Snow Leopard and Lion force use of 10.6 SDK for all current builds
+    # on Snow Leopard and Lion force use of 10.6 SDK for all current builds    
     if( $darwinver >= 10 ) {
-	    $extra_flags .= ' --with-macosx-version-min=10.5 --with-macosx-sdk=/Developer/SDKs/MacOSX10.6.sdk';
+        my $sdk1 = qq(/Developer/SDKs/MacOSX10.6.sdk);
+		my $sdk2 = qq(/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.6.sdk);
+    	my $macossdk = ( -d $sdk2 ) ? $sdk2 : $sdk1;
+	    $extra_flags .= qq( --with-macosx-version-min=10.6 --with-macosx-sdk=$macossdk);
     }
     
-    ## build fix for 2.9.x on darwin 10 +
-    #if( $darwinver >= 10
-    #    && $self->notes( 'build_data' )->{data}{version} =~ /^2.9/ ) {
-    #    $extra_flags .= ' --with-macosx-version-min=10.5';
-    #}
-    
-    # by default always add graphics context
 	$extra_flags .= ' --enable-graphics_ctx';
 
     return $extra_flags;

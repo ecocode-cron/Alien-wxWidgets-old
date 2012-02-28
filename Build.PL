@@ -280,14 +280,15 @@ sub _ask {
 
 sub _get_default_wxwidgets_version_and_type {
     
+    # default version and archive type
     my $defver = '2.8.12';
     my $deftype = 'tar.gz';
     
     if ($^O =~ /^darwin/i ) {
-        # 2.9.2 if this is 64 bit perl on 64 bit mac
+        # 2.9.3 if this is 64 bit perl on 64 bit mac
         if( $Config{ptrsize} == 8 ) {
-            $defver = '2.9.2';
-            $deftype = 'tar.bz2'; # no tar.gz at sourceforge site for 2.9.2
+            $defver = '2.9.3';
+            $deftype = 'tar.bz2'; # no tar.gz at sourceforge site for 2.9.3
         }
     }
     
