@@ -29,7 +29,24 @@
  
  // Define this to use wxURL class.
  #define wxUSE_URL 1
-
+@@ -732,7 +732,7 @@
+ #   else
+         // MSVC 6 didn't include GDI+ headers so disable by default, enable it
+         // here if you use MSVC 6 with a newer SDK
+-#       define wxUSE_GRAPHICS_CONTEXT 0
++#       define wxUSE_GRAPHICS_CONTEXT 0
+ #   endif
+ #else
+     // Disable support for other Windows compilers, enable it if your compiler
+@@ -740,7 +740,7 @@
+     //
+     // Notice that this will be set by configure under non-Windows platforms
+     // anyhow so the value there is not important.
+-#   define wxUSE_GRAPHICS_CONTEXT 0
++#   define wxUSE_GRAPHICS_CONTEXT 0
+ #endif
+ 
+ // Enable wxGraphicsContext implementation using Cairo library.
 @@ -1317,7 +1317,7 @@
  
  #define wxUSE_DRAGIMAGE 1
