@@ -231,12 +231,11 @@ sub awx_get_package {
     return $package . '_Bakefile';
 }
 
-# MSLU is default when using Unicode *and* it has not
-# been explicitly disabled
+# MSLU is off by default. It Must be explicitly enabled
 sub awx_mslu {
     return $_[0]->args( 'wxWidgets-mslu' )
       if defined $_[0]->args( 'wxWidgets-mslu' );
-    return $_[0]->args( 'wxWidgets-unicode' );
+    return 0;
 }
 
 sub massage_environment {
