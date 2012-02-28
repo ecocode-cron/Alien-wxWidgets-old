@@ -1,5 +1,7 @@
 Revision history for Perl extension Alien::wxWidgets.
 
+0.56  TBR
+
 0.55  Tue Feb 28 2012
     - Correctly interpret boolean option = 1 as 'yes' 
       ( Thanks to Robert Olsen )  
