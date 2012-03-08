@@ -5,13 +5,13 @@ use base qw(My::Build::Any_wx_config_Bakefile);
 use My::Build::Utility qw(awx_arch_dir awx_install_arch_dir);
 
 our $WX_CONFIG_LIBSEP;
-our @LIBRARIES = qw(base net xml adv animate aui core fl gizmos
-                    gl html media qa richtext stc xrc);
+our @LIBRARIES = qw(base net xml adv animate aui core fl gizmos gl html
+                    media propgrid qa ribbon richtext stc webview xrc);
 our @MONO_LIBRARIES_2_9 = qw(core gl);
 our @MONO_LIBRARIES_2_8 = qw(core stc gl);
 our @CONTRIB_LIBRARIES = qw(gizmos_xrc ogl plot svg);
 our @CRITICAL  = qw(base core);
-our @IMPORTANT = qw(net xml adv aui gl html media richtext stc xrc);
+our @IMPORTANT = qw(net xml adv aui gl html media richtext stc xrc );
 
 my $initialized;
 my( $wx_debug, $wx_unicode, $wx_monolithic );
