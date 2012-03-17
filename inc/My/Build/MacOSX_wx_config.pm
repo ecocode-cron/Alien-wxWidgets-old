@@ -41,6 +41,7 @@ sub wxwidgets_configure_extra_flags {
     my $extra_flags = $self->notes( 'extraflags' );
     
     if($extra_flags) {
+	# user has given overrides
     	if( $self->notes( 'graphicscontext' ) ) {
 			$extra_flags .= ' --enable-graphics_ctx';
     	}
@@ -66,7 +67,7 @@ sub wxwidgets_configure_extra_flags {
                                         OBJCFLAGS OBJCXXFLAGS);
     }
     
-    # on Snow Leopard and Lion force use of 10.6 SDK for all current builds    
+    # on Snow Leopard and Lion force use of 10.6 SDK for all current builds
     if( $darwinver >= 10 ) {
         my $sdk1 = qq(/Developer/SDKs/MacOSX10.6.sdk);
 		my $sdk2 = qq(/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.6.sdk);
@@ -80,12 +81,13 @@ sub wxwidgets_configure_extra_flags {
 }
 
 sub awx_build_toolkit {
-    # use Cocoa for OS X wxWidgets builds with 64 bit Perl
-    if(    $Config{osname} =~ /darwin/
-        && $Config{ptrsize} == 8 ) {
-        return 'osx_cocoa';
+    my $self = shift;
+    # use Cocoa for OS X wxWidgets >= 2.9
+    # we don't support lower than 2.8 anymore
+    if( $self->notes( 'build_data' )->{data}{version} =~ /^2.8/ ) {
+    	return 'mac';
     } else {
-        return 'mac';
+        return 'osx_cocoa';
     }
 }
 
