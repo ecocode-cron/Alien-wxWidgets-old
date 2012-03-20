@@ -13,7 +13,7 @@ my $winsetuppatch = ( $FORCE_GTX ) ? 'wxMSW-2.9.3-setup_gctx.patch' : 'wxMSW-2.9
   @common 
   ],
                },
-  mac     => { unicode => [ @common ],
+  mac     => { unicode => [ 'cocoaoverlay-2-9-3.patch', @common ],
                },
   unix    => { unicode => [ @common ],
                },

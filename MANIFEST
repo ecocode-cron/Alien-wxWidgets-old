@@ -33,6 +33,7 @@ lib/Alien/wxWidgets/Utility.pm
 Makefile.PL
 MANIFEST
 META.yml
+patches/cocoaoverlay-2-9-3.patch
 patches/data-2.8.10
 patches/data-2.8.11
 patches/data-2.8.12

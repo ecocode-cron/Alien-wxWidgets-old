@@ -1,6 +1,7 @@
 Revision history for Perl extension Alien::wxWidgets.
 
 0.57  TBR
+    - fix for osx-cocoa overlay drawing
 
 0.56  Fri Mar 16 2012
     - add propgrid ribbon webview library names
