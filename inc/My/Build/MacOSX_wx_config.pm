@@ -56,19 +56,24 @@ sub wxwidgets_configure_extra_flags {
     # we are determining extra flags
     $extra_flags = '';
     
-    # on Snow Leopard, force wxWidgets 2.8.x builds to be 32-bit;
+    # on Snow Leopard, and above force wxWidgets 2.8.x builds to be 32-bit;
+    # force 2.9 builds to be 32 bit too if we have a 32 bit Perl
     
-    if(    $self->notes( 'build_data' )->{data}{version} =~ /^2.8/
-        && $darwinver >= 10
-        && `sysctl hw.cpu64bit_capable` =~ /^hw.cpu64bit_capable: 1/ ) {
+    if(     $darwinver >= 10
+        &&  `sysctl hw.cpu64bit_capable` =~ /^hw.cpu64bit_capable: 1/
+        && (    $self->notes( 'build_data' )->{data}{version} =~ /^2.8/
+             || $Config{ptrsize} == 4 ) ) {
+             
         print "Forcing wxWidgets build to 32 bit\n";
-        $extra_flags .= ' ' . join ' ', map { qq{$_="-arch i386"} }
-                                     qw(CFLAGS CXXFLAGS LDFLAGS
+		        $extra_flags .= ' ' . join ' ', map { qq{$_="-arch i386"} }
+		                                     qw(CFLAGS CXXFLAGS LDFLAGS
                                         OBJCFLAGS OBJCXXFLAGS);
     }
     
+    
     # on Snow Leopard and Lion force use of 10.6 SDK for all current builds
     if( $darwinver >= 10 ) {
+        
         my $sdk1 = qq(/Developer/SDKs/MacOSX10.6.sdk);
 		my $sdk2 = qq(/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.6.sdk);
     	my $macossdk = ( -d $sdk2 ) ? $sdk2 : $sdk1;
