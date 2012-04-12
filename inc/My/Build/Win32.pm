@@ -287,9 +287,11 @@ sub awx_w32_extra_buildflags {
     my $self = shift;
     my $buildflags = '';
 	my $extraflags = $self->awx_w32_configure_extra_flags;
-	
 	$buildflags .= $extraflags if $extraflags;
-
+	
+	return $buildflags if !$self->notes('build_wx');
+	
+	
 	# extra flags for vers != 2.8 - that is >= 2.9
 
 	if( $self->notes( 'build_data' )->{data}{version} !~ /^2.8/ ) {
