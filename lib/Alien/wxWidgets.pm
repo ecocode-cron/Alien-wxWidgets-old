@@ -43,7 +43,7 @@ use Module::Pluggable sub_name      => '_list',
                       instantiate   => 'config';
 
 our $AUTOLOAD;
-our $VERSION = '0.57';
+our $VERSION = '0.58';
 our %VALUES;
 our $dont_remap;
 
@@ -230,7 +230,7 @@ currently-loaded configuration.
 
 Returns the wxWidgets version for this C<Alien::wxWidgets>
 installation in the form MAJOR + MINOR / 1_000 + RELEASE / 1_000_000
-e.g. 2.006002 for wxWidgets 2.6.2 and 2.004 for wxWidgets 2.4.0.
+e.g. 2.008012 for wxWidgets 2.8.12 and 2.009 for wxWidgets 2.9.0.
 
 =head2 config
 
@@ -363,7 +363,7 @@ Mattia Barbon <mbarbon@cpan.org>
 
 =item Alien::wxWidgets
 
-Copyright (c) 2005-2009 Mattia Barbon <mbarbon@cpan.org>
+Copyright (c) 2005-2012 Mattia Barbon <mbarbon@cpan.org>
 
 This program is free software; you can redistribute it and/or
 modify it under the same terms as Perl itself
