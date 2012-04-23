@@ -31,4 +31,4 @@
 # Avoid Mac OS X stuff
 \.DS_Store$
 ^MYMETA\.json$
-
+^META\.json$
