@@ -1,5 +1,8 @@
 Revision history for Perl extension Alien::wxWidgets.
 
+0.59  Mon Apr 23 2012
+    - Remove broken META.json
+
 0.58  Thu Apr 12 2012
     - WXWIN / WXDIR MSWin32 fix.
 
