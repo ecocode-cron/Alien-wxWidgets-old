@@ -28,6 +28,8 @@ EOT
     }
 }
 
+our $VERSION = '0.59';
+
 our @EXPORT_OK = qw(awx_capture awx_cc_is_gcc awx_cc_version awx_cc_abi_version
                     awx_sort_config awx_grep_config awx_smart_config);
 
