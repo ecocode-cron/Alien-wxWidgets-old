@@ -18,6 +18,7 @@ my %VERSIONS =
     '2.9.1'         => 'patches/data-2.9.1',
     '2.9.2'         => 'patches/data-2.9.2',
     '2.9.3'         => 'patches/data-2.9.3',
+    '2.9.4'			=> 'patches/data-2.9.4',
     );
 
 my ($DEFAULT_VERSION, $DEFAULT_ARCHIVE_TYPE) = _get_default_wxwidgets_version_and_type();
@@ -285,10 +286,10 @@ sub _get_default_wxwidgets_version_and_type {
     my $deftype = 'tar.gz';
     
     if ($^O =~ /^darwin/i ) {
-        # 2.9.3 if this is 64 bit perl on 64 bit mac
+        # 2.9.4 if this is 64 bit perl on 64 bit mac
         if( $Config{ptrsize} == 8 ) {
-            $defver = '2.9.3';
-            $deftype = 'tar.bz2'; # no tar.gz at sourceforge site for 2.9.3
+            $defver = '2.9.4';
+            $deftype = 'tar.bz2'; # no tar.gz at sourceforge site for 2.9.x
         }
     }
     
