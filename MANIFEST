@@ -77,6 +77,8 @@ patches/wxMSW-2.9.3-makefiles.patch
 patches/wxMSW-2.9.3-setup.patch
 patches/wxMSW-2.9.3-setup_gctx.patch
 patches/wxMSW-2.9.4-makefiles.patch
+patches/wxMSW-2.9.4-setup.patch
+patches/wxMSW-2.9.4-setup_gctx.patch
 patches/wxWidgets-2.8.0-magic.patch
 patches/wxWidgets-2.8.10-gsocket.patch
 patches/wxWidgets-2.9.0-magic.patch
