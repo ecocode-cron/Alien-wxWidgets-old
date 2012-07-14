@@ -83,6 +83,7 @@ patches/wxWidgets-2.8.0-magic.patch
 patches/wxWidgets-2.8.10-gsocket.patch
 patches/wxWidgets-2.9.0-magic.patch
 patches/wxWidgets-2.9.0-msgdlg.patch
+patches/wxWidgets-2.9.4-plugin.patch
 README.txt
 script/make_ppm.pl
 t/01_load.t

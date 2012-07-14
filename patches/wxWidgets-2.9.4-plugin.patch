@@ -1,0 +1,119 @@
+diff -ruNw orig/include/wx/dynload.h new/include/wx/dynload.h
+--- include/wx/dynload.h	2012-07-08 11:28:28.000000000 +0100
++++ include/wx/dynload.h	2011-12-14 18:42:12.000000000 +0000
+@@ -82,11 +82,8 @@
+ 
+ private:
+ 
+-    // These pointers may be NULL but if they are not, then m_ourLast follows
+-    // m_ourFirst in the linked list, i.e. can be found by calling GetNext() a
+-    // sufficient number of times.
+-    const wxClassInfo    *m_ourFirst; // first class info in this plugin
+-    const wxClassInfo    *m_ourLast;  // ..and the last one
++    const wxClassInfo    *m_before; // sm_first before loading this lib
++    const wxClassInfo    *m_after;  // ..and after.
+ 
+     size_t          m_linkcount;    // Ref count of library link calls
+     size_t          m_objcount;     // ..and (pluggable) object instantiations.
+diff -ruNw orig/src/common/dynload.cpp new/src/common/dynload.cpp
+--- src/common/dynload.cpp	2012-07-08 11:28:28.000000000 +0100
++++ src/common/dynload.cpp	2011-12-14 18:42:12.000000000 +0000
+@@ -76,32 +76,9 @@
+         : m_linkcount(1)
+         , m_objcount(0)
+ {
+-    const wxClassInfo* const oldFirst = wxClassInfo::GetFirst();
++    m_before = wxClassInfo::GetFirst();
+     Load( libname, flags );
+-
+-    // It is simple to know what is the last object we registered, it's just
+-    // the new head of the wxClassInfo list:
+-    m_ourLast = wxClassInfo::GetFirst();
+-
+-    // But to find the first wxClassInfo created by this library we need to
+-    // iterate until we get to the previous head as we don't have the links in
+-    // the backwards direction:
+-    if ( m_ourLast != oldFirst )
+-    {
+-        for ( const wxClassInfo* info = m_ourLast; ; info = info->GetNext() )
+-        {
+-            if ( info->GetNext() == oldFirst )
+-            {
+-                m_ourFirst = info;
+-                break;
+-            }
+-        }
+-    }
+-    else // We didn't register any classes at all.
+-    {
+-        m_ourFirst =
+-        m_ourLast = NULL;
+-    }
++    m_after = wxClassInfo::GetFirst();
+ 
+     if( m_handle != 0 )
+     {
+@@ -153,10 +130,7 @@
+ 
+ void wxPluginLibrary::UpdateClasses()
+ {
+-    if ( !m_ourFirst )
+-        return;
+-
+-    for ( const wxClassInfo *info = m_ourFirst; ; info = info->GetNext() )
++    for (const wxClassInfo *info = m_after; info != m_before; info = info->GetNext())
+     {
+         if( info->GetClassName() )
+         {
+@@ -164,9 +138,6 @@
+             // we can quickly find the entry they correspond to.
+             (*ms_classes)[info->GetClassName()] = this;
+         }
+-
+-        if ( info == m_ourLast )
+-            break;
+     }
+ }
+ 
+@@ -176,15 +147,9 @@
+     if (!ms_classes)
+         return;
+ 
+-    if ( !m_ourFirst )
+-        return;
+-
+-    for ( const wxClassInfo *info = m_ourFirst; ; info = info->GetNext() )
++    for(const wxClassInfo *info = m_after; info != m_before; info = info->GetNext())
+     {
+         ms_classes->erase(ms_classes->find(info->GetClassName()));
+-
+-        if ( info == m_ourLast )
+-            break;
+     }
+ }
+ 
+@@ -201,11 +166,9 @@
+     wxASSERT_MSG( m_linkcount == 1,
+                   wxT("RegisterModules should only be called for the first load") );
+ 
+-    if ( m_ourFirst )
+-    {
+-        for ( const wxClassInfo *info = m_ourFirst; ; info = info->GetNext() )
++    for ( const wxClassInfo *info = m_after; info != m_before; info = info->GetNext())
+         {
+-            if( info->IsKindOf(wxCLASSINFO(wxModule)) )
++        if( info->IsKindOf(CLASSINFO(wxModule)) )
+             {
+                 wxModule *m = wxDynamicCast(info->CreateObject(), wxModule);
+ 
+@@ -214,10 +177,6 @@
+                 m_wxmodules.push_back(m);
+                 wxModule::RegisterModule(m);
+             }
+-
+-            if ( info == m_ourLast )
+-                break;
+-        }
+     }
+ 
+     // FIXME: Likewise this is (well was) very similar to InitializeModules()
