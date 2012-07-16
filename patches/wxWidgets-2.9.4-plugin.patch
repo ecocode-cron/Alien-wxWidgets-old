@@ -14,6 +14,7 @@
  
      size_t          m_linkcount;    // Ref count of library link calls
      size_t          m_objcount;     // ..and (pluggable) object instantiations.
+
 --- src/common/dynload.cpp	2011-07-08 11:28:28.000000000 +0100
 +++ src/common/dynload.cpp	2012-12-14 18:42:12.000000000 +0000
 @@ -76,32 +76,9 @@
