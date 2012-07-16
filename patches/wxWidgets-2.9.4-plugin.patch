@@ -1,6 +1,5 @@
-diff -ruNw orig/include/wx/dynload.h new/include/wx/dynload.h
---- include/wx/dynload.h	2012-07-08 11:28:28.000000000 +0100
-+++ include/wx/dynload.h	2011-12-14 18:42:12.000000000 +0000
+--- include/wx/dynload.h	2011-07-08 11:28:28.000000000 +0100
++++ include/wx/dynload.h	2012-12-14 18:42:12.000000000 +0000
 @@ -82,11 +82,8 @@
  
  private:
@@ -15,9 +14,8 @@ diff -ruNw orig/include/wx/dynload.h new/include/wx/dynload.h
  
      size_t          m_linkcount;    // Ref count of library link calls
      size_t          m_objcount;     // ..and (pluggable) object instantiations.
-diff -ruNw orig/src/common/dynload.cpp new/src/common/dynload.cpp
---- src/common/dynload.cpp	2012-07-08 11:28:28.000000000 +0100
-+++ src/common/dynload.cpp	2011-12-14 18:42:12.000000000 +0000
+--- src/common/dynload.cpp	2011-07-08 11:28:28.000000000 +0100
++++ src/common/dynload.cpp	2012-12-14 18:42:12.000000000 +0000
 @@ -76,32 +76,9 @@
          : m_linkcount(1)
          , m_objcount(0)
