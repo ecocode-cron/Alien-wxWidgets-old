@@ -47,7 +47,7 @@ sub wxwidgets_configure_extra_flags {
     	}
         return $extra_flags;
     }
-        
+
     my $darwinver = 0;
     if(`uname -r` =~ /^(\d+)\./) {
         $darwinver = $1;
@@ -69,15 +69,19 @@ sub wxwidgets_configure_extra_flags {
 		                                     qw(CFLAGS CXXFLAGS LDFLAGS
                                         OBJCFLAGS OBJCXXFLAGS);
     }
-    
-    
-    # on Snow Leopard and Lion force use of 10.6 SDK for all current builds
+       
+    # on Snow Leopard, Lion and Mountain Lion, force use of minimal available SDK and 10.6 min version
     if( $darwinver >= 10 ) {
-        
-        my $sdk1 = qq(/Developer/SDKs/MacOSX10.6.sdk);
-		my $sdk2 = qq(/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.6.sdk);
-    	my $macossdk = ( -d $sdk2 ) ? $sdk2 : $sdk1;
-	    $extra_flags .= qq( --with-macosx-version-min=10.6 --with-macosx-sdk=$macossdk);
+        $extra_flags .= qq( --with-macosx-version-min=10.6);
+        for my $sdkversion ( qw( 10.6 10.7 10.8 ) ) {
+        	my $sdk1 = qq(/Developer/SDKs/MacOSX${sdkversion}.sdk);
+			my $sdk2 = qq(/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX${sdkversion}.sdk);
+    		my $macossdk = ( -d $sdk2 ) ? $sdk2 : $sdk1;
+    		if( -d $macossdk ) {
+    			$extra_flags .= qq( --with-macosx-sdk=$macossdk);
+    			last;
+    		}
+    	}
     }
     
 	$extra_flags .= ' --enable-graphics_ctx';

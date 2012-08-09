@@ -2,6 +2,7 @@ Revision history for Perl extension Alien::wxWidgets.
 
 0.60  TBR
     - allow building 2.9.4
+    - correct SDKs for Mountain Lion
 
 0.59  Tue May 01 2012
     - Version sub modules to keep meta info users happy
