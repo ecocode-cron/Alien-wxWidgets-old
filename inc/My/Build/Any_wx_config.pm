@@ -217,6 +217,13 @@ sub awx_make {
     return $make;
 }
 
+sub awx_version_type {
+    my $self = shift;
+    my $versiontype = ( $self->notes( 'build_data' )->{data}{version} =~ /^2\.(6|7|8)/ )
+        ? 2 : 3;
+    return $versiontype;
+}
+
 sub build_wxwidgets {
     my $self = shift;
     my $extra_flags = $self->wxwidgets_configure_extra_flags;
