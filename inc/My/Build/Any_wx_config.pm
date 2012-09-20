@@ -217,9 +217,14 @@ sub awx_make {
     return $make;
 }
 
+sub awx_version_type {
+    my $versiontype = ( $self->notes( 'build_data' )->{data}{version} =~ /^2\.(6|7|8)/ )
+        ? 2 : 3;
+    return $versiontype;
+}
+
 sub build_wxwidgets {
     my $self = shift;
-
     my $extra_flags = $self->wxwidgets_configure_extra_flags;
     my $prefix_dir = $self->_key;
     my $prefix = awx_install_arch_dir( $self, $prefix_dir );
@@ -228,13 +233,20 @@ sub build_wxwidgets {
                        $self->awx_build_toolkit,
                        $opengl ? '--with-opengl ' : '';
     my $unicode = $self->awx_is_unicode ? 'enable' : 'disable';
-    my $debug = $self->awx_is_debug ? 'enable' : 'disable';
+    my $debug = '';
+    
+    if( $self->awx_version_type == 2 ) {
+        $debug = ( $self->awx_debug ) ? '--enable-debug' : '--disable-debug';
+    } else {
+        $debug = ( $self->awx_debug ) ? '--enable-debug=max' : '';
+    }
+
     my $monolithic = $self->awx_is_monolithic ? 'enable' : 'disable';
     my $universal = $self->awx_is_universal ? 'enable' : 'disable';
     my $dir = $self->notes( 'build_data' )->{data}{directory};
     my $cmd = "echo exit | " . # for OS X 10.3...
               "sh ../configure --prefix=$prefix $args --$unicode-unicode"
-            . " --$debug-debug --$monolithic-monolithic"
+            . " $debug --$monolithic-monolithic"
             . " --$universal-universal_binary $extra_flags";
     my $old_dir = Cwd::cwd;
 
@@ -247,7 +259,8 @@ sub build_wxwidgets {
     $self->_system( $cmd ) unless -f 'Makefile';
     my $make = $self->awx_make;
     $self->_system( "$make all" );
-    if( $self->notes( 'build_data' )->{data}{version} !~ /^2.9/ ) {
+        
+    if( $self->awx_version_type == 2 ) {
         chdir 'contrib/src/stc';
         $self->_system( "$make all" );
     }
@@ -290,7 +303,7 @@ sub install_system_wxwidgets {
     chdir 'bld';
     my $make = $self->awx_make;
     $self->_system( "$make install" . $destdir );
-    if( $self->notes( 'build_data' )->{data}{version} !~ /^2.9/ ) {
+    if( $self->awx_version_type == 2 ) {
         chdir 'contrib/src/stc';
         $self->_system( "$make install" . $destdir );
     }

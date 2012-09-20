@@ -293,18 +293,18 @@ sub awx_w32_extra_buildflags {
 	
 	
 	# extra flags for vers != 2.8 - that is >= 2.9
-
-	if( $self->notes( 'build_data' )->{data}{version} !~ /^2.8/ ) {
+    
+	if( $self->awx_version_type == 3 ) {
 		if($self->awx_debug) {
-			$buildflags .= ' DEBUG_INFO=default DEBUG_FLAG=1';
+			$buildflags .= ' DEBUG_INFO=default DEBUG_FLAG=2';
 		} else {
-			$buildflags .= ' DEBUG_INFO=0 DEBUG_FLAG=0'; 
+			$buildflags .= ' DEBUG_INFO=default DEBUG_FLAG=1';
 		}
 	}
 
-	# flags for vers == 2.8
+	# flags for vers == 2.x
 
-	if( $self->notes( 'build_data' )->{data}{version} =~ /^2.8/ ) {
+	if( $self->awx_version_type == 2 ) {
 
 		# do graphicscontext for 2.8 build if requested
 		if( $self->notes( 'graphicscontext' ) ) {

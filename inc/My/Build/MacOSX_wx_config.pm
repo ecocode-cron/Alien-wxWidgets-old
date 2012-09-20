@@ -61,7 +61,7 @@ sub wxwidgets_configure_extra_flags {
     
     if(     $darwinver >= 10
         &&  `sysctl hw.cpu64bit_capable` =~ /^hw.cpu64bit_capable: 1/
-        && (    $self->notes( 'build_data' )->{data}{version} =~ /^2.8/
+        && ( $self->awx_version_type == 2
              || $Config{ptrsize} == 4 ) ) {
              
         print "Forcing wxWidgets build to 32 bit\n";
@@ -93,7 +93,7 @@ sub awx_build_toolkit {
     my $self = shift;
     # use Cocoa for OS X wxWidgets >= 2.9
     # we don't support lower than 2.8 anymore
-    if( $self->notes( 'build_data' )->{data}{version} =~ /^2.8/ ) {
+    if( $self->awx_version_type == 2) {
     	return 'mac';
     } else {
         return 'osx_cocoa';
@@ -107,7 +107,7 @@ sub build_wxwidgets {
 
     # can't build wxWidgets 2.8.x with 64 bit Perl
     if(    $Config{ptrsize} == 8
-        && $self->notes( 'build_data' )->{data}{version} =~ /^2.8/ ) {
+        && $self->awx_version_type == 2 ) {
         print <<EOT;
 =======================================================================
 The 2.8.x wxWidgets for OS X does not support 64-bit. In order to build
