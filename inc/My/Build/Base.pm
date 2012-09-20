@@ -424,6 +424,12 @@ sub awx_wx_patches {
                @{$data->{$toolkit}{$unicode}};
 }
 
+sub awx_version_type {
+    my $versiontype = ( $self->notes( 'build_data' )->{data}{version} =~ /^2\.(6|7|8)/ )
+        ? 2 : 3;
+    return $versiontype;
+}
+
 sub awx_get_name {
     my( $self, %args ) = @_;
     my $e = sub { defined $_[0] ? ( $_[0] ) : () };
