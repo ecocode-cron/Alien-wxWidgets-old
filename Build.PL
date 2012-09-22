@@ -69,6 +69,7 @@ my $build = $class->new
                          'wxWidgets-source'          => { type => '=s' },
                          'wxWidgets-version'         => { type => '=s' },
                          'wxWidgets-extraflags'      => { type => '=s' },
+                         'wxWidgets-stackwalker'     => { type => '!' },
                          'wxWidgets-graphicscontext' => { type => '!',
                                                         default => $^O ne 'MSWin32' },
                          },
@@ -216,6 +217,8 @@ if( $build_wx ) {
     $TYPE = _ask( $build, 'wxWidgets-source', 'Which archive type?', $DEFAULT_ARCHIVE_TYPE );
     $URL = $ENV{AWX_URL};
     $FORCE_GTX = $build->args('wxWidgets-graphicscontext');
+    # get stackwalker if MinGW supports it
+    $FORCE_STACKWALKER = $build->args('wxWidgets-stackwalker');
     $build->notes( 'build_data' => do $VERSIONS{$wx_version} );
 }
 

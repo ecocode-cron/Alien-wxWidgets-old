@@ -7,11 +7,14 @@ my @common = qw(wxWidgets-2.9.0-magic.patch wxWidgets-2.9.4-plugin.patch);
 
 my $winsetuppatch = ( $FORCE_GTX ) ? 'wxMSW-2.9.4-setup_gctx.patch' : 'wxMSW-2.9.4-setup.patch';
 
-{ msw     => { unicode => [ 
-  'wxMSW-2.9.4-makefiles.patch',
-  $winsetuppatch, 
-  @common 
-  ],
+my @windows = ( $winsetuppatch, 'wxMSW-2.9.4-makefiles.patch' );
+
+if( $FORCE_STACKWALKER ) {
+  push( @windows, 'wxMSW-2.9.4-mingw-stackwalker.patch' );
+}
+
+
+{ msw     => { unicode => [ @windows, @common ],
                },
   mac     => { unicode => [ 'cocoaoverlay-2-9-3.patch', @common ],
                },

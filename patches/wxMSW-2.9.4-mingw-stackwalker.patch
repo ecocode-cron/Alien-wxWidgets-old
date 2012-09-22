@@ -1,0 +1,14 @@
+--- include\wx\msw\chkconf.h	2012-07-08 11:28:28.000000000 +0100
++++ include\wx\msw\chkconf.h	2012-09-22 20:07:52.723000000 +0100
+@@ -155,6 +155,11 @@
+ #    define wxUSE_STACKWALKER 0
+ #endif /* compiler doesn't support SEH */
+ 
++#undef wxUSE_ON_FATAL_EXCEPTION
++#define wxUSE_ON_FATAL_EXCEPTION 1
++#undef wxUSE_STACKWALKER
++#define wxUSE_STACKWALKER 1
++
+ #if defined(__GNUWIN32__)
+     /* These don't work as expected for mingw32 and cygwin32 */
+ #   undef  wxUSE_MEMORY_TRACING
