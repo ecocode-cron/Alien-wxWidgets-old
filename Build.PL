@@ -7,7 +7,7 @@ use lib "lib", "inc";
 use My::Build;
 use Config;
 
-our( $TYPE, $URL, $FORCE_GTX, $FORCE_STACKWALKER );
+our( $TYPE, $URL, $FORCE_GTX );
 
 my %VERSIONS =
 
