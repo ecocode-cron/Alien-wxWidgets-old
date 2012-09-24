@@ -1,5 +1,7 @@
 Revision history for Perl extension Alien::wxWidgets.
 
+0.62  TBR
+
 0.61  Fri Sep 21 2012
     - change default debug level for wxWidgets >= 2.9 to 1 ( was 0)
     - fix several incorrect wxWidgets version checks 
