@@ -34,6 +34,34 @@ a different wx-config.
     perl Build test
     perl Build install
 
+=head3 Requirements for building on Unices
+
+If you are going to ask Alien::wxWidgets to build wxWidgets you will need to
+install development prerequisites. The following is the list for Ubuntu but
+you can adapt for your own distribution where the package names may vary.
+
+gcc
+g++
+libgtk2.0-dev
+libgstreamer0.10-dev
+libgstreamer-plugins-base0.10-dev
+libglu1-mesa-dev
+libexpat1-dev
+libtiff4-dev
+libpng12-dev
+libjpeg-dev
+libcairo2-dev
+freeglut3-dev
+libxmu-dev
+libwebkitgtk-dev*
+
+To build the wxWebView componenent you need libwebkitgtk version 1.3.1 or
+greater. For Linux distributions currently this means a fairly recent
+release. For example, Ubuntu ge 11.10
+
+If you do not have a recent enough libwebkitgtk installed then configure
+will simply not build the library. This is harmless.
+
 =head2 Windows
 
 If you are going to build your own wxWidgets then
@@ -110,7 +138,14 @@ perl Build.PL --wxWidgets-extraflags="--disable-compat26"
     or nmake. You can usefully pass any of the options in build/msw/config.(vc|gcc)
     
     e.g. --wxWidgets-extraflags="USE_STC=0 VENDOR=anameIchose"
-    
+
+perl Build.PL --wxWidgets-userpatch=/some/path/to/user.patch
+	
+    If you have automated building scripts and use some wxWidgets customisations
+    you may give the path to a patch file (unified diff style) to be applied
+    to the wxWidgets source. Any standard Alien::wxWidgets patches will be
+    applied first.
+
 perl Build.PL --prefix
 	
 	Set a custom installation prefix.

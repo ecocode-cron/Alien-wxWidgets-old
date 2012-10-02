@@ -1,6 +1,10 @@
 Revision history for Perl extension Alien::wxWidgets.
 
-0.62  TBR
+0.62  Tue Oct 2 2012
+    - Fix patching on MSWin when buildpaths have spaces.
+    - Allow addition of user patch - --wxWidgets-userpatch
+    - Expand README.txt
+    - Another Mac OS X SDK change
 
 0.61  Fri Sep 21 2012
     - change default debug level for wxWidgets >= 2.9 to 1 ( was 0)

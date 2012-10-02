@@ -70,10 +70,11 @@ sub wxwidgets_configure_extra_flags {
                                         OBJCFLAGS OBJCXXFLAGS);
     }
        
-    # on Snow Leopard, Lion and Mountain Lion, force use of minimal available SDK and 10.6 min version
+    # on Snow Leopard, Lion and Mountain Lion, force use of available SDK and 10.6 min version
     if( $darwinver >= 10 ) {
         $extra_flags .= qq( --with-macosx-version-min=10.6);
-        for my $sdkversion ( qw( 10.6 10.7 10.8 ) ) {
+		# SDK 10.7 will not work if we have SDK 10.8 installed too - so reverse order
+        for my $sdkversion ( qw( 10.8 10.7 10.6 ) ) {
         	my $sdk1 = qq(/Developer/SDKs/MacOSX${sdkversion}.sdk);
 			my $sdk2 = qq(/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX${sdkversion}.sdk);
     		my $macossdk = ( -d $sdk2 ) ? $sdk2 : $sdk1;

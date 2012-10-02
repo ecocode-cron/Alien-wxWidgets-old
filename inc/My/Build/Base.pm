@@ -328,7 +328,10 @@ sub patch_wxwidgets {
     my $self = shift;
     my $old_dir = Cwd::cwd();
     my @patches = $self->awx_wx_patches;
-
+    if( my $userpatch = $self->notes( 'userpatch' ) ) {
+        die qq(User specified patch $userpatch not found.) if !-f $userpatch;
+        push( @patches, $userpatch );
+    }
     print "Patching wxWidgets...\n";
 
     my $wx_dir = $self->notes( 'build_data' )->{data}{directory};

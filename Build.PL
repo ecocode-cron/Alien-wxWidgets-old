@@ -69,6 +69,7 @@ my $build = $class->new
                          'wxWidgets-source'          => { type => '=s' },
                          'wxWidgets-version'         => { type => '=s' },
                          'wxWidgets-extraflags'      => { type => '=s' },
+                         'wxWidgets-userpatch'       => { type => '=s' },
                          'wxWidgets-graphicscontext' => { type => '!',
                                                         default => $^O ne 'MSWin32' },
                          },
@@ -97,6 +98,7 @@ my $have_alien_configuration = 0;
 # if there is any any wxWidgets installation registered with Alien::wxWidgets
 # it will only get upgraded if it was compiled using Alien::wxWidgets itself and
 # it is older than $DEFAULT_VERSION
+
 my $ok = eval {
     require Alien::wxWidgets;
     require File::Basename;
@@ -204,6 +206,7 @@ $build->notes( 'build_wx' => $build_wx );
 $build->notes( 'mk_portable' => $build->args('wxWidgets-portable') );
 $build->notes( 'install_only' => $have_alien_configuration && !$build_wx && $accept_defaults );
 $build->notes( 'extraflags' => $build->args('wxWidgets-extraflags') || '' );
+$build->notes( 'userpatch' => $build->args('wxWidgets-userpatch') || '' );
 $build->notes( 'graphicscontext' => $build->args('wxWidgets-graphicscontext') );
 
 if( $build_wx ) {

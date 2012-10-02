@@ -44,8 +44,8 @@ sub _patch_command {
     my $patch_exe = File::Spec->catfile( File::Spec->updir,
                                          qw(inc bin patch.exe) );
 
-    my $cmd = qq{perl -pe "" -- $patch_file} .
-              qq{ | $patch_exe -N -p0 -u -b -z .bak};
+    my $cmd = qq{perl -pe "" -- "$patch_file"} .
+              qq{ | "$patch_exe" -N -p0 -u -b -z .bak};
 
     return $cmd;
 }
