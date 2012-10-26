@@ -34,10 +34,11 @@ wxMac-2.8.3-brokengcc.patch
 wxMac-2.8.3-brokengcc.patch
                                ), @common ],
                },
-  unix    => { unicode => [ qw( 
-  
+  unix    => { unicode => [ qw(
+wxGTK-2.8.12-dirdialog.patch
   							   ), @common ],
                ansi    => [ qw(
+wxGTK-2.8.12-dirdialog.patch
                				   ), @common ],
                },
   data    => { url  => ( sprintf '%s/%s-%s.%s', $URL, $BASE, $VERSION, $TYPE ),

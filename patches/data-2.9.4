@@ -15,7 +15,7 @@ my $winsetuppatch = ( $FORCE_GTX ) ? 'wxMSW-2.9.4-setup_gctx.patch' : 'wxMSW-2.9
                },
   mac     => { unicode => [ 'cocoaoverlay-2-9-3.patch', @common ],
                },
-  unix    => { unicode => [ @common ],
+  unix    => { unicode => [ 'wxGTK-2.9.4-dirdialog.patch', @common ],
                },
   data    => { url  => ( sprintf '%s/%s-%s.%s', $URL, $BASE, $VERSION, $TYPE ),
                directory => ( sprintf '%s-%s', $BASE, $VERSION ),

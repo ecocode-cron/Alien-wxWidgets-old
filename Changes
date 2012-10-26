@@ -1,6 +1,7 @@
 Revision history for Perl extension Alien::wxWidgets.
 
-0.63  TBR
+0.63  Fri Oct 26 2012
+    - Patches for wxGTK build fixing dir dialog issues
 
 0.62  Tue Oct 2 2012
     - Fix patching on MSWin when buildpaths have spaces.
