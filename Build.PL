@@ -18,7 +18,7 @@ my %VERSIONS =
     '2.9.1'         => 'patches/data-2.9.1',
     '2.9.2'         => 'patches/data-2.9.2',
     '2.9.3'         => 'patches/data-2.9.3',
-    '2.9.4'			=> 'patches/data-2.9.4',
+    '2.9.4'	    => 'patches/data-2.9.4',
     );
 
 my ($DEFAULT_VERSION, $DEFAULT_ARCHIVE_TYPE) = _get_default_wxwidgets_version_and_type();
@@ -77,9 +77,9 @@ my $build = $class->new
     meta_merge =>
       { resources       =>
           { 'license'       => 'http://dev.perl.org/licenses/',
-            'homepage'      => 'http://wxperl.eu/',
+            'homepage'      => 'http://www.wxperl.it/',
             'bugtracker'    => 'http://rt.cpan.org/NoAuth/Bugs.html?Dist=Alien-wxWidgets',
-            'repository'    => 'https://wxperl.svn.sourceforge.net/svnroot/wxperl/Alien-wxWidgets',
+            'repository'    => 'http://svn.code.sf.net/p/wxperl/code/Alien-wxWidgets',
             'MailingList'   => 'http://lists.perl.org/list/wxperl-users.html',
             },
         },
