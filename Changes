@@ -1,5 +1,8 @@
 Revision history for Perl extension Alien::wxWidgets.
 
+0.64  Sat Apr 13 2013
+    - Build IPC on Windows
+
 0.63  Fri Oct 26 2012
     - Patches for wxGTK build fixing dir dialog issues
 

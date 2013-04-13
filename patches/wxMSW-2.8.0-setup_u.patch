@@ -62,7 +62,7 @@ diff -r -u include/wx/msw/setup.h include/wx/msw/setup.h
  #define wxUSE_DRAGIMAGE 1
  
 -#define wxUSE_IPC         1
-+#define wxUSE_IPC         0
++#define wxUSE_IPC         1
                                  // 0 for no interprocess comms
  #define wxUSE_HELP        1
                                  // 0 for no help facility
