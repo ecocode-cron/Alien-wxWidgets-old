@@ -316,7 +316,7 @@ sub extract_wxwidgets {
     print "Extracting wxWidgets...\n";
 
     $self->_load_bundled_modules;
-    $Archive::Extract::PREFER_BIN = 1;
+    $Archive::Extract::PREFER_BIN = ( $^O =~ /^mswin/i ) ? 0 : 1;
     my $ae = Archive::Extract->new( archive => $archive );
 
     die 'Error: ', $ae->error unless $ae->extract;
