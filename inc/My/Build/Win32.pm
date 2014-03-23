@@ -62,7 +62,12 @@ sub awx_grep_dlls {
     my @libs = grep { m/(?:lib)?wx(?:wince|msw|base)[\w\.]+$/ }
                grep { m/${digits}\d*${suff}(_|\.)/ }
                bsd_glob( File::Spec->catfile( $libdir, "*$Config{lib_ext}" ) );
+    # we want builtins on Win32 so that they are available for wxWidgets extensions
+    my @builtins = grep { m/wx(zlib|regex|expat|png|jpeg|tiff)/ }
+               bsd_glob( File::Spec->catfile( $libdir, "*$Config{lib_ext}" ) );
 
+    $self->{w32builtins} = \@builtins;
+    
     foreach my $full ( @dlls, @libs ) {
         my( $name, $type );
         local $_ = File::Basename::basename( $full );
@@ -162,7 +167,7 @@ sub files_to_install {
         my $base = File::Basename::basename( $lib );
         $files{$lib} = awx_arch_file( "rEpLaCe/lib/$base" );
     }
-
+    
     if( $self->notes( 'build_wx' ) || $self->notes( 'mk_portable' )  ) {
         require File::Find;
         my $no_platform = join '|', qw(unix gtk x11 motif mac cocoa
@@ -191,7 +196,12 @@ sub files_to_install {
                   );
         }
     }
-
+    
+    for my $builtin ( @{ $self->awx_wx_config_data->{w32builtins} } ) {
+	my $base = File::Basename::basename( $builtin );
+        $files{$builtin} = awx_arch_file( "rEpLaCe/lib/$base" );
+    }
+    
     return %files;
 }
 

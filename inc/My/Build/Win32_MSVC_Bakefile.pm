@@ -79,6 +79,7 @@ sub awx_wx_config_data {
     $self->awx_w32_find_setup_dir( $data{cxxflags} ); # for awx_grep_dlls
 
     $data{dlls} = $self->awx_grep_dlls( $orig_libdir, $digits, $self->awx_is_monolithic );
+    $data{w32builtins} = $self->{w32builtins};
     $data{version} = $digits;
 
     $self->{awx_data} = \%data;

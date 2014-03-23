@@ -19,6 +19,7 @@ my %VERSIONS =
     '2.9.2'         => 'patches/data-2.9.2',
     '2.9.3'         => 'patches/data-2.9.3',
     '2.9.4'	    => 'patches/data-2.9.4',
+    '3.0.0'         => 'patches/data-3.0.0',
     );
 
 my ($DEFAULT_VERSION, $DEFAULT_ARCHIVE_TYPE) = _get_default_wxwidgets_version_and_type();
@@ -285,23 +286,18 @@ sub _ask {
 sub _get_default_wxwidgets_version_and_type {
     
     # default version and archive type
-    my $defver = '2.8.12';
-    my $deftype = 'tar.gz';
-    
-    if ($^O =~ /^darwin/i ) {
-        # 2.9.4 if this is 64 bit perl on 64 bit mac
-        if( $Config{ptrsize} == 8 ) {
-            $defver = '2.9.4';
-            $deftype = 'tar.bz2'; # no tar.gz at sourceforge site for 2.9.x
-        }
-    }
+    my $defver = '3.0.0';
+    my $deftype = 'tar.bz2';
     
     if( $^O =~ /^linux/i) {
         # 2.8.10 if this is gtk < 2.4
         my $pkg_config = $ENV{PKG_CONFIG} || 'pkg-config';
         if( my $gtkfullver = qx($pkg_config --modversion gtk+-2.0 2>&1) ) {
             if($gtkfullver =~ /^\d+\.(\d+)\.\d+/) {
-                $defver = '2.8.10' if $1 < 4;
+                if ( $1 < 4 ) {
+                    $defver = '2.8.10';
+                    $deftype = 'tar.gz';
+                }
             }
         }
     }

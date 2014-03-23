@@ -1,6 +1,8 @@
 Revision history for Perl extension Alien::wxWidgets.
 
-0.65  TBR
+0.65  Mon Mar 24 2014
+    - Update default to wxWidgets 3.0.0
+    - install builtins on wxMSW
 
 0.64  Sat Apr 13 2013
     - Build IPC on Windows
