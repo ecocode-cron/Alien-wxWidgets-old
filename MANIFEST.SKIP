@@ -14,6 +14,7 @@
 \bpm_to_blib$
 \bblibdirs$
 ^MANIFEST\.SKIP$
+Build.bat$
 
 # Avoid Module::Build generated and utility files.
 \bBuild$
@@ -24,9 +25,13 @@
 \.tmp$
 \.old$
 \.bak$
+\.tar.gz$
+\.tar.gzbak$
+
 \#$
 \b\.#
 ^MYMETA.yml$
+configured$
 
 # Avoid Mac OS X stuff
 \.DS_Store$
