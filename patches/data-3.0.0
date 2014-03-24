@@ -15,7 +15,7 @@ my $winsetuppatch = ( $FORCE_GTX ) ? 'wxMSW-2.9.4-setup_gctx.patch' : 'wxMSW-2.9
   ],
                },
   
-  mac     => { unicode => [ 'cocoaoverlay-2-9-3.patch', @common ],
+  mac     => { unicode => [ @common ],
                },
   unix    => { unicode => [ @common ],
                },
