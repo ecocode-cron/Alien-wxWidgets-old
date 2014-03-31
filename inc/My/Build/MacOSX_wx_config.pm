@@ -69,23 +69,41 @@ sub wxwidgets_configure_extra_flags {
 		                                     qw(CFLAGS CXXFLAGS LDFLAGS
                                         OBJCFLAGS OBJCXXFLAGS);
     }
-       
-    # on Snow Leopard, Lion and Mountain Lion, force use of available SDK and 10.6 min version
+    
+    if ( $darwinver >= 13 ) {
+	    # we can't currently build with Xcode 5 on Mavericks
+	    my $xcodestring = qx(xcodebuild --version) || '';
+	    if ($xcodestring =~ /Xcode\s+(\d+)/ ) {
+	        my $xcodever = $1;
+	        if ( $xcodever >= 5) {
+		        print <<EOX;
+=======================================================================
+wxPerl does not currently support building on Mac OSX Mavericks and
+above with Xcode 5.x or greater.
+If you wish to develop using wxPerl on this machine you should remove
+XCode 5.x and download Xcode 4.6.3 from the Apple developer site.
+=======================================================================
+EOX
+                exit 1;
+	        }
+	    }
+    }
+    
+    # on Snow Leopard and above, force use of available SDK and min versions
     if( $darwinver >= 10 ) {
-        $extra_flags .= qq( --with-macosx-version-min=10.6);
-		# SDK 10.7 will not work if we have SDK 10.8 installed too - so reverse order
+	# SDK 10.7 will not work if we have SDK 10.8 installed too - so reverse order
         for my $sdkversion ( qw( 10.8 10.7 10.6 ) ) {
-        	my $sdk1 = qq(/Developer/SDKs/MacOSX${sdkversion}.sdk);
+            my $sdk1 = qq(/Developer/SDKs/MacOSX${sdkversion}.sdk);
 			my $sdk2 = qq(/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX${sdkversion}.sdk);
     		my $macossdk = ( -d $sdk2 ) ? $sdk2 : $sdk1;
     		if( -d $macossdk ) {
-    			$extra_flags .= qq( --with-macosx-sdk=$macossdk);
-    			last;
+    		    $extra_flags .= qq( --with-macosx-version-min=10.6 --with-macosx-sdk=$macossdk);
+    		    last;
     		}
     	}
     }
     
-	$extra_flags .= ' --enable-graphics_ctx';
+    $extra_flags .= ' --enable-graphics_ctx';
 
     return $extra_flags;
 }

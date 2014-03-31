@@ -1,8 +1,9 @@
 Revision history for Perl extension Alien::wxWidgets.
 
-0.65  Mon Mar 24 2014
+0.65  Mon Mar 31 2014
     - Update default to wxWidgets 3.0.0
-    - install builtins on wxMSW
+    - build on MacOSX Mavericks with Xcode 4.6.3
+    - install builtins on wxMSW (used by some wxWidgets extensions)
 
 0.64  Sat Apr 13 2013
     - Build IPC on Windows
