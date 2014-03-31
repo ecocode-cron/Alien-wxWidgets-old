@@ -1,5 +1,7 @@
 Revision history for Perl extension Alien::wxWidgets.
 
+0.66  TBR
+
 0.65  Mon Mar 31 2014
     - Update default to wxWidgets 3.0.0
     - build on MacOSX Mavericks with Xcode 4.6.3
